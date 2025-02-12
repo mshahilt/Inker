@@ -21,7 +21,8 @@ sudo docker compose up
 <b>React</b>:<b> http://localhost:5173</b>
 <br/>
 <b>Express</b>:<b> http://localhost:3000</b>
-
+<br>
+Ensure that these are live
 #### STEP 4
 ##### ENSURE LIVENESS OF BACKEND
 ```bash
