@@ -1,0 +1,41 @@
+services:
+  express:
+    container_name: express-ts-app
+    build: ./Backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://mongo:27017/mydatabase  # MongoDB connection string
+    command: npm run dev
+    depends_on:
+      - mongo  # Ensures express starts after MongoDB
+
+  react-app:
+    container_name: frontend-react-app
+    build: ./Frontend
+    ports:
+      - "5173:5173"  # Exposing React dev server
+    volumes:
+      - .:/app        # Mount the entire project (for live reloading)
+      - /app/node_modules  # Prevents overwriting node_modules in the container
+    environment:
+      - NODE_ENV=development
+    command: npm run dev  # Use "npm run dev" for Vite
+
+  mongo:
+    container_name: mongo-db
+    image: mongo:latest
+    ports:
+      - "27017:27017"  # Exposing MongoDB port
+    volumes:
+      - mongo-data:/data/db  # Persistent MongoDB storage
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password  # Set MongoDB root credentials
+
+volumes:
+  mongo-data:  # Declare volume for persistent storage
