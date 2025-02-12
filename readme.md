@@ -2,11 +2,12 @@
 
 ## HOW TO RUN
 #### NOTE
-The development environment is entirely dockerised so install docker first if you are on linux use your package manager if you are on windows install Docker desktop before continuing view. Refer this documentation to setup docker.
+The development environment is entirely dockerised so install docker first if you are on linux use your package manager if you are on windows install Docker desktop before continuing view.<i> Refer this documentation to setup docker.</i>
 <br>
 <b>https://docs.docker.com/engine/install</b>
 <br>
-Install the docker compose plugin for your distribution.
+<i>Install the docker compose plugin for your distribution.</i>
+<br>
 <a><b>https://docs.docker.com/compose/install/linux</b></a>
 <br>
 
@@ -17,9 +18,9 @@ Go to the root directory of the project and run if everything is setup correctly
 sudo docker compose up
 ```
 #### STEP 2
-FRONTEND <b>http://localhost:5173</b>
+<b>React</b>:<b> http://localhost:5173</b>
 <br/>
-BACKEND <b>http://localhost:3000</b>
+<b>Express</b>:<b> http://localhost:3000</b>
 
 #### STEP 4
 ##### ENSURE LIVENESS OF BACKEND
