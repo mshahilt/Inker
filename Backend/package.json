@@ -3,18 +3,19 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-"scripts": {
-  "dev": "nodemon",
-  "build": "tsc",
-  "start": "node dist/index.js"
-},
+  "scripts": {
+    "dev": "nodemon",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "mongoose": "^8.10.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
