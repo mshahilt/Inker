@@ -24,6 +24,7 @@ sudo docker compose up
 <br>
 Ensure that these are live
 
+
 #### STEP 4
 ##### ENSURE LIVENESS OF BACKEND
 ```bash
