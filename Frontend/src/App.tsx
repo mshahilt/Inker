@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import './App.css'
+import { Button } from '@/components/ui/button'
 
 function App() {
   useEffect(()=>{
@@ -15,10 +16,7 @@ function App() {
     DataFetcher()
   },[])
   return (
-    <>
-    <div className='bg-red-500'>hello</div>
-    INKER
-    </>
+    <Button>Inker</Button>
   )
 }
 
