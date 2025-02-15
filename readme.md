@@ -114,12 +114,11 @@ cd inker-blog
 sudo docker compose up
 
 # Create new feature branch
-git checkout -b feature/your-feature-name origin/test
-
+git checkout -b test origin/test
 # Commit and push changes
 git add .
 git commit -m "feat: your changes"
-git push origin feature/your-feature-name
+git push origin test
 ```
 
 ## Support
