@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import './App.css'
-import { Button } from '@/components/ui/button'
+import Login from './components/auth/Login'
 
 function App() {
   useEffect(()=>{
@@ -16,8 +16,10 @@ function App() {
     DataFetcher()
   },[])
   return (
-    <Button>Inker</Button>
-  )
+    <>
+      <Login />
+    </>
+  );
 }
 
 export default App
