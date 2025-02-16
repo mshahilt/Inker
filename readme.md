@@ -24,6 +24,10 @@ Welcome to the INKER Blog project! We're excited to have you here. This guide wi
   - [Branch Management](#branch-management)
   - [Making Changes](#making-changes)
   - [Submitting PRs](#submitting-prs)
+- [🚀 Coding Standards](#-coding-standards)
+  - [General Guidelines](#general-guidelines)
+  - [Naming Conventions](#naming-conventions)
+  - [Git Commit Standards](#naming-conventions)
 - [⚡ Quick Start Commands](#-quick-start-commands)
 - [Support](#-support)
 
@@ -101,6 +105,54 @@ curl -X GET http://localhost:3000
 3. Select `test` as the base branch
 4. Add a descriptive title and detailed description
 5. Link any related issues
+
+## 🚀 Coding Standards
+
+Maintaining a consistent coding style ensures code readability and maintainability. Please follow these guidelines:
+
+### General Guidelines
+
+- Follow the **SOLID** principles and **MVC architecture**.
+- Keep functions and components **small** and **focused on a single responsibility**.
+- Write **clean and self-documenting** code with meaningful variable and function names.
+- Avoid unnecessary **comments**—the code should be **self-explanatory**.
+- Ensure **no console logs** or debugging statements are left before committing.
+
+### Naming Conventions
+
+- **Files & Folders:**
+  - Use `kebab-case` for folders (e.g., `user-profile`).
+  - Use `dot-separated` names for files inside folders (e.g., `user.controller.ts`, `auth.service.ts`, `blog.model.ts`).
+- **Variables & Functions:**
+  - Use `camelCase` for variables and functions (e.g., `fetchUserData`).
+  - Use `PascalCase` for React components and classes (e.g., `UserProfile`).
+- **Database Schema Fields:**
+  - Use `snake_case` for database fields (e.g., `profile_picture`).
+- **Constants:**
+  - Use `UPPER_CASE` for constants (e.g., `DEFAULT_PAGE_SIZE`).
+
+### Git Commit Standards
+
+Use **Conventional Commits** format for consistency:
+<type>: <message>
+
+markdown
+Copy
+Edit
+#### Common Commit Types:
+- `feat`: New feature added (`feat: add user authentication`)
+- `fix`: Bug fix (`fix: resolve login issue`)
+- `chore`: Maintenance work (`chore: update dependencies`)
+- `docs`: Documentation update (`docs: improve README`)
+- `style`: Code style changes (formatting, missing semicolons, etc.)
+- `refactor`: Code improvements without changing functionality
+- `test`: Adding or modifying tests
+
+Example commits:
+```bash
+git commit -m "feat: implement JWT authentication"
+git commit -m "fix: resolve profile picture upload bug"
+git commit -m "docs: add API usage instructions"
 
 ## ⚡ Quick Start Commands
 
