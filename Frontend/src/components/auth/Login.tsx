@@ -4,11 +4,13 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 import { Github } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Login: FC = () => {
   const [signin, setSignin] = useState<"register" | "login">("login");
+  const navigate = useNavigate()
   return (
-    <div className="min-h-screen flex">
+    <div className="h-screen flex">
       {/* Sidebar */}
       <div className="hidden lg:flex lg:w-1/2 bg-black p-6">
         <div className="flex items-start gap-2 text-white">
@@ -28,7 +30,7 @@ const Login: FC = () => {
             className="text-sm"
             onClick={() => setSignin(signin === "login" ? "register" : "login")}
           >
-            Login
+            {signin === "login" ? 'register' : 'login' }
           </Button>
         </header>
 
@@ -83,7 +85,8 @@ const Login: FC = () => {
                   autoComplete="new-password"
                 />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full"
+              onClick={() => navigate('/profile')}>
                 {signin === "login" ? "Login" : "Register"}
               </Button>
             </form>

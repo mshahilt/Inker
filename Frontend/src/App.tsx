@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import './App.css'
-import Login from './components/auth/Login'
+// import Login from './components/auth/Login'
+import { RouterProvider } from 'react-router-dom'
+import { router } from './router/Routes'
 
 function App() {
   useEffect(()=>{
@@ -17,7 +19,7 @@ function App() {
   },[])
   return (
     <>
-      <Login />
+      <RouterProvider router={router} />
     </>
   );
 }
