@@ -3,11 +3,11 @@ import { IUserRepository } from "../../repositories/interface/IUserRepository";
 import { IAuthService } from "../interface/IAuthService";
 import { hashPassword } from "../../utils/hashPassword";
 import generateOtp from "../../utils/generateOtp";
-
 import { sendOtpEmail } from "../../utils/sendEmail";
+import { redisClient } from "../../configs/redis.config";
 
 
-
+//!   Implementation for Auth Service
 export class AuthService implements IAuthService {
     constructor(private _userRepository: IUserRepository){}
 
@@ -24,7 +24,18 @@ export class AuthService implements IAuthService {
 
         await sendOtpEmail(user.email, otp)
 
-        //store user data and otp to redis
+        const response = await redisClient.setEx(
+            user.email,
+            300,
+            JSON.stringify({
+                ...user,
+                otp
+            })
+          );
+
+          if (!response) {
+            throw new Error("Internal server error");
+          }
 
         return user.email
     }
