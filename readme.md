@@ -42,10 +42,27 @@ Before you begin, ensure you have installed:
 
 ### Installation Steps
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-username/inker-blog.git
-   cd inker-blog
+**Forking the repository**
+
+
+1. Go to the [Inker Respository test branch](https://github.com/TheByteFlow/Inker/tree/test).
+2. Click on the fork option on the top right under the navbar.
+3. Click on Create a new fork.
+4. Uncheck the "Copy the master branch only" option.
+5. Click on the Create fork option.
+
+The forked repository will be available in "your repositories".
+
+
+**Cloning the repository**
+
+
+1. Go to your repositories and you can see the forked repository of Inker.
+2. Click on the "Code" option and copy the repository url.
+3. Go to your desired file location in the command prompt (terminal for linux).
+4. Enter the command
+    ```bash
+   git clone the-url-you-copied
    ```
 
 ## 🛠️ Development Setup
@@ -79,7 +96,13 @@ curl -X GET http://localhost:3000
 
 1. **Create your feature branch**
    ```bash
- git checkout -b test origin/test   ```
+   git checkout -b origin/frontend/test
+   ```
+   or 
+
+    ```bash
+   git checkout -b origin/backend/test
+   ```
 
 2. **Keep your branch updated**
    ```bash
