@@ -1,8 +1,9 @@
 import  jwt from "jsonwebtoken"
+import { env } from "../configs/env.config"
 
 
-const ACCESS_KEY = process.env.JWT_ACCESS_SECRET
-const REFRESH_KEY = process.env.JWT_REFRESH_SECRET
+const ACCESS_KEY = env.JWT_ACCESS_SECRET as string
+const REFRESH_KEY = env.JWT_REFRESH_SECRET as string
 
 const ACCESS_TOKEN_EXPIRY =  '1h'
 const  REFRESH_TOKEN_EXPIRY = '7d'
@@ -22,7 +23,7 @@ export  function generateRefreshToken  (payload:Object,expiresIn:string = REFRES
 
 export  function verifyAccessToken (token:string):object|null{
     try {
-        return jwt.verify(token,ACCESS_TOKEN_EXPIRY)
+        return jwt.verify(token,ACCESS_KEY) as object
     } catch (error:unknown) {
         return null
     }
@@ -30,7 +31,7 @@ export  function verifyAccessToken (token:string):object|null{
 
 export function verifyRefreshToken (token:string):object|null{
      try {
-            return jwt.verify(token,REFRESH_KEY)
+            return jwt.verify(token,REFRESH_KEY) as object
      } catch (error:unknown) {
         return null
      }

@@ -56,7 +56,7 @@ export class AuthService implements IAuthService {
             throw new Error("Incorrect password");
         }
 
-        const payload = { id: user._id, email: user.email };
+        const payload = { id: user._id, role: user.role, email: user.email };
 
         const accessToken = generateAccessToken(payload);
         const refreshToken = generateRefreshToken(payload);
