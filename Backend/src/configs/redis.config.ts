@@ -1,13 +1,11 @@
 import { createClient, RedisClientType } from "redis"
+import { env } from "./env.config"
 
 let redisClient: RedisClientType
 
 function connectRedis(){
 redisClient = createClient({
-    socket: {
-        host: 'redis',
-        port: 6379
-    }
+    url: env.REDIS_URI
 })
 
 redisClient.on('connect', () => {
