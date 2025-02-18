@@ -1,12 +1,12 @@
 import { IUser } from "../../models/interface/IUser";
 import { IUserRepository } from "../../repositories/interface/IUserRepository";
 import { IAuthService } from "../interface/IAuthService";
-import { hashPassword } from "../../utils/hashPassword";
-import generateOtp from "../../utils/generateOtp";
-import { sendOtpEmail } from "../../utils/sendEmail";
+import { hashPassword } from "../../utils/hash-password.util";
+import generateOtp from "../../utils/generate-otp.util";
+import { sendOtpEmail } from "../../utils/send-email.util";
 import { redisClient } from "../../configs/redis.config";
 import bcrypt from 'bcrypt';
-import { generateAccessToken, generateRefreshToken } from '../../utils/jwt';
+import { generateAccessToken, generateRefreshToken } from '../../utils/jwt.util';
 
 
 //!   Implementation for Auth Service
