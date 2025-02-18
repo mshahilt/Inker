@@ -10,7 +10,7 @@ const Login: FC = () => {
   const [signin, setSignin] = useState<"register" | "login">("login");
   const navigate = useNavigate()
   return (
-    <div className="h-screen flex">
+    <div className="min-h-screen flex">
       {/* Sidebar */}
       <div className="hidden lg:flex lg:w-1/2 bg-black p-6">
         <div className="flex items-start gap-2 text-white">

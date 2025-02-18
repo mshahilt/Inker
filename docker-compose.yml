@@ -13,6 +13,7 @@ services:
     command: npm run dev
     depends_on:
       - mongo  # Ensures express starts after MongoDB
+      - redis
 
   react-app:
     container_name: frontend-react-app
@@ -37,5 +38,15 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=password  # Set MongoDB root credentials
 
+
+  redis:
+    container_name: "redis_container"
+    image: "redis:latest" 
+    ports:
+      - "6379:6379" 
+    volumes:
+      - redis_data:/data # Persist redis storage 
+
 volumes:
   mongo-data:  # Declare volume for persistent storage
+  redis_data:
