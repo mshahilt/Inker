@@ -1,4 +1,4 @@
-import transporter from "../configs/mail.congfig"
+import transporter from "../configs/mail.config"
 
 export const sendOtpEmail = async (email: string, otp: number) => {
     try{
