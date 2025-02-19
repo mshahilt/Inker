@@ -1,4 +1,4 @@
-import { IUser } from "../../models/interface/IUser";
+import { IUser } from "shared/types"
 import { IUserRepository } from "../../repositories/interface/IUserRepository";
 import { IAuthService } from "../interface/IAuthService";
 import { hashPassword } from "../../utils/hash-password.util";

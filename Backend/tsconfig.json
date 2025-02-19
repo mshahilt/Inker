@@ -3,8 +3,12 @@
     "target": "ES6",
     "module": "CommonJS",
     "outDir": "./dist",
-    "rootDir": "./src",
+    "baseUrl": ".",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@/*": ["./*"],
+      "shared/*": ["../shared/*"]
+    },
   }
 }

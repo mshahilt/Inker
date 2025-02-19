@@ -1,3 +1,7 @@
+import dotenv from "dotenv"
+
+dotenv.config()
+
 export const env = {
     get PORT() {
         return process.env.PORT
@@ -7,17 +11,17 @@ export const env = {
     },
     get JWT_ACCESS_SECRET() {
         return process.env.JWT_ACCESS_SECRET;
-      },
-      get JWT_REFRESH_SECRET(){
+    },
+    get JWT_REFRESH_SECRET() {
         return process.env.JWT_REFRESH_SECRET;
-      },
-      get REDIS_URI() {
+    },
+    get REDIS_URI() {
         return process.env.REDIS_URI;
-      },
-      get CLOUDINARY_API_KEY() {
+    },
+    get CLOUDINARY_API_KEY() {
         return process.env.CLOUDINARY_API_KEY!;
-      },
-      get CLOUDINARY_API_SECRET() {
+    },
+    get CLOUDINARY_API_SECRET() {
         return process.env.CLOUDINARY_API_SECRET!;
-      },
+    },
 }

@@ -1,52 +1,39 @@
 services:
   express:
-    container_name: express-ts-app
+    container_name: inker-express
     build: ./Backend
     ports:
       - "3000:3000"
     volumes:
-      - .:/app
-      - /app/node_modules
+      -  ./Backend:/app
     environment:
       - NODE_ENV=development
-      - MONGO_URI=mongodb://mongo:27017/mydatabase  # MongoDB connection string
-    command: npm run dev
+      - MONGO_URI=mongodb://mongo:27017/mydatabase
     depends_on:
-      - mongo  # Ensures express starts after MongoDB
+      - mongo
       - redis
-
-  react-app:
-    container_name: frontend-react-app
-    build: ./Frontend
-    ports:
-      - "5173:5173"  # Exposing React dev server
-    volumes:
-      - .:/app        # Mount the entire project (for live reloading)
-      - /app/node_modules  # Prevents overwriting node_modules in the container
-    environment:
-      - NODE_ENV=development
-    command: npm run dev  # Use "npm run dev" for Vite
+    command: "npm run dev"
 
   mongo:
     container_name: mongo-db
-    image: mongo:latest
+    image: mongo:6
     ports:
-      - "27017:27017"  # Exposing MongoDB port
+      - "27017:27017"
     volumes:
-      - mongo-data:/data/db  # Persistent MongoDB storage
+      - mongo-data:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=password  # Set MongoDB root credentials
+      - MONGO_INITDB_ROOT_PASSWORD=password
 
 
   redis:
     container_name: "redis_container"
-    image: "redis:latest" 
+    image: "redis:7.4"
     ports:
-      - "6379:6379" 
+      - "6379:6379"
     volumes:
-      - redis_data:/data # Persist redis storage 
+      - redis_data:/data
 
 volumes:
-  mongo-data:  # Declare volume for persistent storage
+  mongo-data:
   redis_data:
