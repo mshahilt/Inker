@@ -2,10 +2,10 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 
-const Header = () => {
+const Navbar = () => {
   const navigate = useNavigate()
     return (
-      <header className="bg-white shadow-sm px-6 py-4 sticky top-0 w-full z-50 ">
+      <header className="bg-white shadow-sm px-6 py-4 fixed top-0 w-full z-50 ">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2">
             <div className="text-Black-600 text-2xl font-bold">Inker</div>
@@ -24,4 +24,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default Navbar;
