@@ -1,4 +1,3 @@
-import { IUser } from "shared/types"
 import { IUserRepository } from "../../repositories/interface/IUserRepository";
 import { IAuthService } from "../interface/IAuthService";
 import { hashPassword } from "../../utils/hash-password.util";
@@ -8,12 +7,14 @@ import { redisClient } from "../../configs/redis.config";
 import bcrypt from 'bcrypt';
 import { generateAccessToken, generateRefreshToken } from '../../utils/jwt.util';
 
+import {IUserModel} from "@/models/implementation/user.model";
+
 
 //!   Implementation for Auth Service
 export class AuthService implements IAuthService {
     constructor(private _userRepository: IUserRepository){}
 
-    async signup(user: IUser): Promise<string> {
+    async signup(user: IUserModel): Promise<string> {
         const userExist = await this._userRepository.findByEmail(user.email)
 
         if(userExist){

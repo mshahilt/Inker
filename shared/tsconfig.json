@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "composite": true, // Required for project references
+    "declaration": true, // Generate type declarations
+    "emitDeclarationOnly": true,
+    "outDir": "dist", // Output directory for declarations
+    "strict": true
+  },
+  "include": ["types"]
+}
