@@ -1,12 +1,14 @@
 import Layout from "@/layouts/Layout";
 import LoginPage from "@/pages/auth/Auth";
+import LandingPage from "@/pages/landingPage/LandingPage";
 import Profile from "@/pages/profile/Profile";
 import { createBrowserRouter } from "react-router-dom";
 
 
 export const router = createBrowserRouter([
+    { path: "/", element: <LandingPage/> },
     {
-      path: "/",
+      path: "/home",
       element: <Layout />,
       children: [
         { index: true , element: <div> home </div>},
