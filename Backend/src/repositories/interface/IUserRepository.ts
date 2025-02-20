@@ -1,7 +1,7 @@
-import {IUser} from "shared/types"
+import {IUserModel} from "@/src/models/implementation/user.model";
 
 export interface IUserRepository {
-    create(user: IUser): Promise<IUser>;
+    create(user: IUserModel): Promise<IUserModel>;
 
-    findByEmail(email: string): Promise<IUser | null>;
+    findByEmail(email: string): Promise<IUserModel | null>;
 }

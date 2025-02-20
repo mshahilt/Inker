@@ -1,29 +1,12 @@
-import { IUser } from "shared/types";
 import { IUserRepository } from "../interface/IUserRepository";
-import User from "../../models/implementation/user.model";
-
-// <<<<<<< HEAD
+import User, {IUserModel} from "../../models/implementation/user.model";
 import { BaseRepository } from "../base.repository";
 
-//!   Implementation for User Repository
-export class UserRepository extends BaseRepository<IUser> implements IUserRepository {
+export class UserRepository extends BaseRepository<IUserModel> implements IUserRepository {
   constructor() {
     super(User);
   }
-// =======
-
-// export class UserRepository implements IUserRepository {
-//     async create(user: IUser): Promise<IUser> {
-//         try {
-//             return await User.create(user);
-//         } catch (error) {
-//             console.error(error)
-//             throw new Error("Error creating user")
-//         }
-//     }
-// >>>>>>> 862c793 (edited docker-compose, initial setup changes and indroduced shared for global type management)
-
-  async createUser(user: IUser): Promise<IUser> {
+  async createUser(user: IUserModel): Promise<IUserModel> {
     try {
       return await this.create(user);
     } catch (error) {
@@ -32,7 +15,7 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
     }
   }
 
-  async findByEmail(email: string): Promise<IUser | null> {
+  async findByEmail(email: string): Promise<IUserModel | null> {
     try {
       return await this.findOne({ email });
     } catch (error) {

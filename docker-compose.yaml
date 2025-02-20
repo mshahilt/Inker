@@ -1,0 +1,53 @@
+services:
+  express:
+    container_name: inker-express
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    volumes:
+      - ../Inker:/app/Inker
+      - /app/node_modules
+    working_dir: /app/Inker/Backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://mongo:27017/INKER
+    command: sh -c "npm install && npm run dev"
+    networks:
+      - app-network
+
+  mongo:
+    container_name: inker-mongoDB
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    networks:
+      - app-network
+
+
+  redis:
+    container_name: inker-redis
+    image: "redis:7.4"
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+  redis_data:

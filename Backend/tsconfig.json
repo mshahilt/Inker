@@ -1,4 +1,5 @@
 {
+//  "extends": "../shared/tsconfig.json",
   "compilerOptions": {
     "target": "ES6",
     "module": "CommonJS",
@@ -7,8 +8,41 @@
     "strict": true,
     "esModuleInterop": true,
     "paths": {
-      "@/*": ["./*"],
-      "shared/*": ["../shared/*"]
+      "@/*": [
+        "src/*"
+      ],
+      "shared/*": [
+        "../shared/*"
+      ],
+      "@shared/*": [
+        "../shared/types/*"
+      ]
     },
-  }
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "skipLibCheck": false,
+    "pretty": true,
+    "noEmit": false,
+    "noErrorTruncation": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "typeRoots": [
+    "./node_modules/@types",
+    "./types/**/*.d.ts"
+  ],
+  "include": [
+    "src/**/*",
+    "./types/**/*.d.ts",
+    "../shared/types/**/*.d.ts",
+    "types",
+    "../shared/types/**/*.ts",
+    "types"
+  ]
 }
+
+
+
+//    "paths": {
+//      "@shared/*": ["../shared/*"],
+//      "@models/*": ["src/models/*"],
+//    },

@@ -1,5 +1,5 @@
-import { createClient, RedisClientType } from "redis";
-import { env } from "./env.config";
+import {createClient, RedisClientType} from "redis"
+import {env} from "@/configs/env.config"
 
 let redisClient: RedisClientType;
 
