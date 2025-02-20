@@ -1,6 +1,11 @@
 //* libraries and packages
 import express from "express"
 import cors from "cors"
+import dotenv from "dotenv"
+
+dotenv.config()
+
+//* validating all the env
 import { validateEnv } from "./utils/validate-env.util"
 
 validateEnv()

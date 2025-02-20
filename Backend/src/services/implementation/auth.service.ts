@@ -1,10 +1,9 @@
 import { IUserRepository } from "../../repositories/interface/IUserRepository";
 import { IAuthService } from "../interface/IAuthService";
-import { hashPassword } from "../../utils/hash-password.util";
 import generateOtp from "../../utils/generate-otp.util";
 import { sendOtpEmail } from "../../utils/send-email.util";
 import { redisClient } from "../../configs/redis.config";
-import bcrypt from 'bcrypt';
+import { hashPassword, comparePassword } from "../../utils/bcrypt.util";
 import { generateAccessToken, generateRefreshToken } from '../../utils/jwt.util';
 
 import {IUserModel} from "@/models/implementation/user.model";
@@ -51,7 +50,7 @@ export class AuthService implements IAuthService {
             throw new Error("User not found");
         }
 
-        const isMatch = await bcrypt.compare(password, user.password as string);
+        const isMatch = await comparePassword(password, user.password as string);
 
         if(!isMatch){
             throw new Error("Incorrect password");
