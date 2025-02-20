@@ -1,5 +1,5 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/users/AppSidebar"; 
+import { AppSidebar } from "@/components/common/AppSidebar"; 
 import { Outlet } from "react-router-dom";
 
 export default function Layout() {

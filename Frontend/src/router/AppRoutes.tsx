@@ -1,6 +1,6 @@
 import Layout from "@/layouts/Layout";
 import LoginPage from "@/pages/auth/Auth";
-import Profile from "@/pages/users/Profile";
+import Profile from "@/pages/profile/Profile";
 import { createBrowserRouter } from "react-router-dom";
 
 
