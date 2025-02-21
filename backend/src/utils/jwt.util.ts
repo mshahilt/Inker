@@ -18,7 +18,8 @@ export function generateRefreshToken(payload: object): string {
 export function verifyAccessToken(token: string) {
   try {
     return jwt.verify(token, ACCESS_KEY);
-  } catch (error) {
+  } catch (err) {
+    console.error(err)
     return null;
   }
 }
@@ -26,7 +27,8 @@ export function verifyAccessToken(token: string) {
 export function verifyRefreshToken(token: string) {
   try {
     return jwt.verify(token, REFRESH_KEY);
-  } catch (error: unknown) {
+  } catch (err) {
+    console.error(err)
     return null;
   }
 }
