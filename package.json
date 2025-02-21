@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "<div align=\"center\">",
   "workspaces": [
-    "Frontend",
-    "Backend",
+    "frontend",
+    "backend",
     "shared"
   ],
   "main": "index.js",
