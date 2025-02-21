@@ -18,23 +18,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: 'npm'
 
-      - name: Install dependencies (Frontend)
-        run: |
-          cd frontend
-          npm ci
+      - name: Install dependencies (for all workspaces)
+        run: npm ci
 
       - name: Run ESLint (Frontend)
-        run: |
-          cd frontend
-          npm run lint -- --max-warnings=0
-
-      - name: Install dependencies (Backend)
-        run: |
-          cd backend
-          npm ci
+        run: npm run lint --workspace=frontend -- --max-warnings=0
 
       - name: Run ESLint (Backend)
-        run: |
-          cd backend
-          npm run lint -- --max-warnings=0
+        run: npm run lint --workspace=backend -- --max-warnings=0
