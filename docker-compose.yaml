@@ -2,13 +2,13 @@ services:
   express:
     container_name: inker-express
     build:
-      context: ./Backend
+      context: ./backend
       dockerfile: Dockerfile
     volumes:
       - ../Inker:/app/Inker  
       # @muhammedsirajudeen add a more streamlined approach than copying the entire code base on to backend container
       - /app/node_modules
-    working_dir: /app/Inker/Backend
+    working_dir: /app/Inker/backend
     ports:
       - "3000:3000"
     depends_on:
