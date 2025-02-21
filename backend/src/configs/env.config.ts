@@ -17,4 +17,10 @@ export const env = {
   get REDIS_PORT() {
     return process.env.REDIS_PORT;
   },
+  get SENDER_EMAIL() {
+    return process.env.SENDER_EMAIL;
+  },
+  get PASSKEY() {
+    return process.env.PASSKEY;
+  },
 };
