@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import './App.css'
 // import Login from './components/auth/Login'
 import { RouterProvider } from 'react-router-dom'
-import { router } from './router/Routes'
+import { router } from './router/AppRoutes'
 
 function App() {
   useEffect(()=>{
