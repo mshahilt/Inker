@@ -19,4 +19,10 @@ export function validateEnv() {
   if (!env.JWT_REFRESH_SECRET) {
     throw new Error("JWT_REFRESH_SECRET is not found in the env");
   }
+  if (!env.SENDER_EMAIL) {
+    throw new Error("SENDER_EMAIL is not found in the env");
+  }
+  if (!env.PASSKEY) {
+    throw new Error("PASSKEY is not found in the env");
+  }
 }

@@ -6,6 +6,7 @@ import {
     DeleteResult,
     Types,
     UpdateWriteOpResult,
+	// isObjectIdOrHexString,
 } from "mongoose";
 
 export abstract class BaseRepository<T extends Document> {
@@ -65,6 +66,9 @@ export abstract class BaseRepository<T extends Document> {
     }
 
     async addToSet(id: string, field: string, value: unknown): Promise<T | null> {
+		// if(!isObjectIdOrHexString(id)){
+
+		// }
         const updatedDocument = await this.model.findByIdAndUpdate(
             id,
             {$addToSet: {[field]: value}} as UpdateQuery<T>,

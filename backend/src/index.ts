@@ -1,29 +1,35 @@
 //* libraries and packages
-import express from "express"
-import cors from "cors"
-import dotenv from "dotenv"
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 
 //* validating all the env
-import { validateEnv } from "./utils/validate-env.util"
+import { validateEnv } from "./utils/validate-env.util";
 
-validateEnv()
+validateEnv();
 
 //* configs
-import { connectDb } from "./configs/mongo.config"
-import { connectRedis } from "./configs/redis.config"
+import { connectDb } from "./configs/mongo.config";
+import { connectRedis } from "./configs/redis.config";
 
 //* routers
-import authRouter from "./routers/auth.router"
+import authRouter from "./routers/auth.router";
+import { notFoundHandler } from "./middlewares/not-found.middleware";
+import { errorHandler } from "./middlewares/error.middlware";
 
-const PORT = 3000
-const app = express()
-app.use(cors())
+const PORT = 3000;
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-connectDb()
-connectRedis()
+connectDb();
+connectRedis();
 
-app.use('/auth', authRouter)
+app.use("/api/auth", authRouter);
+app.use(notFoundHandler);
+app.use(errorHandler);
 
-app.listen(PORT, () => console.log(`Server started at ${PORT} ✅`))
+app.listen(PORT, () => console.log(`Server started at ${PORT} ✅`));

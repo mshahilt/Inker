@@ -14,8 +14,8 @@ import {IUser} from "shared/types";
 //     social_links: { type: string; url: string }[];
 //     resume?: string;
 //     date_of_birth: Date;
-//     createdAt: Date;
-//     updatedAt: Date;
+//     created_at: Date;
+//     updated_at: Date;
 // }
 
 export interface IUserModel extends Document, Omit<IUser, "_id"> {}
@@ -72,7 +72,7 @@ const userSchema = new Schema<IUserModel>(
         },
     },
     {
-        timestamps: true,
+        timestamps: {createdAt: "created_at", updatedAt: "updated_at"},
     }
 );
 
