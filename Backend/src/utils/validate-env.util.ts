@@ -1,4 +1,4 @@
-import { env } from "../configs/env.config";
+import { env } from "@/configs/env.config";
 
 export function validateEnv() {
   if (!env.PORT) {
