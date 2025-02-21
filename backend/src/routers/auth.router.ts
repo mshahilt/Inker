@@ -10,7 +10,7 @@ const userRepository = new UserRepository();
 const authService = new AuthService(userRepository);
 const authController = new AuthController(authService);
 
-authRouter.post('/register',authController.signup);
-authRouter.post('/login',authController.signin);
+authRouter.post('/register',authController.signup.bind(authController));
+authRouter.post('/login',authController.signin.bind(authController));
 
 export default authRouter;

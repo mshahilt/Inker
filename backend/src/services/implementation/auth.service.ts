@@ -7,6 +7,9 @@ import { hashPassword, comparePassword } from "../../utils/bcrypt.util";
 import { generateAccessToken, generateRefreshToken } from '../../utils/jwt.util';
 
 import {IUserModel} from "@/models/implementation/user.model";
+import { createHttpError } from "@/utils/http-error.util";
+import { HttpStatus } from "@/constants/status.constant";
+import { HttpResponse } from "@/constants/response-message.constant";
 
 
 //!   Implementation for Auth Service
@@ -17,7 +20,7 @@ export class AuthService implements IAuthService {
         const userExist = await this._userRepository.findByEmail(user.email)
 
         if(userExist){
-            throw new Error("User already exist")
+            throw createHttpError(HttpStatus.CONFLICT, HttpResponse.USER_EXIST)
         }
 
         user.password = await hashPassword(user.password as string)
@@ -36,7 +39,7 @@ export class AuthService implements IAuthService {
           );
 
           if (!response) {
-            throw new Error("Internal server error");
+            throw createHttpError(HttpStatus.INTERNAL_SERVER_ERROR, HttpResponse.SERVER_ERROR)
           }
 
         return user.email
@@ -47,13 +50,13 @@ export class AuthService implements IAuthService {
         const user = await this._userRepository.findByEmail(email);
 
         if(!user){
-            throw new Error("User not found");
+            throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND)
         }
 
         const isMatch = await comparePassword(password, user.password as string);
 
         if(!isMatch){
-            throw new Error("Incorrect password");
+            throw createHttpError(HttpStatus.UNAUTHORIZED, HttpResponse.PASSWORD_INCORRECT)
         }
 
         const payload = { id: user._id, role: user.role, email: user.email };

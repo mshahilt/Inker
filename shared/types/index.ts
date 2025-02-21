@@ -11,6 +11,6 @@ export interface IUser {
     social_links: { type: string; url: string }[];
     resume?: string;
     date_of_birth: Date;
-    createdAt: Date;
-    updatedAt: Date;
+    created_at: Date;
+    updated_at: Date;
 }

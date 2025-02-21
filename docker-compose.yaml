@@ -2,13 +2,13 @@ services:
   express:
     container_name: inker-express
     build:
-      context: ./Backend
+      context: ./backend
       dockerfile: Dockerfile
     volumes:
       - ../Inker:/app/Inker  
       # @muhammedsirajudeen add a more streamlined approach than copying the entire code base on to backend container
       - /app/node_modules
-    working_dir: /app/Inker/Backend
+    working_dir: /app/Inker/backend
     ports:
       - "3000:3000"
     depends_on:
@@ -16,7 +16,7 @@ services:
       - redis
     environment:
       - NODE_ENV=development
-      - MONGO_URI=mongodb://mongo:27017/INKER
+      - MONGO_URI=mongodb://admin:password@mongo:27017/INKER?authSource=admin
     command: sh -c "npm install && npm run dev"
     networks:
       - app-network
@@ -31,6 +31,7 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=password
+    command: mongod --quiet --logpath /dev/null
     networks:
       - app-network
 
