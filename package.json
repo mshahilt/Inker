@@ -2,6 +2,7 @@
   "name": "inker",
   "version": "1.0.0",
   "description": "<div align=\"center\">",
+  "private": true,
   "workspaces": [
     "frontend",
     "backend",
