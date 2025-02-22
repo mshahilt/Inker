@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import Logo from "../../assets/Logo Light.svg"
+import Logo from "../../../assets/Logo Light.svg"
 import Button from "../../ui/button"
 import { LogIn } from "lucide-react"
 

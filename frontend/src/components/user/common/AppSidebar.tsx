@@ -1,6 +1,6 @@
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
-import LightLogo from "../../assets/Logo Light.svg"
-import DarkLogo from "../../assets/Logo Dark.svg"
+import LightLogo from "../../../assets/Logo Light.svg"
+import DarkLogo from "../../../assets/Logo Dark.svg"
 
 import {
   Sidebar,
