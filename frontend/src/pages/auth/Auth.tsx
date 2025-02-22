@@ -1,5 +1,5 @@
-import AuthLeftPanel from "@/components/auth/AuthLeftPanel";
-import Login from "@/components/auth/Login";
+import AuthLeftPanel from "@/components/user/auth/AuthLeftPanel";
+import Login from "@/components/user/auth/Login";
 import { useState } from "react";
 
 export default function LoginPage() {

@@ -1,5 +1,6 @@
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
-import Logo from "../../assets/Logo Light.svg"
+import LightLogo from "../../assets/Logo Light.svg"
+import DarkLogo from "../../assets/Logo Dark.svg"
 
 import {
   Sidebar,
@@ -12,7 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuTrigger } from "../../ui/dropdown-menu";
 
 const items = [
   {
@@ -52,7 +53,8 @@ export function AppSidebar() {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg">
                   <div className="w-full flex justify-center items-center">
-                    <img src={Logo} alt=""  className="max-w-[100px]"/>
+                    <img src={LightLogo} alt=""  className="max-w-[100px] dark:hidden"/>
+                    <img src={DarkLogo} alt=""  className="max-w-[100px] dark:block hidden"/>
                   </div>
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
