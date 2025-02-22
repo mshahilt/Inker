@@ -9,4 +9,5 @@ export const HttpResponse = {
   OTP_NOT_FOUND: "Otp not found",
   INVALID_CREDENTIALS: "Invalid credentials",
   USER_CREATION_FAILED: "User creation failed",
+  USER_CREATION_SUCCESS: "User created successfully",
 };

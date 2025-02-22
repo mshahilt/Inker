@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { IAuthService } from "../../services/interface/IAuthService";
 import { IAuthController } from "../interface/IAuthController";
+import { HttpStatus } from "@/constants/status.constant";
 
 export class AuthController implements IAuthController {
   constructor(private _authService: IAuthService) {}
@@ -48,7 +49,7 @@ export class AuthController implements IAuthController {
         email
       );
 
-      res.status(200).json(verificationResponse);
+      res.status(HttpStatus.CREATED).json(verificationResponse);
     } catch (err) {
       next(err);
     }

@@ -81,24 +81,27 @@ export class AuthService implements IAuthService {
     otp: string,
     email: string
   ): Promise<{ status: number; message: string }> {
+    //get the stored data from redis
     const storedDataString = await redisClient.get(email);
-    console.log(storedDataString);
     if (!storedDataString) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.OTP_NOT_FOUND);
     }
 
+    //parsed from string to object
     const storedData = JSON.parse(storedDataString);
 
+    //validated the otp
     if (storedData.otp !== otp)
       throw createHttpError(HttpStatus.BAD_REQUEST, HttpResponse.OTP_INCORRECT);
 
+    //construct a user object
     const user = {
       username: storedData.username,
-      name: storedData.name,
       email: storedData.email,
       password: storedData.password,
     };
 
+    //user creation
     const createdUser = await this._userRepository.create(user);
     if (!createdUser)
       throw createHttpError(
@@ -108,7 +111,7 @@ export class AuthService implements IAuthService {
 
     return {
       status: 200,
-      message: "Operation success",
+      message: HttpResponse.USER_CREATION_SUCCESS,
     };
   }
 }
