@@ -6,5 +6,8 @@ export interface IAuthService {
     email: string,
     password: string
   ): Promise<{ accessToken: string; refreshToken: string }>;
-  verifyOtp(otp: string, email: string): Promise<boolean>;
+  verifyOtp(
+    otp: string,
+    email: string
+  ): Promise<{ status: number; message: string }>;
 }

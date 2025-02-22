@@ -43,9 +43,12 @@ export class AuthController implements IAuthController {
     try {
       const { otp, email } = req.body;
 
-      const isVerified = await this._authService.verifyOtp(otp, email);
+      const verificationResponse = await this._authService.verifyOtp(
+        otp,
+        email
+      );
 
-      res.status(200).json({ isVerified });
+      res.status(200).json(verificationResponse);
     } catch (err) {
       next(err);
     }

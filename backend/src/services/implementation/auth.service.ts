@@ -77,15 +77,38 @@ export class AuthService implements IAuthService {
     return { accessToken, refreshToken };
   }
 
-  async verifyOtp(otp: string, email: string): Promise<boolean> {
+  async verifyOtp(
+    otp: string,
+    email: string
+  ): Promise<{ status: number; message: string }> {
     const storedDataString = await redisClient.get(email);
+    console.log(storedDataString);
     if (!storedDataString) {
-      throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND);
+      throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.OTP_NOT_FOUND);
     }
 
     const storedData = JSON.parse(storedDataString);
-    console.log(storedData);
 
-    return storedData.otp === otp;
+    if (storedData.otp !== otp)
+      throw createHttpError(HttpStatus.BAD_REQUEST, HttpResponse.OTP_INCORRECT);
+
+    const user = {
+      username: storedData.username,
+      name: storedData.name,
+      email: storedData.email,
+      password: storedData.password,
+    };
+
+    const createdUser = await this._userRepository.create(user);
+    if (!createdUser)
+      throw createHttpError(
+        HttpStatus.CONFLICT,
+        HttpResponse.USER_CREATION_FAILED
+      );
+
+    return {
+      status: 200,
+      message: "Operation success",
+    };
   }
 }
