@@ -1,11 +1,13 @@
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/common/AppSidebar";
+import { AppSidebar } from "@/components/user/common/AppSidebar";
 import { Outlet } from "react-router-dom";
-import Navbar from "@/components/common/Navbar";
+import Navbar from "@/components/user/common/Navbar";
+import { ThemeProvider } from "@/components/user/common/theme-provider";
 
-export default function Layout() {
+export default function AppLayout() {
   return (
     <>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset >
@@ -15,6 +17,7 @@ export default function Layout() {
           </main>
         </SidebarInset>
       </SidebarProvider>
+      </ThemeProvider>
     </>
   );
 }

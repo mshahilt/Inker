@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import Image from "../../assets/AuthImage.jpg"
+import Image from "../../../assets/AuthImage.jpg"
 
 
 const AuthLeftPanel: FC = () => {

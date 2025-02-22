@@ -1,8 +1,8 @@
-import React from 'react'
+
 
 const SearchBar = () => {
     return (
-        <div className="relative">
+        <div className="relative  hidden md:block">
             <input
                 placeholder="Search..."
                 className="input  px-5 py-1 rounded-lg w-56 transition-all focus:md:w-64 border outline-none"

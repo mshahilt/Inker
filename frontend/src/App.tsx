@@ -16,9 +16,8 @@ function App() {
     DataFetcher()
   },[])
   return (
-    <>
       <RouterProvider router={router} />
-    </>
+
   );
 }
 

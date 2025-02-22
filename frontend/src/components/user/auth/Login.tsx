@@ -1,8 +1,8 @@
 import { FC } from "react";
-import { Button } from "../ui/button";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Separator } from "../ui/separator";
+import { Button } from "../../ui/button";
+import { Label } from "../../ui/label";
+import { Input } from "../../ui/input";
+import { Separator } from "../../ui/separator";
 import { Github } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 

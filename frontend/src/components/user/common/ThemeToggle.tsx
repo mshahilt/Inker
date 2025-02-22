@@ -1,10 +1,15 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import { useTheme } from './theme-provider'
 
 const ThemeToggle = () => {
-    const [isDark, setIsDark] = useState(false)
+  const { setTheme } = useTheme()
+
+    const [theme, setLocalTheme] = useState(localStorage.getItem('vite-ui-theme'))
 
     const toggleTheme = () => {
-        setIsDark(!isDark)
+        setTheme(theme  === "dark" ? 'light' : 'dark')
+        setLocalTheme(theme  === "dark" ? 'light' : 'dark')
+
     }
 
     return (
@@ -13,7 +18,7 @@ const ThemeToggle = () => {
                 className="peer hidden"
                 id="toggle"
                 type="checkbox"
-                checked={isDark}
+                checked={theme === 'dark'}
                 onChange={toggleTheme}
             />
             <div

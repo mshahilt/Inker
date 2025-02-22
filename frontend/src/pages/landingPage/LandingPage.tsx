@@ -1,10 +1,10 @@
 
-import FeaturesSection from "@/components/landingPage/FeatureSection";
-import TestimonialsSection from "@/components/landingPage/Testimonials";
-import HeroSection from "@/components/landingPage/HeroSection";
-import Footer from "@/components/landingPage/Footer";
-import SiteShowCase from "@/components/landingPage/SiteShowCase";
-import LandingMenuBar from "@/components/landingPage/LandingMenuBar";
+import FeaturesSection from "@/components/user/landingPage/FeatureSection";
+import TestimonialsSection from "@/components/user/landingPage/Testimonials";
+import HeroSection from "@/components/user/landingPage/HeroSection";
+import Footer from "@/components/user/landingPage/Footer";
+import SiteShowCase from "@/components/user/landingPage/SiteShowCase";
+import LandingMenuBar from "@/components/user/landingPage/LandingMenuBar";
 
 const LandingPage = () => {
   return (
