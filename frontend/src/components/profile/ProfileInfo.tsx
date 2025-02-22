@@ -1,15 +1,18 @@
-import { ChevronLeft, Plus, Settings } from 'lucide-react'
+import { ChevronLeft, Plus } from 'lucide-react'
 import { FC } from 'react'
 
 const ProfileInfo: FC = () => {
   return (
     <div className='min-w-[300px] lg:w-[400px] p-2 lg:border lg:h-full'>
-      <div className="flex justify-between items-center mb-5">
+      <div className="flex justify-between items-center mb-5 px-2">
         <div className="flex">
-          <ChevronLeft strokeWidth={1.8} />
+          <ChevronLeft strokeWidth={1.8} className='md:hidden' />
           <p> Profile</p>
         </div>
-        <Settings strokeWidth={1.8} size={19} />
+        <div className='bg-gray-200 px-2 py-1 rounded-md text-gray-600 font-medium'>
+          <p>Edit profile</p>
+        </div>
+      
       </div>
 
       <div className="w-full bg-gray-200 p-1 rounded-3xl mb-3">
@@ -29,9 +32,9 @@ const ProfileInfo: FC = () => {
         </div>
       </div>
 
-      <button className="outline rounded-lg px-2 py-1 w-fit h-fit flex gap-2 mt-3 items-center">
-        <Plus strokeWidth={1.8} />
-        <p className="text-md ">Edit Profile</p>
+      <button className="outline rounded-md px-2 py-1 w-fit h-fit flex gap-1 mt-3 items-center text-neutral-500 ml-2 active:scale-95">
+        <Plus strokeWidth={1.2} />
+        <p className="text-md ">Add bio</p>
       </button>
     </div>
   )
