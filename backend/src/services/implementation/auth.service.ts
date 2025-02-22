@@ -83,6 +83,7 @@ export class AuthService implements IAuthService {
   ): Promise<{ status: number; message: string }> {
     //get the stored data from redis
     const storedDataString = await redisClient.get(email);
+    console.log(storedDataString);
     if (!storedDataString) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.OTP_NOT_FOUND);
     }
@@ -110,7 +111,7 @@ export class AuthService implements IAuthService {
       );
 
     return {
-      status: 200,
+      status: HttpStatus.OK,
       message: HttpResponse.USER_CREATION_SUCCESS,
     };
   }
