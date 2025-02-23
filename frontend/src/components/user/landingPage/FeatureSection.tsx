@@ -1,6 +1,6 @@
 const FeaturesSection = () => {
   return (
-    <section className="py-20 px-6 ">
+    <section className="py-20 px-6  flex flex-col items-center">
       <h2 className="text-3xl font-bold text-center mb-16">
         What Makes Inker Your Professional Power-suite?
       </h2>
