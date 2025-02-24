@@ -4,10 +4,8 @@ export default function LoginPage() {
   // const [signin, setSignin] = useState<"register" | "login">("login");
 
   return (
-    <div className="min-h-screen flex">
+    <div className='container relative grid h-svh flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0'>
       <UserAuth />
-      {/* <AuthLeftPanel />
-      <Login signin={signin} setSignin={setSignin} /> */}
     </div>
   );
 }
