@@ -4,13 +4,15 @@ import { type FC, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/password-input"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/cn"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
+import { AuthService } from "@/services/authServices"
+import { useNavigate } from "react-router-dom"
 
 interface UserAuthFormProps {
     authState: "login" | "register"
@@ -50,6 +52,7 @@ const registerSchema = z
 
 export const UserAuthForm: FC<UserAuthFormProps> = ({ authState, onStateChange }) => {
     const [isLoading, setIsLoading] = useState(false)
+    const navigate = useNavigate()
     const formSchema = authState === "login" ? loginSchema : registerSchema
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -61,9 +64,13 @@ export const UserAuthForm: FC<UserAuthFormProps> = ({ authState, onStateChange }
         try {
             // Simulate API call
             await new Promise((resolve) => setTimeout(resolve, 2000))
-
-            console.log(data)
+            if (authState == 'login') {
+                await AuthService.loginService(data)
+            } else {
+                await AuthService.registerService(data as { email: string; password: string; name: string; confirmPassword: string })
+            }
             toast.success(authState === "login" ? "Logged in successfully" : "Account created successfully")
+            navigate('/home')
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             toast.error("An error occurred. Please try again.")
@@ -83,9 +90,8 @@ export const UserAuthForm: FC<UserAuthFormProps> = ({ authState, onStateChange }
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem className="space-y-1">
-                                        <FormLabel>Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="John Doe" {...field} />
+                                            <Input placeholder="Name" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -97,9 +103,8 @@ export const UserAuthForm: FC<UserAuthFormProps> = ({ authState, onStateChange }
                             name="email"
                             render={({ field }) => (
                                 <FormItem className="space-y-1">
-                                    <FormLabel>Email</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="name@example.com" {...field} />
+                                        <Input placeholder="Email" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -110,9 +115,8 @@ export const UserAuthForm: FC<UserAuthFormProps> = ({ authState, onStateChange }
                             name="password"
                             render={({ field }) => (
                                 <FormItem className="space-y-1">
-                                    <FormLabel>Password</FormLabel>
                                     <FormControl>
-                                        <PasswordInput placeholder="********" {...field} />
+                                        <PasswordInput placeholder="Password" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -124,9 +128,8 @@ export const UserAuthForm: FC<UserAuthFormProps> = ({ authState, onStateChange }
                                 name="confirmPassword"
                                 render={({ field }) => (
                                     <FormItem className="space-y-1">
-                                        <FormLabel>Confirm Password</FormLabel>
                                         <FormControl>
-                                            <PasswordInput placeholder="********" {...field} />
+                                            <PasswordInput placeholder="Confirm Password" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
