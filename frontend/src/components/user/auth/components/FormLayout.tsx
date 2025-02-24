@@ -18,18 +18,10 @@ export const FormLayout = () => {
                         {signin === 'login' ? "Please enter your email and password to log in." : "Please fill in the details to create your account."}
                     </p>
                 </div>
-                <UserAuthForm />
-                <div className="flex gap-1 justify-center text-sm">
-                    <p>
-                        {signin === "login" ? "Don't have an account?" : "Already have an account?"}
-                    </p>
-                    <p
-                        className="underline cursor-pointer text-blue-600 hover:text-blue-800"
-                        onClick={() => setSignin(signin === "login" ? "register" : "login")}
-                    >
-                        {signin === "login" ? "Register now." : "Login now."}
-                    </p>
-                </div>
+                <UserAuthForm
+                    authState={signin}
+                    onStateChange={setSignin}
+                />
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center">
                         <Separator />
