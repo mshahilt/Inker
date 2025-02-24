@@ -2,13 +2,13 @@ import { useState } from 'react'
 import { useTheme } from './theme-provider'
 
 const ThemeToggle = () => {
-  const { setTheme } = useTheme()
+    const { setTheme } = useTheme()
 
     const [theme, setLocalTheme] = useState(localStorage.getItem('vite-ui-theme'))
 
     const toggleTheme = () => {
-        setTheme(theme  === "dark" ? 'light' : 'dark')
-        setLocalTheme(theme  === "dark" ? 'light' : 'dark')
+        setTheme(theme === "dark" ? 'light' : 'dark')
+        setLocalTheme(theme === "dark" ? 'light' : 'dark')
 
     }
 
