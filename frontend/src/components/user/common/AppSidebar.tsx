@@ -4,7 +4,7 @@ import DarkLogo from "../../../assets/Logo Dark.svg";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { DropdownMenu, DropdownMenuTrigger } from "../../ui/dropdown-menu";
 import Button from "@/components/ui/button";
-import { useNavigate, Link } from "react-router-dom";
+import {  Link } from "react-router-dom";
 
 const items = [
 	{
@@ -30,7 +30,6 @@ const items = [
 ];
 
 export function AppSidebar() {
-	const navigate = useNavigate();
 
 	return (
 		<Sidebar>
