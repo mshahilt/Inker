@@ -10,4 +10,6 @@ export const HttpResponse = {
   INVALID_CREDENTIALS: "Invalid credentials",
   USER_CREATION_FAILED: "User creation failed",
   USER_CREATION_SUCCESS: "User created successfully",
+  UNEXPECTED_KEY_FOUND: "Unexpected key found",
+  INVALID_EMAIL: "Invalid email address",
 };

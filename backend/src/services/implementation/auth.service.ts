@@ -114,6 +114,9 @@ export class AuthService implements IAuthService {
         HttpResponse.USER_CREATION_FAILED
       );
 
+    //delete the data from redis
+    await redisClient.del(email);
+
     return {
       status: HttpStatus.OK,
       message: HttpResponse.USER_CREATION_SUCCESS,
