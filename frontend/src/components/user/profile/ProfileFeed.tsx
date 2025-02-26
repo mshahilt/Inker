@@ -83,7 +83,7 @@ const ProfileFeed: FC = () => {
         ))}
       </div>
 
-      <div className="flex flex-wrap justify-center  p-4 h-[85vh] lg:overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <div className="flex flex-wrap justify-center  p-4 h-[85vh] lg:overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle:'none'}}>
         {dummyPosts.length>0?(
           dummyPosts.map((post, index) => (
             <div
