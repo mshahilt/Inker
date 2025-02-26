@@ -97,11 +97,12 @@ export class AuthService implements IAuthService {
       throw createHttpError(HttpStatus.BAD_REQUEST, HttpResponse.OTP_INCORRECT);
 
     //get unique username
-    const uniqUsername = await generateUniqueUsername(storedData.username)
+    const uniqUsername = await generateUniqueUsername(storedData.name)
     
     //construct a user object
     const user  = {
       username: uniqUsername,
+      name: storedData.name,
       email: storedData.email,
       password: storedData.password,
     };
