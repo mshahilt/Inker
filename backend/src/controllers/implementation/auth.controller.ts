@@ -2,12 +2,24 @@ import { Request, Response, NextFunction } from "express";
 import { IAuthService } from "../../services/interface/IAuthService";
 import { IAuthController } from "../interface/IAuthController";
 import { HttpStatus } from "@/constants/status.constant";
+import signupSchema from "@/schema/signup-schema";
+import { createHttpError } from "@/utils/http-error.util";
+import { HttpResponse } from "@/constants/response-message.constant";
 
 export class AuthController implements IAuthController {
   constructor(private _authService: IAuthService) {}
 
   async signup(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      // console.log(validatedData, "validated");  const validatedData = signupSchema.parse(req.body);
+
+      // if (!validatedData) {
+      //   throw createHttpError(
+      //     HttpStatus.BAD_REQUEST,
+      //     HttpResponse.INVALID_CREDENTIALS
+      //   );
+      // }
+      // const user = await this._authService.signup(validatedData);
       const user = await this._authService.signup(req.body);
 
       res.status(200).json({
