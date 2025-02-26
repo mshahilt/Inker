@@ -13,6 +13,7 @@ import { IUserModel } from "@/models/implementation/user.model";
 import { createHttpError } from "@/utils/http-error.util";
 import { HttpStatus } from "@/constants/status.constant";
 import { HttpResponse } from "@/constants/response-message.constant";
+import { generateUniqueUsername } from "@/utils/generate-uniq-username";
 
 //!   Implementation for Auth Service
 export class AuthService implements IAuthService {
@@ -20,7 +21,7 @@ export class AuthService implements IAuthService {
 
   async signup(user: IUserModel): Promise<string> {
     const userExist = await this._userRepository.findByEmail(user.email);
-
+    
     if (userExist) {
       throw createHttpError(HttpStatus.CONFLICT, HttpResponse.USER_EXIST);
     }
@@ -54,7 +55,7 @@ export class AuthService implements IAuthService {
     email: string,
     password: string
   ): Promise<{ accessToken: string; refreshToken: string }> {
-    const user = await this._userRepository.findByEmail(email);
+    const user = await this._userRepository.findOneWithUsernameOrEmail(email);
 
     if (!user) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND);
@@ -95,15 +96,18 @@ export class AuthService implements IAuthService {
     if (storedData.otp !== otp)
       throw createHttpError(HttpStatus.BAD_REQUEST, HttpResponse.OTP_INCORRECT);
 
+    //get unique username
+    const uniqUsername = await generateUniqueUsername(storedData.username)
+    
     //construct a user object
-    const user = {
-      username: storedData.username,
+    const user  = {
+      username: uniqUsername,
       email: storedData.email,
       password: storedData.password,
     };
 
     //user creation
-    const createdUser = await this._userRepository.create(user);
+    const createdUser = await this._userRepository.create(user as IUserModel);
     if (!createdUser)
       throw createHttpError(
         HttpStatus.CONFLICT,
