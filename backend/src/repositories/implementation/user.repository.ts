@@ -23,4 +23,24 @@ export class UserRepository extends BaseRepository<IUserModel> implements IUserR
       throw new Error("Error finding user by email");
     }
   }
+
+  async findByUsername(username: string): Promise<IUserModel | null> {
+    try {
+      return await this.findOne({ username })
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error while finding user by email")
+    }
+  }
+
+  async findOneWithUsernameOrEmail(value: string): Promise<IUserModel | null> {
+    try {
+      return await this.findByUsernameOrEmail(value)
+    } catch (error) {
+      console.error(error);
+      throw new Error("errror while finding user by email,username")
+    }
+  }
+
+
 }
