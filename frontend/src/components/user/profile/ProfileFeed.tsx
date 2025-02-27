@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import BlogCard from "../common/BlogCard";
 import { ArrowBigUp,ArrowBigDown } from "lucide-react";
-
+import { Link } from "react-router-dom";
 const TAB_OPTIONS = ["Posts", "Archieve", "Saved"] as const;
 const dummyPosts = [
   {
@@ -89,8 +89,11 @@ const ProfileFeed: FC = () => {
             <div
               key={index}
               className="p-2 m-1 border-2 rounded-lg max-w-[300px] flex flex-col justify-between"
-            >   
-              <BlogCard post={post} />
+            > 
+             <Link to={`/blog/${index}`}>
+                <BlogCard post={post} />
+              </Link>  
+              
               <div className="flex ml-auto mt-3 px-2 text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 w-fit rounded-md ">
                 <button className="flex items-center gap-1 text-sm  hover:cursor-pointer">
                   <ArrowBigUp strokeWidth={1}/> {post.upvotes}
