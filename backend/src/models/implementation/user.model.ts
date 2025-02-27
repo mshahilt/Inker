@@ -34,10 +34,10 @@ const userSchema = new Schema<IUserModel>(
     bio: {
       type: String,
     },
-    profile_picture: {
+    profilePicture: {
       type: String,
     },
-    social_links: [
+    socialLinks: [
       {
         type: {
           type: String,
@@ -50,12 +50,12 @@ const userSchema = new Schema<IUserModel>(
     resume: {
       type: String,
     },
-    date_of_birth: {
+    dateOfBirth: {
       type: Date,
     },
   },
   {
-    timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
+    timestamps: true,
   }
 );
 
