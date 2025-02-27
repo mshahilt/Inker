@@ -21,9 +21,9 @@ export class AuthController implements IAuthController {
 
   async signin(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { email, password } = req.body;
+      const { email, username, password } = req.body;
 
-      const tokens = await this._authService.signin(email, password);
+      const tokens = await this._authService.signin(email || username, password);
 
       res.cookie("refreshToken", tokens.refreshToken, {
         httpOnly: true,

@@ -1,9 +1,9 @@
-import { IUser } from "../../models/interface/IUser";
+import { IUser } from "shared/types";
 
 export interface IAuthService {
   signup(user: IUser): Promise<string>;
   signin(
-    email: string,
+    identifier: string,
     password: string
   ): Promise<{ accessToken: string; refreshToken: string }>;
   verifyOtp(
