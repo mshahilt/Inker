@@ -4,11 +4,13 @@ import { IAuthController } from "../interface/IAuthController";
 import { HttpStatus } from "@/constants/status.constant";
 
 export class AuthController implements IAuthController {
-  constructor(private _authService: IAuthService) {}
+  constructor(private _authService: IAuthService) { }
 
   async signup(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const user = await this._authService.signup(req.body);
+
+      console.log("user",user)
 
       res.status(200).json({
         email: user,

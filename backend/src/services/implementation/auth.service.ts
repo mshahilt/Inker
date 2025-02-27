@@ -1,6 +1,6 @@
 import { IUserRepository } from "../../repositories/interface/IUserRepository";
 import { IAuthService } from "../interface/IAuthService";
-import generateOtp from "../../utils/generate-otp.util";
+import { generateOTP } from "@/utils/generate-otp.util";
 import { sendOtpEmail } from "../../utils/send-email.util";
 import { redisClient } from "../../configs/redis.config";
 import { hashPassword, comparePassword } from "../../utils/bcrypt.util";
@@ -9,16 +9,18 @@ import {
   generateRefreshToken,
 } from "../../utils/jwt.util";
 
-import { IUserModel } from "@/models/implementation/user.model";
 import { createHttpError } from "@/utils/http-error.util";
 import { HttpStatus } from "@/constants/status.constant";
 import { HttpResponse } from "@/constants/response-message.constant";
+import { IUser } from "shared/types";
+import { IUserModel } from "@/models/implementation/user.model";
 
 //!   Implementation for Auth Service
 export class AuthService implements IAuthService {
-  constructor(private _userRepository: IUserRepository) {}
+  constructor(private _userRepository: IUserRepository) { }
 
-  async signup(user: IUserModel): Promise<string> {
+  async signup(user: IUserModel): Promise<IUserModel> {
+    console.log("email is ", user.email)
     const userExist = await this._userRepository.findByEmail(user.email);
 
     if (userExist) {
@@ -27,27 +29,29 @@ export class AuthService implements IAuthService {
 
     user.password = await hashPassword(user.password as string);
 
-    const otp = generateOtp();
+    const otp = generateOTP();
 
-    await sendOtpEmail(user.email, otp);
+    console.log(typeof otp, otp)
 
-    const response = await redisClient.setEx(
-      user.email,
-      300,
-      JSON.stringify({
-        ...user,
-        otp,
-      })
-    );
+    // await sendOtpEmail(user.email, Number(otp));
 
-    if (!response) {
-      throw createHttpError(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        HttpResponse.SERVER_ERROR
-      );
-    }
+    // const response = await redisClient.setEx(
+    //   user.email,
+    //   300,
+    //   JSON.stringify({
+    //     ...user,
+    //     otp,
+    //   })
+    // );
 
-    return user.email;
+    // if (!response) {
+    //   throw createHttpError(
+    //     HttpStatus.INTERNAL_SERVER_ERROR,
+    //     HttpResponse.SERVER_ERROR
+    //   );
+    // }
+
+    return await this._userRepository.create(user)
   }
 
   async signin(

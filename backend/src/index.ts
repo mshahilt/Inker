@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
+
 dotenv.config();
 
 //* validating all the env
@@ -15,7 +16,8 @@ import { connectDb } from "./configs/mongo.config";
 import { connectRedis } from "./configs/redis.config";
 
 //* routers
-import authRouter from "./routers/auth.router";
+import authRouter from "@/routers/auth.router";
+import userRouter from "@/routers/user.router"
 import { notFoundHandler } from "./middlewares/not-found.middleware";
 import { errorHandler } from "./middlewares/error.middlware";
 
@@ -26,9 +28,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 connectDb();
-connectRedis();
+// connectRedis();
 
 app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 

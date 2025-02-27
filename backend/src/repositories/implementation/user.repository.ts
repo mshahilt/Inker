@@ -1,13 +1,14 @@
 import { IUserRepository } from "../interface/IUserRepository";
-import User, {IUserModel} from "../../models/implementation/user.model";
+import User, { IUserModel } from "../../models/implementation/user.model";
 import { BaseRepository } from "../base.repository";
+import { Types } from "mongoose";
 
 export class UserRepository extends BaseRepository<IUserModel> implements IUserRepository {
   constructor() {
     super(User);
   }
   async createUser(user: IUserModel): Promise<IUserModel> {
-    try {
+    try { 
       return await this.create(user);
     } catch (error) {
       console.error(error);
@@ -21,6 +22,25 @@ export class UserRepository extends BaseRepository<IUserModel> implements IUserR
     } catch (error) {
       console.error(error);
       throw new Error("Error finding user by email");
+    }
+  }
+
+  async findUserById(id: Types.ObjectId): Promise<IUserModel | null> {
+    try {
+      return await this.findById(id)
+    } catch (error: any) {
+      console.error(error)
+      console.log(error.message)
+      throw new Error("Error finding user by id")
+    }
+  }
+
+  async update(id: Types.ObjectId, data: Partial<IUserModel>): Promise<IUserModel | null> {
+    try {
+      return await this.findByIdAndUpdate(id, data)
+    } catch (error) {
+      console.error(error)
+      throw new Error("Error updating user by id")
     }
   }
 }

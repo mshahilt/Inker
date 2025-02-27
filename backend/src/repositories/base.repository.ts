@@ -6,7 +6,7 @@ import {
     DeleteResult,
     Types,
     UpdateWriteOpResult,
-	// isObjectIdOrHexString,
+    // isObjectIdOrHexString,
 } from "mongoose";
 
 export abstract class BaseRepository<T extends Document> {
@@ -18,11 +18,11 @@ export abstract class BaseRepository<T extends Document> {
     }
 
     async findByIdAndUpdate(id: Types.ObjectId, update: UpdateQuery<T>): Promise<T | null> {
-        return this.model.findByIdAndUpdate(id, update, {upsert: true, new: true});
+        return this.model.findByIdAndUpdate(id, update, { upsert: true, new: true });
     }
 
     async findAll(): Promise<T[]> {
-        return this.model.find();
+        return this.model.find()
     }
 
     async create(data: Partial<T>): Promise<T> {
@@ -31,7 +31,7 @@ export abstract class BaseRepository<T extends Document> {
     }
 
     async update(id: Types.ObjectId, data: Partial<T>): Promise<T | null> {
-        return this.model.findByIdAndUpdate(id, data, {new: true});
+        return this.model.findByIdAndUpdate(id, data, { new: true });
     }
 
     async updateOne(
@@ -58,7 +58,7 @@ export abstract class BaseRepository<T extends Document> {
     }
 
     async findOneAndUpdate(filter: FilterQuery<T>, update: UpdateQuery<T>): Promise<T> {
-        return this.model.findOneAndUpdate(filter, update, {upsert: true, new: true});
+        return this.model.findOneAndUpdate(filter, update, { upsert: true, new: true });
     }
 
     async findOneAndDelete(filter: FilterQuery<T>): Promise<T | null> {
@@ -66,13 +66,13 @@ export abstract class BaseRepository<T extends Document> {
     }
 
     async addToSet(id: string, field: string, value: unknown): Promise<T | null> {
-		// if(!isObjectIdOrHexString(id)){
+        // if(!isObjectIdOrHexString(id)){
 
-		// }
+        // }
         const updatedDocument = await this.model.findByIdAndUpdate(
             id,
-            {$addToSet: {[field]: value}} as UpdateQuery<T>,
-            {new: true}
+            { $addToSet: { [field]: value } } as UpdateQuery<T>,
+            { new: true }
         );
         return updatedDocument as unknown as T | null;
     }
@@ -80,8 +80,8 @@ export abstract class BaseRepository<T extends Document> {
     async pull(id: string, field: string, value: unknown): Promise<T | null> {
         const updatedDocument = await this.model.findByIdAndUpdate(
             id,
-            {$pull: {[field]: value}} as UpdateQuery<T>,
-            {new: true}
+            { $pull: { [field]: value } } as UpdateQuery<T>,
+            { new: true }
         );
         return updatedDocument as unknown as T | null;
     }

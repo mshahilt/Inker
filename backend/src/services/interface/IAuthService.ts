@@ -1,7 +1,8 @@
-import { IUser } from "../../models/interface/IUser";
+import { IUserModel } from "@/models/implementation/user.model";
+import { IUser } from "@shared/index";
 
 export interface IAuthService {
-  signup(user: IUser): Promise<string>;
+  signup(user: IUserModel): Promise<IUserModel>;
   signin(
     email: string,
     password: string

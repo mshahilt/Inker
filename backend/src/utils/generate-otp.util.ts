@@ -1,6 +1,6 @@
+import crypto from "crypto"
+import { START_INTERVAL, END_INTERVAL } from "@/constants"
 
-const generateOtp = () => {
-    return Math.floor(100000 + Math.random() * 999999) 
+export const generateOTP = () => {
+    return crypto.randomInt(START_INTERVAL, END_INTERVAL).toString()
 }
-
-export default generateOtp
