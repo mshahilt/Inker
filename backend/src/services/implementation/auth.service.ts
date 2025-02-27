@@ -8,18 +8,18 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from "../../utils/jwt.util";
-
-import { IUserModel } from "@/models/implementation/user.model";
 import { createHttpError } from "@/utils/http-error.util";
 import { HttpStatus } from "@/constants/status.constant";
 import { HttpResponse } from "@/constants/response-message.constant";
 import { generateUniqueUsername } from "@/utils/generate-uniq-username";
+import { IUser } from "shared/types";
+import { IUserModel } from "@/models/implementation/user.model";
 
 //!   Implementation for Auth Service
 export class AuthService implements IAuthService {
   constructor(private _userRepository: IUserRepository) {}
 
-  async signup(user: IUserModel): Promise<string> {
+  async signup(user: IUser): Promise<string> {
     const userExist = await this._userRepository.findByEmail(user.email);
     
     if (userExist) {
@@ -52,10 +52,10 @@ export class AuthService implements IAuthService {
   }
 
   async signin(
-    email: string,
+    identifier: string,
     password: string
   ): Promise<{ accessToken: string; refreshToken: string }> {
-    const user = await this._userRepository.findOneWithUsernameOrEmail(email);
+    const user = await this._userRepository.findOneWithUsernameOrEmail(identifier);
 
     if (!user) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND);
