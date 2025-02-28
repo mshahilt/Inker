@@ -16,11 +16,11 @@ export const router = createBrowserRouter([
         { path: "explore" , element: <div> Explore </div>},
         { path: "activity" , element: <div> Activity </div>},
         { path: "profile", element: <Profile /> },
+        { path: "account/profile", element: <EditProfile /> },
         { path: "blog/:id" , element: <BlogDetail />}
       ],
     },
     { path: "auth", element: < LoginPage /> },
-    { path:"editProfile", element: <EditProfile/> }
 
   ]);
 
