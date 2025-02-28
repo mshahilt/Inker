@@ -1,13 +1,11 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import EmailInput from "@/components/user/editProfile/EmailInput";
 import PictureInput from "@/components/user/editProfile/PictureInput";
 import UsernameInput from "@/components/user/editProfile/UsernameInput";
 import UpdateProfile from "@/components/user/editProfile/UpdateProfile";
-import Button from "@/components/ui/button";
 
 
 const EditProfile: FC = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen ">

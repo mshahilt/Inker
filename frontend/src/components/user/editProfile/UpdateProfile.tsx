@@ -9,7 +9,7 @@ import { Card } from '@/components/ui/card'
 const UpdateProfile: FC = () => {
     return (
 
-        <Card className="grid w-full max-w-sm items-center gap-1.5 space-y-2 p-4 shadow-none ">
+        <Card className="grid w-full items-center gap-1.5 space-y-2 p-4 shadow-none ">
             <Label htmlFor="email">Full Name</Label>
             <Input type="email" id="email" placeholder="my name" />
             <Label>Bio</Label>

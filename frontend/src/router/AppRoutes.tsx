@@ -21,7 +21,6 @@ export const router = createBrowserRouter([
       ],
     },
     { path: "auth", element: < LoginPage /> },
-    { path:"editProfile", element: <EditProfile/> }
 
   ]);
 
