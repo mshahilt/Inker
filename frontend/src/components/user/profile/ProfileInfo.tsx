@@ -43,7 +43,7 @@ const ProfileInfo: FC = () => {
         </div>
       </div>
 
-      <button className="outline rounded-md px-2 py-1 w-fit h-fit flex gap-1 mt-3 items-center text-neutral-500 ml-2 active:scale-95">
+      <button className="outline rounded-md px-2 py-1 w-fit h-fit flex gap-1 mt-3 items-center text-neutral-500 ml-2 active:scale-95"  onClick={() => navigate('/account/profile')}>
         <Plus strokeWidth={1.2} />
         <p className="text-md ">Add bio</p>
       </button>
