@@ -7,8 +7,7 @@ import { createBrowserRouter } from "react-router-dom";
 import BlogDetail from "@/components/user/blogDetailed";
 import OtpForm from "@/pages/auth/OtpForm";
 import { GoogleOAuthProvider } from '@react-oauth/google';
-
-const clientId = "757238086713-cmaic773782cs0qguopsrcmgvgk1jlj7.apps.googleusercontent.com";
+import { env } from "@/config/env";
 
 
 export const router = createBrowserRouter([
@@ -25,7 +24,7 @@ export const router = createBrowserRouter([
         { path: "blog/:id" , element: <BlogDetail />}
       ],
     },
-    { path: "auth", element: <GoogleOAuthProvider clientId={clientId}>< LoginPage /></GoogleOAuthProvider> },
+    { path: "auth", element: <GoogleOAuthProvider clientId={env.GOOGLE_CLIENT_ID}>< LoginPage /></GoogleOAuthProvider> },
     { path: "otp-verification", element: < OtpForm /> },
 
   ]);
