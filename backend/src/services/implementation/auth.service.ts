@@ -14,7 +14,6 @@ import { HttpResponse } from "@/constants/response-message.constant";
 import { generateUniqueUsername } from "@/utils/generate-uniq-username";
 import { IUser } from "shared/types";
 import { IUserModel } from "@/models/implementation/user.model";
-import { log } from "console";
 
 //!   Implementation for Auth Service
 export class AuthService implements IAuthService {
