@@ -45,11 +45,15 @@ export function InputOTPForm() {
         const email = location.state?.email as string
 
         try {
-            const response = await AuthService.otpVerificationService({...data, email})
+            const response = await AuthService.otpVerificationService({ ...data, email })
             navigate('/home')
             toast.success(response.message)
-        } catch (error: any) {
-            toast.error(error.message || "An error occurred. Please try again.")
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error("An unexpected error occurred.");
+            }
         } finally {
             setIsLoading(false)
         }

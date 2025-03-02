@@ -31,7 +31,7 @@ export const UserAuthForm: FC<UserAuthFormProps> = ({ authState, onStateChange }
 
     async function onSubmit(data: z.infer<typeof formSchema>) {
         setIsLoading(true);
-    
+
         try {
             if (authState === 'login') {
                 await AuthService.loginService(data);
@@ -42,13 +42,17 @@ export const UserAuthForm: FC<UserAuthFormProps> = ({ authState, onStateChange }
                 toast.success("OTP shared successfully");
                 navigate('/otp-verification', { state: { email: data.email } });
             }
-        } catch (error: any) {
-            toast.error(error.message || "An unexpected error occurred.");
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error("An unexpected error occurred.");
+            }
         } finally {
             setIsLoading(false);
         }
     }
-    
+
 
     return (
         <div className={cn("grid gap-6")}>
@@ -57,17 +61,17 @@ export const UserAuthForm: FC<UserAuthFormProps> = ({ authState, onStateChange }
                     <div className="grid gap-2">
                         {authState === "register" && (
                             <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem className="space-y-1">
-                                    <FormControl>
-                                        <Input placeholder="Name" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem className="space-y-1">
+                                        <FormControl>
+                                            <Input placeholder="Name" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                         )}
                         <FormField
                             control={form.control}
