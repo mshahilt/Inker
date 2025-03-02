@@ -5,6 +5,7 @@ import EditProfile from "@/pages/profile/editProfile";
 import Profile from "@/pages/profile/Profile";
 import { createBrowserRouter } from "react-router-dom";
 import BlogDetail from "@/components/user/blogDetailed";
+import OtpForm from "@/pages/auth/OtpForm";
 
 export const router = createBrowserRouter([
     { path: "/", element: <LandingPage/> },
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
       ],
     },
     { path: "auth", element: < LoginPage /> },
+    { path: "otp-verification", element: < OtpForm /> },
 
   ]);
 
