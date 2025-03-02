@@ -1,5 +1,5 @@
-import { FormLayout } from "@/components/user/auth/components/FormLayout";
-import { SideLayout } from "@/components/user/auth/components/SideLayout";
+import { FormLayout } from "@/components/user/auth/FormLayout";
+import { SideLayout } from "@/components/user/auth/SideLayout";
 
 export default function LoginPage() {
 

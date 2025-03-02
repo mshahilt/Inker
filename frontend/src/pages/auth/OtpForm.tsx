@@ -1,5 +1,5 @@
-import { InputOTPForm } from "@/components/user/auth/components/InputOTPForm";
-import { SideLayout } from "@/components/user/auth/components/SideLayout";
+import { InputOTPForm } from "@/components/user/auth/InputOTPForm";
+import { SideLayout } from "@/components/user/auth/SideLayout";
 
 const OtpForm = () => {
     return (
