@@ -6,7 +6,7 @@ import validate from "@/middlewares/validate.middleware";
 import signupSchema from "@/schema/signup-schema";
 import signinSchema from "@/schema/signin.schema";
 import verifyOtpSchema from "@/schema/verify-otp.schema";
-import verifyEmailScheam from "@/schema/forgot-email.schema";
+import verifyEmailScheam from "@/schema/forgot-pass.schema";
 import resetPasswordSchema from "@/schema/reset-pass.schema";
 
 const authRouter = Router();
