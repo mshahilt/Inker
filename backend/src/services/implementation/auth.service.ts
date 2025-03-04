@@ -131,15 +131,15 @@ export class AuthService implements IAuthService {
 
   async getResetPassword(token: string, password: string): Promise<{ status: number; message: string }> {
     //get email from redis
-    const validateToken = await redisClient.get(token);
-    if (!validateToken) {
+    const getEmail = await redisClient.get(token);
+    if (!getEmail) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.TOKEN_EXPIRED);
     }
 
     //hash password
     const hashedPassword = await hashPassword(password);
 
-    const updateUser = await this._userRepository.updatePassword(validateToken, hashedPassword);
+    const updateUser = await this._userRepository.updatePassword(getEmail, hashedPassword);
     if (!updateUser) {
       throw createHttpError(HttpStatus.INTERNAL_SERVER_ERROR, HttpResponse.SERVER_ERROR);
     }
