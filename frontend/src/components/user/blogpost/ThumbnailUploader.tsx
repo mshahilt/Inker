@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Camera, X } from "lucide-react";
 import { setThumbnail, setSaved } from "@/store/blogSlice";
 import type { RootState } from "@/store/store";
+import { Camera, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Input } from "@/components/ui/input"; // ✅ ShadCN Input
 
 export const ThumbnailUploader: React.FC = () => {
   const dispatch = useDispatch();
   const thumbnail = useSelector((state: RootState) => state.blogEditor.thumbnail);
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (thumbnail) {
+      const objectUrl = URL.createObjectURL(thumbnail);
+      setThumbnailUrl(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl); // Cleanup URL when unmounting
+    }
+    setThumbnailUrl(null);
+  }, [thumbnail]);
 
   const handleThumbnailClick = () => {
     fileInputRef.current?.click();
@@ -22,47 +36,49 @@ export const ThumbnailUploader: React.FC = () => {
     }
   };
 
-  const removeThumbnail = () => {
+  const removeThumbnail = (e: React.MouseEvent) => {
+    e.stopPropagation();
     dispatch(setThumbnail(null));
     dispatch(setSaved(false));
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   return (
-    <div
-      className="bg-gray-200 dark:bg-gray-600/30 rounded-lg p-4 flex items-center justify-center cursor-pointer relative"
+    <Card
+      className="relative flex items-center justify-center cursor-pointer border border-dashed p-4 bg-muted text-muted-foreground hover:bg-muted/80 transition rounded-lg"
       onClick={handleThumbnailClick}
     >
-      {thumbnail ? (
+      {thumbnailUrl ? (
         <>
-          <img
-            src={URL.createObjectURL(thumbnail)}
-            alt="Thumbnail preview"
-            className="max-h-40 rounded-md object-cover"
-          />
-          {/* <button
-            onClick={(e) => {
-              e.stopPropagation();
-              removeThumbnail();
-            }}
-            className="absolute -top-2 -right-2 bg-red-600 rounded-full p-1 hover:bg-red-700 transition-colors"
+          <AspectRatio ratio={16 / 9} className="w-full max-w-xs">
+            <img
+              src={thumbnailUrl}
+              alt="Thumbnail preview"
+              className="rounded-md object-cover w-full h-full"
+            />
+          </AspectRatio>
+          <Button
+            variant="destructive"
+            size="icon"
+            className="absolute -top-2 -right-2 w-6 h-6"
+            onClick={removeThumbnail}
           >
-            <X className="w-4 h-4 text-white" />
-          </button> */}
+            <X className="w-4 h-4" />
+          </Button>
         </>
       ) : (
-        <div className="flex flex-col items-center gap-2 text-gray-400">
+        <div className="flex flex-col items-center gap-2">
           <Camera className="w-8 h-8" />
           <Label className="text-sm font-medium">Add Thumbnail</Label>
         </div>
       )}
-      <input
+      <Input
         type="file"
         ref={fileInputRef}
         onChange={handleThumbnailChange}
         accept="image/*"
-        className="hidden"
+        className="absolute inset-0 opacity-0 cursor-pointer"
       />
-    </div>
+    </Card>
   );
 };

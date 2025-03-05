@@ -1,5 +1,7 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface MarkdownRendererProps {
   content: string;
@@ -34,6 +36,16 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
     em: ({ children }: { children: React.ReactNode }) => (
       <em className="italic text-gray-200">{children}</em>
     ),
+    code: ({ inline, className, children }: { inline?: boolean; className?: string; children: React.ReactNode }) => {
+      const match = /language-(\w+)/.exec(className || "");
+      return !inline ? (
+        <SyntaxHighlighter style={oneDark} language={match?.[1] || "plaintext"} PreTag="div">
+          {String(children).trim()}
+        </SyntaxHighlighter>
+      ) : (
+        <code className="bg-muted px-1 py-0.5 rounded text-sm font-mono text-purple-300">{children}</code>
+      );
+    },
   };
 
   return (

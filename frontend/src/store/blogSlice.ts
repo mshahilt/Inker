@@ -1,16 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { Blog, ViewMode, TabMode } from "../../../shared/types";
+import type { Blog, ViewMode, TabMode, BlogEditorState } from '@/types/index'
 
-interface BlogEditorState {
-  title: string;
-  content: string;
-  activeTab: TabMode;
-  saved: boolean;
-  thumbnail: File | null;
-  attachments: File[];
-  blogs: Blog[];
-  viewMode: ViewMode;
-}
+
 
 const initialState: BlogEditorState = {
   title: "",
