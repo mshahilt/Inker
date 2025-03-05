@@ -37,12 +37,12 @@ export function AppSidebar() {
   return (
     <Sidebar variant="sidebar" collapsible="icon">
       <SidebarHeader>
-        {isExpanded ? (
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton className="w-full h-12 flex items-center justify-center">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton className="w-full h-12 flex items-center justify-center">
+                  {isExpanded ?
                     <div className="w-full flex justify-center items-center">
                       <img
                         src={LightLogo}
@@ -54,52 +54,43 @@ export function AppSidebar() {
                         alt="Dark Logo"
                         className="max-w-[100px] dark:block hidden"
                       />
-                    </div>
-                  </SidebarMenuButton>
-                </DropdownMenuTrigger>
-              </DropdownMenu>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        ) : (
-			<>
-		<div className=" w-8 h-8 my-3 bg-black rounded-md">
-		</div>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton className="w-full h-12 flex items-center justify-center bg-black text-white">
-                <Plus size={18} strokeWidth={3} />
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-			</>
-        )}
+                    </div> :
+                    <div className="w-full flex justify-center items-center">
+                      <img
+                        src={LightLogo}
+                        alt="Light Logo"
+                        className="max-w-[100px] dark:hidden"
+                      />
+                      <img
+                        src={DarkLogo}
+                        alt="Dark Logo"
+                        className="max-w-[100px] dark:block hidden"
+                      />
+
+                    </div>}
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+        <SidebarMenu>
+        </SidebarMenu>
       </SidebarHeader>
 
       <SidebarContent>
         <SidebarGroup>
-          {isExpanded && (
-            <SidebarGroupLabel>
-              <Button className="w-full mt-1.5 mb-1.5 h-[32px]">
-                <Plus /> New Post
-              </Button>
-            </SidebarGroupLabel>
-          )}
-
           <SidebarGroupContent className="mt-2">
             <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton className="!bg-black !text-white dark:!bg-white dark:!text-black flex justify-center mb-2">
+                  <Plus size={18} strokeWidth={3} />
+                  {isExpanded && <Label className="whitespace-nowrap">New Post</Label>}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
-                    asChild
-                    className={`
-                      w-full h-12 flex items-center 
-                      ${
-                        isExpanded
-                          ? "justify-start pl-4 gap-4"
-                          : "justify-center"
-                      }
-                    `}
-                  >
+                    asChild>
                     <Link to={item.url} className="flex items-center w-full">
                       <item.icon size={18} strokeWidth={2} />
                       {isExpanded && <span className="ml-2">{item.title}</span>}
