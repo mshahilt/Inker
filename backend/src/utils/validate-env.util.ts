@@ -28,4 +28,7 @@ export function validateEnv() {
   if (!env.CLIENT_ORIGIN) {
     throw new Error("CLIENT_ORIGIN is not found in the env");
   }
+  if (!env.RESET_PASS_URL) {
+    throw new Error("RESET_PASS_URL is not found in the env");
+  }
 }
