@@ -23,7 +23,7 @@ export const BlogList: React.FC = () => {
               />
             )}
             <CardHeader>
-              <CardTitle className="text-lg">{blog.title}</CardTitle>
+              <CardTitle className="text-4xl font-bold text-foreground">{blog.title}</CardTitle>
             </CardHeader>
             <CardContent>
               <MarkdownRenderer content={blog.content} />

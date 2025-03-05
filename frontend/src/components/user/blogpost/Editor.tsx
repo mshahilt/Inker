@@ -9,6 +9,7 @@ import { AttachmentArea } from "./AttatchmentArea";
 import { setTitle, setContent, setActiveTab, addBlog } from "@/store/blogSlice";
 import type { RootState } from "@/store/store";
 import { MarkdownRenderer } from "./MarkdownRenderer";
+import { TabMode } from "@/types";
 
 export const Editor: React.FC = () => {
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ export const Editor: React.FC = () => {
       <Card className="border rounded-lg overflow-hidden">
         <div className="flex justify-between items-center px-4 py-3 border-b">
           <div className="flex gap-4">
-            {["write", "preview"].map((tab) => (
+            {(["write", "preview"] as TabMode[]).map((tab) => (
               <Button
                 key={tab}
                 variant="ghost"
@@ -79,7 +80,7 @@ export const Editor: React.FC = () => {
             />
           ) : (
             <div className="space-y-4 p-3 rounded-md">
-              {title && <h1 className="text-xl font-bold">{title}</h1>}
+              {title && <h1 className="text-4xl font-bold text-foreground">{title}</h1>}
               {content ? (
                 <MarkdownRenderer content={content} />
               ) : (

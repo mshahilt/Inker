@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Input } from "@/components/ui/input"; // ✅ ShadCN Input
+import { Input } from "@/components/ui/input"; 
 
 export const ThumbnailUploader: React.FC = () => {
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ export const ThumbnailUploader: React.FC = () => {
     if (thumbnail) {
       const objectUrl = URL.createObjectURL(thumbnail);
       setThumbnailUrl(objectUrl);
-      return () => URL.revokeObjectURL(objectUrl); // Cleanup URL when unmounting
+      return () => URL.revokeObjectURL(objectUrl); 
     }
     setThumbnailUrl(null);
   }, [thumbnail]);
@@ -45,7 +45,7 @@ export const ThumbnailUploader: React.FC = () => {
 
   return (
     <Card
-      className="relative flex items-center justify-center cursor-pointer border border-dashed p-4 bg-muted text-muted-foreground hover:bg-muted/80 transition rounded-lg"
+      className="relative flex items-center justify-center cursor-pointer border border-dashed p-4 bg-muted text-muted-foreground hover:bg-muted/80 rounded-lg"
       onClick={handleThumbnailClick}
     >
       {thumbnailUrl ? (
