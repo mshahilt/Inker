@@ -52,10 +52,12 @@ export function AppSidebar() {
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupLabel>
+						<Link to="/blog/create">
 						<Button className="w-full mt-1.5 mb-1.5 h-[32px]">
 							{" "}
 							<Plus /> New Post
 						</Button>
+						</Link>
 					</SidebarGroupLabel>
 					<SidebarGroupContent className="mt-2">
 						<SidebarMenu>
