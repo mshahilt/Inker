@@ -12,7 +12,6 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -20,8 +19,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { DropdownMenu, DropdownMenuTrigger } from "../../ui/dropdown-menu";
-import Button from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Label } from "@/components/ui/label";
 
 const items = [
   { title: "My feed", url: "/home", icon: Newspaper },
