@@ -81,10 +81,12 @@ export function AppSidebar() {
           <SidebarGroupContent className="mt-2">
             <SidebarMenu>
               <SidebarMenuItem>
+                <Link to="/blog/create">
                 <SidebarMenuButton className="!bg-black !text-white dark:!bg-white dark:!text-black flex justify-center mb-2">
                   <Plus size={18} strokeWidth={3} />
                   {isExpanded && <Label className="whitespace-nowrap">New Post</Label>}
                 </SidebarMenuButton>
+                </Link>
               </SidebarMenuItem>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
