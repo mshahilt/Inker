@@ -14,7 +14,7 @@ export const BlogList: React.FC = () => {
         <p className="text-muted-foreground text-center">No blogs posted yet.</p>
       ) : (
         blogs.map((blog, index) => (
-          <Card key={index} className="bg-muted">
+          <Card key={index} className="">
             {blog.thumbnail && (
               <img
                 src={URL.createObjectURL(blog.thumbnail)}
