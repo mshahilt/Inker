@@ -6,6 +6,8 @@ import validate from "@/middlewares/validate.middleware";
 import signupSchema from "@/schema/signup-schema";
 import signinSchema from "@/schema/signin.schema";
 import verifyOtpSchema from "@/schema/verify-otp.schema";
+import verifyEmailScheam from "@/schema/forgot-pass.schema";
+import resetPasswordSchema from "@/schema/reset-pass.schema";
 
 const authRouter = Router();
 
@@ -28,5 +30,21 @@ authRouter.post(
   validate(verifyOtpSchema),
   authController.verifyOtp.bind(authController)
 );
+authRouter.post(
+  "/forgot-password",
+  validate(verifyEmailScheam),
+  authController.forgotPassword.bind(authController)
+)
+authRouter.post(
+  "/reset-password",
+  validate(resetPasswordSchema),
+  authController.resetPassword.bind(authController)
+)
+authRouter.post(
+  "/refresh-token",
+  authController.refreshAccessToken.bind(authController)
+)
+
+
 
 export default authRouter;
