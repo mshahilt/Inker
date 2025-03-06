@@ -40,6 +40,10 @@ authRouter.post(
   validate(resetPasswordSchema),
   authController.resetPassword.bind(authController)
 )
+authRouter.post(
+  "/refresh-token",
+  authController.refreshAccessToken.bind(authController)
+)
 
 
 
