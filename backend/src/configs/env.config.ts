@@ -23,4 +23,10 @@ export const env = {
   get PASSKEY() {
     return process.env.PASSKEY;
   },
+  get CLIENT_ORIGIN() {
+    return process.env.CLIENT_ORIGIN;
+  },
+  get RESET_PASS_URL() {
+    return process.env.RESET_PASS_URL;
+  }
 };

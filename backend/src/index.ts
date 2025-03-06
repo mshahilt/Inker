@@ -18,10 +18,15 @@ import { connectRedis } from "./configs/redis.config";
 import authRouter from "./routers/auth.router";
 import { notFoundHandler } from "./middlewares/not-found.middleware";
 import { errorHandler } from "./middlewares/error.middlware";
+import { env } from "./configs/env.config";
 
-const PORT = 3000;
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: env.CLIENT_ORIGIN,
+    credentials: true, 
+    methods: ["GET", "POST", "PUT", "DELETE"], 
+    allowedHeaders: ["Content-Type", "Authorization"], 
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -32,4 +37,4 @@ app.use("/api/auth", authRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-app.listen(PORT, () => console.log(`Server started at ${PORT} ✅`));
+app.listen(env.PORT, () => console.log(`Server started at ${env.PORT} ✅`));
