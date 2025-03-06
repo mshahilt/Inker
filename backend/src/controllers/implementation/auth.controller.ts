@@ -37,6 +37,7 @@ export class AuthController implements IAuthController {
       next(err);
     }
   }
+
   async verifyOtp(
     req: Request,
     res: Response,
@@ -73,6 +74,18 @@ export class AuthController implements IAuthController {
       res.status(HttpStatus.OK).json(updateUserPassword)
 
     } catch (error) {
+      next(error)
+    }
+  }
+
+  async refreshAccessToken(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try{
+      const { refreshToken } = req.cookies;
+
+      const accessToken = await this._authService.refreshAccessToken(refreshToken);
+
+      res.status(HttpStatus.OK).json(accessToken);
+    }catch(error) {
       next(error)
     }
   }

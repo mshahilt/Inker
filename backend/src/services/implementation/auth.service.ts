@@ -4,7 +4,7 @@ import generateOtp from "../../utils/generate-otp.util";
 import { sendOtpEmail, sendResetPasswordEmail } from "../../utils/send-email.util";
 import { redisClient } from "../../configs/redis.config";
 import { hashPassword, comparePassword } from "../../utils/bcrypt.util";
-import { generateAccessToken, generateRefreshToken } from "../../utils/jwt.util";
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../../utils/jwt.util";
 import { createHttpError } from "@/utils/http-error.util";
 import { HttpStatus } from "@/constants/status.constant";
 import { HttpResponse } from "@/constants/response-message.constant";
@@ -12,6 +12,7 @@ import { generateUniqueUsername } from "@/utils/generate-uniq-username";
 import { IUser } from "shared/types";
 import { IUserModel } from "@/models/implementation/user.model";
 import { nanoid } from "nanoid";
+import { JwtPayload } from "jsonwebtoken";
 
 //!   Implementation for Auth Service
 export class AuthService implements IAuthService {
@@ -151,5 +152,24 @@ export class AuthService implements IAuthService {
       status: HttpStatus.OK,
       message: HttpResponse.PASSWORD_CHANGE_SUCCESS,
     };
+  }
+
+  async refreshAccessToken(token: string): Promise<string> {
+
+    if(!token){
+      throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.NO_TOKEN);
+    }
+
+    const decoded = verifyRefreshToken(token) as JwtPayload;
+    if(!decoded) {
+      throw createHttpError(HttpStatus.NO_CONTENT, HttpResponse.TOKEN_EXPIRED);
+    }
+
+    const payload = { id: decoded.id, role: decoded.role, email: decoded.email };
+
+    const accessToken = generateAccessToken(payload);
+
+    return accessToken;
+
   }
 }
