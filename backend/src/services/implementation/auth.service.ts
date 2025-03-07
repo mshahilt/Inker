@@ -172,4 +172,20 @@ export class AuthService implements IAuthService {
     return accessToken;
 
   }
+
+  async usernameUpdate(
+    id: string,
+    username: string
+  ): Promise<string | undefined> {
+    const isExist = await this._userRepository.findByUsername(username);
+    if (isExist?._id == id) {
+      throw createHttpError(HttpStatus.BAD_REQUEST, HttpResponse.SAME_USERNAME);
+    }
+    if (isExist) {
+      throw createHttpError(HttpStatus.CONFLICT, HttpResponse.USERNAME_EXIST);
+    }
+
+    const user = await this._userRepository.updateUsername(id, username);
+    return user ? user.username : undefined;
+  }
 }

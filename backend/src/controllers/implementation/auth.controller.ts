@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { IAuthService } from "../../services/interface/IAuthService";
 import { IAuthController } from "../interface/IAuthController";
 import { HttpStatus } from "@/constants/status.constant";
+import { HttpResponse } from "@/constants/response-message.constant";
 
 export class AuthController implements IAuthController {
   constructor(private _authService: IAuthService) {}
@@ -86,6 +87,16 @@ export class AuthController implements IAuthController {
 
       res.status(HttpStatus.OK).json(accessToken);
     }catch(error) {
+      next(error)
+    }
+  }
+  async editUsername (req:Request,res:Response,next:NextFunction):Promise<void>{
+    try{
+      const { username } = req.body
+      const { id } = JSON.parse(req.headers["x-user-payload"] as string)
+      const updatedUsername = await this._authService.usernameUpdate(id, username)
+      res.status(HttpStatus.OK).json({message: HttpResponse.USERNAME_CHANGED, username: updatedUsername})
+    }catch(error){
       next(error)
     }
   }
