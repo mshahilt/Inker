@@ -16,4 +16,8 @@ export const HttpResponse = {
   TOKEN_EXPIRED: "Token not valid or expired!",
   PASSWORD_CHANGE_SUCCESS: "Password changed successfully!",
   UNAUTHORIZED: "Unauthorized access!",
+  USERNAME_EXIST:"Username Already Exist",
+  NO_PAYLOAD:"Payload not found",
+  USERNAME_CHANGED: "Username has been changed successfully",
+  SAME_USERNAME: "Cannot change to old username"
 };
