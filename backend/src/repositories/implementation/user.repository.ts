@@ -50,4 +50,13 @@ export class UserRepository extends BaseRepository<IUserModel> implements IUserR
       throw new Error("errror while updating the password");
     }
   }
+
+  async updateUsername(id: string, username: string): Promise<IUserModel | null> {
+    try{
+      return await this.model.findByIdAndUpdate(id,{$set:{username:username}})
+    }catch(error){
+      console.log(error)
+      throw new Error("error while updating username")
+    }
+  }
 }

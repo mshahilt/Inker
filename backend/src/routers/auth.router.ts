@@ -8,6 +8,8 @@ import signinSchema from "@/schema/signin.schema";
 import verifyOtpSchema from "@/schema/verify-otp.schema";
 import verifyEmailScheam from "@/schema/forgot-pass.schema";
 import resetPasswordSchema from "@/schema/reset-pass.schema";
+import editUsernameSchema from "@/schema/username.schema";
+import verifyToken from "@/middlewares/verify-token.middleware";
 
 const authRouter = Router();
 
@@ -16,35 +18,41 @@ const authService = new AuthService(userRepository);
 const authController = new AuthController(authService);
 
 authRouter.post(
-  "/register",
+  "/auth/register",
   validate(signupSchema),
   authController.signup.bind(authController)
 );
 authRouter.post(
-  "/login",
+  "/auth/login",
   validate(signinSchema),
   authController.signin.bind(authController)
 );
 authRouter.post(
-  "/otp",
+  "/auth/otp",
   validate(verifyOtpSchema),
   authController.verifyOtp.bind(authController)
 );
 authRouter.post(
-  "/forgot-password",
+  "/auth/forgot-password",
   validate(verifyEmailScheam),
   authController.forgotPassword.bind(authController)
 )
 authRouter.post(
-  "/reset-password",
+  "/auth/reset-password",
   validate(resetPasswordSchema),
   authController.resetPassword.bind(authController)
 )
 authRouter.post(
-  "/refresh-token",
+  "/auth/refresh-token",
   authController.refreshAccessToken.bind(authController)
 )
 
+authRouter.patch(
+  "/profile/change-username",
+  validate(editUsernameSchema),
+  verifyToken('user'),
+  authController.editUsername.bind(authController)
+);
 
 
 export default authRouter;

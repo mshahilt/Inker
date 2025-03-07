@@ -10,4 +10,6 @@ export interface IUserRepository {
   findOneWithUsernameOrEmail(value: string): Promise<IUserModel | null>;
 
   updatePassword(email: string, hashedPassword: string): Promise<IUserModel | null>;
+  
+  updateUsername(id: string,username: string):Promise<IUserModel | null>;
 }

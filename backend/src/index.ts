@@ -33,7 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 connectDb();
 connectRedis();
 
-app.use("/api/auth", authRouter);
+app.use("/api", authRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
