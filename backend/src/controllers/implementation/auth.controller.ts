@@ -37,6 +37,7 @@ export class AuthController implements IAuthController {
       next(err);
     }
   }
+
   async verifyOtp(
     req: Request,
     res: Response,
@@ -52,6 +53,40 @@ export class AuthController implements IAuthController {
       res.status(HttpStatus.CREATED).json(verificationResponse);
     } catch (err) {
       next(err);
+    }
+  }
+
+  async forgotPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { email } = req.body;
+      const verifyForgotPassword = await this._authService.verifyForgotPassword(email);
+      res.status(HttpStatus.OK).json(verifyForgotPassword);
+      
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async resetPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const {password,token} = req.body;
+      const updateUserPassword = await this._authService.getResetPassword(token,password);
+      res.status(HttpStatus.OK).json(updateUserPassword)
+
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async refreshAccessToken(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try{
+      const { refreshToken } = req.cookies;
+
+      const accessToken = await this._authService.refreshAccessToken(refreshToken);
+
+      res.status(HttpStatus.OK).json(accessToken);
+    }catch(error) {
+      next(error)
     }
   }
 }

@@ -5,6 +5,7 @@ import EditProfile from "@/pages/profile/editProfile";
 import Profile from "@/pages/profile/Profile";
 import { createBrowserRouter } from "react-router-dom";
 import BlogDetail from "@/components/user/blogDetailed";
+import AddBlog from '@/components/user/blogpost/index'
 import OtpForm from "@/pages/auth/OtpForm";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { env } from "@/config/env";
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
         { path: "activity" , element: <div> Activity </div>},
         { path: "profile", element: <Profile /> },
         { path: "account/profile", element: <EditProfile /> },
+        { path: "blog/create" , element: <AddBlog />},
         { path: "blog/:id" , element: <BlogDetail />}
       ],
     },
