@@ -83,5 +83,20 @@ export const AuthService = {
       toast.error(err.response?.data?.error || "Attempt to change password failed. Please try again.");
       throw new Error(err.response?.data?.error || "Attempt to change password failed.");
     }
+  },
+
+  changeProfilePictureService: async (data: {userId: string, file: File}): Promise<{ status: number; message: string }> => {
+    try {
+      const response = await axiosInstance.patch<{ status: number; message: string }> ("api/profile/change-profile-picture", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      });
+      return response.data;
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ error: string }>;
+      toast.error(err.response?.data?.error || "Attempt to change profile picture failed. Please try again.");
+      throw new Error(err.response?.data?.error || "Attempt to change profile picture failed.");
+    }
   }
 }
