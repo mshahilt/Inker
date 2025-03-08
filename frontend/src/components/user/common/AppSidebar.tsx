@@ -1,79 +1,101 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
-import LightLogo from "../../../assets/Logo Light.svg"
-import DarkLogo from "../../../assets/Logo Dark.svg"
-
+import {
+  UserRound,
+  Newspaper,
+  Search,
+  SquareActivity,
+  Plus,
+} from "lucide-react";
+import LightLogo from "../../../assets/Logo Light.svg";
+import DarkLogo from "../../../assets/Logo Dark.svg";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { DropdownMenu, DropdownMenuTrigger } from "../../ui/dropdown-menu";
+import { Link } from "react-router-dom";
+import { Label } from "@/components/ui/label";
 
 const items = [
-  {
-    title: "Home",
-    url: "#",
-    icon: Home,
-  },
-  {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
+  { title: "My feed", url: "/home", icon: Newspaper },
+  { title: "Explore", url: "/explore", icon: Search },
+  { title: "Activity", url: "/activity", icon: SquareActivity },
+  { title: "Profile", url: "/profile", icon: UserRound },
 ];
 
 export function AppSidebar() {
+  const { state } = useSidebar();
+  const isExpanded = state === "expanded";
+
   return (
-    <Sidebar>
+    <Sidebar variant="sidebar" collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton size="lg">
-                  <div className="w-full flex justify-center items-center">
-                    <img src={LightLogo} alt=""  className="max-w-[100px] dark:hidden"/>
-                    <img src={DarkLogo} alt=""  className="max-w-[100px] dark:block hidden"/>
-                  </div>
+                <SidebarMenuButton className="w-full h-12 flex items-center justify-center">
+                  {isExpanded ?
+                    <div className="w-full flex justify-center items-center">
+                      <img
+                        src={LightLogo}
+                        alt="Light Logo"
+                        className="max-w-[100px] dark:hidden"
+                      />
+                      <img
+                        src={DarkLogo}
+                        alt="Dark Logo"
+                        className="max-w-[100px] dark:block hidden"
+                      />
+                    </div> :
+                    <div className="w-full flex justify-center items-center">
+                      <img
+                        src={LightLogo}
+                        alt="Light Logo"
+                        className="max-w-[100px] dark:hidden"
+                      />
+                      <img
+                        src={DarkLogo}
+                        alt="Dark Logo"
+                        className="max-w-[100px] dark:block hidden"
+                      />
+
+                    </div>}
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
             </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
+        <SidebarMenu>
+        </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
+          <SidebarGroupContent className="mt-2">
             <SidebarMenu>
+              <SidebarMenuItem>
+                <Link to="/blog/create">
+                <SidebarMenuButton className="!bg-black !text-white dark:!bg-white dark:!text-black flex justify-center mb-2">
+                  <Plus size={18} strokeWidth={3} />
+                  {isExpanded && <Label className="whitespace-nowrap">New Post</Label>}
+                </SidebarMenuButton>
+                </Link>
+              </SidebarMenuItem>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+                  <SidebarMenuButton
+                    asChild>
+                    <Link to={item.url} className="flex items-center w-full">
+                      <item.icon size={18} strokeWidth={2} />
+                      {isExpanded && <span className="ml-2">{item.title}</span>}
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -83,4 +105,5 @@ export function AppSidebar() {
       </SidebarContent>
     </Sidebar>
   );
+
 }

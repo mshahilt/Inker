@@ -1,5 +1,5 @@
 import { IUserRepository } from "../interface/IUserRepository";
-import User, {IUserModel} from "../../models/implementation/user.model";
+import User, { IUserModel } from "../../models/implementation/user.model";
 import { BaseRepository } from "../base.repository";
 
 export class UserRepository extends BaseRepository<IUserModel> implements IUserRepository {
@@ -21,6 +21,33 @@ export class UserRepository extends BaseRepository<IUserModel> implements IUserR
     } catch (error) {
       console.error(error);
       throw new Error("Error finding user by email");
+    }
+  }
+
+  async findByUsername(username: string): Promise<IUserModel | null> {
+    try {
+      return await this.findOne({ username });
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error while finding user by email");
+    }
+  }
+
+  async findOneWithUsernameOrEmail(value: string): Promise<IUserModel | null> {
+    try {
+      return await this.findByUsernameOrEmail(value);
+    } catch (error) {
+      console.error(error);
+      throw new Error("errror while finding user by email,username");
+    }
+  }
+
+  async updatePassword(email: string, hashedPassword: string): Promise<IUserModel | null> {
+    try {
+      return await this.model.findOneAndUpdate({ email: email }, { $set: { password: hashedPassword } }, { new: true });
+    } catch (error) {
+      console.error(error);
+      throw new Error("errror while updating the password");
     }
   }
 }

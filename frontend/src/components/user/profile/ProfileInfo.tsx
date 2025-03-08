@@ -1,8 +1,10 @@
 import { ChevronLeft, Plus } from 'lucide-react'
 import { FC } from 'react'
 import Button from '../../ui/button'
+import { useNavigate } from 'react-router-dom'
 
 const ProfileInfo: FC = () => {
+  const navigate = useNavigate()
   return (
     <div className='min-w-[300px] lg:w-[400px] p-2 lg:border lg:h-full'>
       <div className="flex justify-between items-center mb-5 px-2">
@@ -10,7 +12,7 @@ const ProfileInfo: FC = () => {
           <ChevronLeft strokeWidth={1.8} className='md:hidden' />
           <p> Profile</p>
         </div>
-        <Button className='active:scale-95'>Edit Profile</Button>
+        <Button className='active:scale-95' onClick={() => navigate('/account/profile')}>Edit Profile</Button>
 
       </div>
 
@@ -41,7 +43,7 @@ const ProfileInfo: FC = () => {
         </div>
       </div>
 
-      <button className="outline rounded-md px-2 py-1 w-fit h-fit flex gap-1 mt-3 items-center text-neutral-500 ml-2 active:scale-95">
+      <button className="outline rounded-md px-2 py-1 w-fit h-fit flex gap-1 mt-3 items-center text-neutral-500 ml-2 active:scale-95"  onClick={() => navigate('/account/profile')}>
         <Plus strokeWidth={1.2} />
         <p className="text-md ">Add bio</p>
       </button>
