@@ -72,5 +72,16 @@ export const AuthService = {
       toast.error(err.response?.data?.error || "Attempt to change username failed. Please try again.");
       throw new Error(err.response?.data?.error || "Attempt to change username failed.");
     }
+  },
+
+  changePasswordService: async (data: {userId: string, oldPassword: string; newPassword: string;}): Promise<{ status: number; message: string }> => {
+    try {
+      const response = await axiosInstance.patch<{ status: number; message: string }> ("api/profile/change-password", data);
+      return response.data;
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ error: string }>;
+      toast.error(err.response?.data?.error || "Attempt to change password failed. Please try again.");
+      throw new Error(err.response?.data?.error || "Attempt to change password failed.");
+    }
   }
 }
