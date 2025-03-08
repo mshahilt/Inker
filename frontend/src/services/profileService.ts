@@ -25,7 +25,8 @@ interface ProfileData extends UpdateProfileData {
     createdAt: string; 
     updatedAt: string; 
   }
-  
+
+
 
 export const AuthService = {
   updateProfileService: async (data: UpdateProfileData): Promise<{ status: number; message: string, updatedFields: string[]}> => {
@@ -49,5 +50,17 @@ export const AuthService = {
       throw new Error(err.response?.data?.error || "Profile details fetching failed.");
     }
   },
+
+  changeEmailService: async (data: {oldEmail: string; newEmail: string;}): Promise<{ status: number; message: string }> => {
+    try {
+      const response = await axiosInstance.patch<{ status: number; message: string }> ("api/profile/change-email", data);
+      return response.data;
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ error: string }>;
+      toast.error(err.response?.data?.error || "Attempt to change email failed. Please try again.");
+      throw new Error(err.response?.data?.error || "Attempt to change email failed.");
+    }
+  },
+
 
 }
