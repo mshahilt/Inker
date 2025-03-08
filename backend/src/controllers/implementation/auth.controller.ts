@@ -7,7 +7,11 @@ import { HttpResponse } from "@/constants/response-message.constant";
 export class AuthController implements IAuthController {
   constructor(private _authService: IAuthService) { }
 
-  async signup(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async signup(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+  ): Promise<void> {
     try {
 
       const user = await this._authService.signup(req.body);
@@ -20,7 +24,12 @@ export class AuthController implements IAuthController {
     }
   }
 
-  async signin(req: Request, res: Response, next: NextFunction): Promise<void> {
+
+  async signin(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+  ): Promise<void> {
     try {
       const { email, username, password } = req.body;
 
@@ -38,6 +47,7 @@ export class AuthController implements IAuthController {
       next(err);
     }
   }
+  
 
   async verifyOtp(
     req: Request,
@@ -57,7 +67,12 @@ export class AuthController implements IAuthController {
     }
   }
 
-  async forgotPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+
+  async forgotPassword(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+  ): Promise<void> {
     try {
       const { email } = req.body;
       const verifyForgotPassword = await this._authService.verifyForgotPassword(email);
@@ -68,7 +83,12 @@ export class AuthController implements IAuthController {
     }
   }
 
-  async resetPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+
+  async resetPassword(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+  ): Promise<void> {
     try {
       const { password, token } = req.body;
       const updateUserPassword = await this._authService.getResetPassword(token, password);
@@ -79,7 +99,12 @@ export class AuthController implements IAuthController {
     }
   }
 
-  async refreshAccessToken(req: Request, res: Response, next: NextFunction): Promise<void> {
+
+  async refreshAccessToken(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+  ): Promise<void> {
     try {
       const { refreshToken } = req.cookies;
 

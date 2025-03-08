@@ -6,4 +6,6 @@ export interface IProfileService {
 
     usernameUpdate(id: string, username: string): Promise<string | undefined>;
 
+    updateProfile(id: string, updateData: Partial<IUserModel>): Promise<IUserModel>;
+
 }

@@ -21,4 +21,5 @@ export const HttpResponse = {
   USERNAME_CHANGED: "Username has been changed successfully",
   SAME_USERNAME: "Cannot change to old username",
   RESOURCE_FOUND: "Resource found.",
+  RESOURCE_UPDATED: "Resource updated.",
 };

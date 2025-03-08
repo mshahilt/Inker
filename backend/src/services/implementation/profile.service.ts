@@ -4,6 +4,7 @@ import { createHttpError } from "@/utils/http-error.util";
 import { HttpStatus } from "@/constants/status.constant";
 import { HttpResponse } from "@/constants/response-message.constant";
 import { IUserModel } from "@/models/implementation/user.model";
+import { IUser } from "shared/types";
 
 
 //!   Implementation for Profile Service
@@ -32,6 +33,21 @@ export class ProfileService implements IProfileService {
 
     const user = await this._userRepository.updateUsername(id, username);
     return user ? user.username : undefined;
+  }
+
+  async updateProfile(id:string,updateData:Partial<IUserModel>): Promise<IUserModel>{
+    const isExist = await this._userRepository.findUserById(id);
+
+    if(!isExist){
+      throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND);
+    }
+
+    const updatedData = await this._userRepository.updateUserProfile(id,updateData) 
+    
+    if(!updatedData){
+      throw createHttpError(HttpStatus.NOT_FOUND,HttpResponse.USER_NOT_FOUND)
+    }
+    return updatedData
   }
 
 }

@@ -4,6 +4,7 @@ import verifyToken from "@/middlewares/verify-token.middleware";
 import { ProfileService } from "@/services/implementation/profile.service";
 import { ProfileController } from "@/controllers/implementation/profile.controller";
 import validate from "@/middlewares/validate.middleware";
+import updateProfileSchema from "@/schema/update-profile.schema";
 import editUsernameSchema from "@/schema/username.schema";
 
 const profileRouter = Router();
@@ -23,6 +24,15 @@ profileRouter.patch(
   verifyToken('user'),
   profileController.editUsername.bind(profileController)
 );
+
+profileRouter.patch(
+  "/update-profile",
+  validate(updateProfileSchema),
+  verifyToken('user'),
+  profileController.updateProfile.bind(profileController)
+);
+
+
 
 
 
