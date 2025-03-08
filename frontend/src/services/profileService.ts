@@ -4,15 +4,31 @@ import { toast } from "sonner";
 
 
 
-interface profileData {
+interface UpdateProfileData {
     name: string;
     bio: string;
     resume: string;
-    socials: {platform: string, url: string}[] 
+    socials: {
+        platform: string, 
+        url: string
+    }[] 
 }
 
+interface ProfileData extends UpdateProfileData {
+    _id: string; 
+    userName: string; 
+    email: string; 
+    status: "Active" | "Inactive" | "Pending"; 
+    role: "User" | "Admin";
+    profilePicture: string;
+    dateOfBirth: string; 
+    createdAt: string; 
+    updatedAt: string; 
+  }
+  
+
 export const AuthService = {
-  updateProfileService: async (data: profileData): Promise<{ status: number; message: string, updatedFields: string[]}> => {
+  updateProfileService: async (data: UpdateProfileData): Promise<{ status: number; message: string, updatedFields: string[]}> => {
     try {
       const response = await axiosInstance.put<{ status: number; message: string, updatedFields: string[]}> ("/api/profile/update", data);
       return response.data;
@@ -20,6 +36,17 @@ export const AuthService = {
       const err = error as AxiosError<{ error: string }>;
       toast.error(err.response?.data?.error || "Profile update failed. Please try again.");
       throw new Error(err.response?.data?.error || "Profile update failed.");
+    }
+  },
+
+  profileDetailsService: async (): Promise<{ status: number; data: ProfileData }> => {
+    try {
+      const response = await axiosInstance.get<{ status: number; data: ProfileData }> ("api/profile");
+      return response.data;
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ error: string }>;
+      toast.error(err.response?.data?.error || "Profile details fetching failed. Please try again.");
+      throw new Error(err.response?.data?.error || "Profile details fetching failed.");
     }
   },
 
