@@ -5,11 +5,11 @@ import { HttpStatus } from "@/constants/status.constant";
 import { HttpResponse } from "@/constants/response-message.constant";
 
 export class AuthController implements IAuthController {
-  constructor(private _authService: IAuthService) {}
+  constructor(private _authService: IAuthService) { }
 
   async signup(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-    
+
       const user = await this._authService.signup(req.body);
 
       res.status(HttpStatus.OK).json({
@@ -62,7 +62,7 @@ export class AuthController implements IAuthController {
       const { email } = req.body;
       const verifyForgotPassword = await this._authService.verifyForgotPassword(email);
       res.status(HttpStatus.OK).json(verifyForgotPassword);
-      
+
     } catch (error) {
       next(error)
     }
@@ -70,8 +70,8 @@ export class AuthController implements IAuthController {
 
   async resetPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const {password,token} = req.body;
-      const updateUserPassword = await this._authService.getResetPassword(token,password);
+      const { password, token } = req.body;
+      const updateUserPassword = await this._authService.getResetPassword(token, password);
       res.status(HttpStatus.OK).json(updateUserPassword)
 
     } catch (error) {
@@ -80,23 +80,13 @@ export class AuthController implements IAuthController {
   }
 
   async refreshAccessToken(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try{
+    try {
       const { refreshToken } = req.cookies;
 
       const accessToken = await this._authService.refreshAccessToken(refreshToken);
 
       res.status(HttpStatus.OK).json(accessToken);
-    }catch(error) {
-      next(error)
-    }
-  }
-  async editUsername (req:Request,res:Response,next:NextFunction):Promise<void>{
-    try{
-      const { username } = req.body
-      const { id } = JSON.parse(req.headers["x-user-payload"] as string)
-      const updatedUsername = await this._authService.usernameUpdate(id, username)
-      res.status(HttpStatus.OK).json({message: HttpResponse.USERNAME_CHANGED, username: updatedUsername})
-    }catch(error){
+    } catch (error) {
       next(error)
     }
   }

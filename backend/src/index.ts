@@ -19,13 +19,14 @@ import authRouter from "./routers/auth.router";
 import { notFoundHandler } from "./middlewares/not-found.middleware";
 import { errorHandler } from "./middlewares/error.middlware";
 import { env } from "./configs/env.config";
+import profileRouter from "./routers/profile.router";
 
 const app = express();
 app.use(cors({
     origin: env.CLIENT_ORIGIN,
-    credentials: true, 
-    methods: ["GET", "POST", "PUT", "DELETE"], 
-    allowedHeaders: ["Content-Type", "Authorization"], 
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -33,7 +34,8 @@ app.use(express.urlencoded({ extended: true }));
 connectDb();
 connectRedis();
 
-app.use("/api", authRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/profile", profileRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 

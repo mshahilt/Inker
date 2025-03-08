@@ -16,7 +16,7 @@ import { JwtPayload } from "jsonwebtoken";
 
 //!   Implementation for Auth Service
 export class AuthService implements IAuthService {
-  constructor(private _userRepository: IUserRepository) {}
+  constructor(private _userRepository: IUserRepository) { }
 
   async signup(user: IUser): Promise<string> {
     const userExist = await this._userRepository.findByEmail(user.email);
@@ -156,12 +156,12 @@ export class AuthService implements IAuthService {
 
   async refreshAccessToken(token: string): Promise<string> {
 
-    if(!token){
+    if (!token) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.NO_TOKEN);
     }
 
     const decoded = verifyRefreshToken(token) as JwtPayload;
-    if(!decoded) {
+    if (!decoded) {
       throw createHttpError(HttpStatus.NO_CONTENT, HttpResponse.TOKEN_EXPIRED);
     }
 
@@ -170,22 +170,7 @@ export class AuthService implements IAuthService {
     const accessToken = generateAccessToken(payload);
 
     return accessToken;
-
   }
 
-  async usernameUpdate(
-    id: string,
-    username: string
-  ): Promise<string | undefined> {
-    const isExist = await this._userRepository.findByUsername(username);
-    if (isExist?._id == id) {
-      throw createHttpError(HttpStatus.BAD_REQUEST, HttpResponse.SAME_USERNAME);
-    }
-    if (isExist) {
-      throw createHttpError(HttpStatus.CONFLICT, HttpResponse.USERNAME_EXIST);
-    }
 
-    const user = await this._userRepository.updateUsername(id, username);
-    return user ? user.username : undefined;
-  }
 }

@@ -14,5 +14,4 @@ export interface IAuthService {
 
   refreshAccessToken(token: string): Promise<string>;
 
-  usernameUpdate(id: string, username: string): Promise<string | undefined>;
 }

@@ -6,5 +6,4 @@ export interface IAuthController {
     forgotPassword(req: Request, res: Response, next: NextFunction) : Promise <void>;
     resetPassword(req: Request, res: Response, next: NextFunction ) : Promise <void>;
     refreshAccessToken(req: Request, res: Response, next: NextFunction): Promise<void>;
-    editUsername(req: Request, res: Response, next: NextFunction): Promise<void>;
 }

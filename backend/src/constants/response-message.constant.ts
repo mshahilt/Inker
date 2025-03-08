@@ -19,5 +19,6 @@ export const HttpResponse = {
   USERNAME_EXIST:"Username Already Exist",
   NO_PAYLOAD:"Payload not found",
   USERNAME_CHANGED: "Username has been changed successfully",
-  SAME_USERNAME: "Cannot change to old username"
+  SAME_USERNAME: "Cannot change to old username",
+  RESOURCE_FOUND: "Resource found.",
 };

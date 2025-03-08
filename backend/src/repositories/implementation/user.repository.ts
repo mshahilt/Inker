@@ -52,9 +52,9 @@ export class UserRepository extends BaseRepository<IUserModel> implements IUserR
   }
 
   async updateUsername(id: string, username: string): Promise<IUserModel | null> {
-    try{
-      return await this.model.findByIdAndUpdate(id,{$set:{username:username}})
-    }catch(error){
+    try {
+      return await this.model.findByIdAndUpdate(id, { $set: { username: username } })
+    } catch (error) {
       console.log(error)
       throw new Error("error while updating username")
     }
