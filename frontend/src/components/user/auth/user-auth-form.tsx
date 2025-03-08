@@ -107,12 +107,20 @@ export const UserAuthForm: FC<UserAuthFormProps> = ({ authState, onStateChange }
             </Form>
             <div className="text-center">
                 {authState === "login" ? (
+
                     <p>
+                        <div className='flex items-center justify-center'>
+                            <Button variant="link" className='text-sm font-medium text-muted-foreground hover:opacity-75' onClick={() => onStateChange("register")}>
+                                ForgetPassword?
+                            </Button>
+                        </div>
                         Don't have an account?{" "}
                         <Button variant="link" onClick={() => onStateChange("register")}>
                             Register
                         </Button>
                     </p>
+
+
                 ) : (
                     <p>
                         Already have an account?{" "}
