@@ -22,7 +22,7 @@ const BottomNavigation = () => {
 					<span className="text-xs text-gray-500">Explore</span>
 				</Link>
 
-				<Link to="#" className="inline-flex flex-col items-center justify-center px-5" onClick={() => handleTabChange("create")}>
+				<Link to="/blog/create" className="inline-flex flex-col items-center justify-center px-5" onClick={() => handleTabChange("create")}>
 					<div className="flex items-center justify-center w-10 h-10 bg-black rounded-full">
 						<Plus className="w-6 h-6 text-white" />
 					</div>
