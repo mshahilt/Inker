@@ -62,5 +62,15 @@ export const AuthService = {
     }
   },
 
-
+  
+  changeUsernameService: async (data: {oldUserName: string; newUserName: string;}): Promise<{ status: number; message: string }> => {
+    try {
+      const response = await axiosInstance.patch<{ status: number; message: string }> ("api/profile/change-username", data);
+      return response.data;
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ error: string }>;
+      toast.error(err.response?.data?.error || "Attempt to change username failed. Please try again.");
+      throw new Error(err.response?.data?.error || "Attempt to change username failed.");
+    }
+  }
 }
