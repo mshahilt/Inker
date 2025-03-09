@@ -1,3 +1,4 @@
+import { hashPassword } from "@/utils";
 import { model, Schema, Document } from "mongoose";
 // import { IUser } from "shared/types";
 
@@ -73,8 +74,17 @@ const userSchema = new Schema<IUserModel>(
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
+
   }
 );
+
+
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    this.password = await hashPassword(this.password)
+  }
+  next()
+})
 
 const User = model<IUserModel>("User", userSchema);
 export default User;

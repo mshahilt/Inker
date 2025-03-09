@@ -57,6 +57,14 @@ export abstract class BaseRepository<T extends Document> {
         return this.model.findOne(filter);
     }
 
+    async findByUsernameOrEmail (value: string) : Promise<T | null> {
+        const filter : FilterQuery<T> = {
+            $or: [{email : value} , {username:value}]
+        }
+
+        return this.model.findOne(filter);
+    }
+
     async findOneAndUpdate(filter: FilterQuery<T>, update: UpdateQuery<T>): Promise<T> {
         return this.model.findOneAndUpdate(filter, update, { upsert: true, new: true });
     }

@@ -8,11 +8,10 @@ export class AuthController implements IAuthController {
 
   async signup(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+    
       const user = await this._authService.signup(req.body);
 
-      console.log("user",user)
-
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         email: user,
       });
     } catch (err) {
@@ -33,7 +32,7 @@ export class AuthController implements IAuthController {
         sameSite: "strict",
       });
 
-      res.status(200).json({ accessToken: tokens.accessToken });
+      res.status(HttpStatus.OK).json({ accessToken: tokens.accessToken });
     } catch (err) {
       next(err);
     }

@@ -8,7 +8,7 @@ export class UserRepository extends BaseRepository<IUserModel> implements IUserR
     super(User);
   }
   async createUser(user: IUserModel): Promise<IUserModel> {
-    try { 
+    try {
       return await this.create(user);
     } catch (error) {
       console.error(error);
@@ -28,9 +28,8 @@ export class UserRepository extends BaseRepository<IUserModel> implements IUserR
   async findUserById(id: Types.ObjectId): Promise<IUserModel | null> {
     try {
       return await this.findById(id)
-    } catch (error: any) {
+    } catch (error) {
       console.error(error)
-      console.log(error.message)
       throw new Error("Error finding user by id")
     }
   }
@@ -43,4 +42,23 @@ export class UserRepository extends BaseRepository<IUserModel> implements IUserR
       throw new Error("Error updating user by id")
     }
   }
+  async findByUsername(username: string): Promise<IUserModel | null> {
+    try {
+      return await this.findOne({ username })
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error while finding user by email")
+    }
+  }
+
+  async findOneWithUsernameOrEmail(value: string): Promise<IUserModel | null> {
+    try {
+      return await this.findByUsernameOrEmail(value)
+    } catch (error) {
+      console.error(error);
+      throw new Error("errror while finding user by email,username")
+    }
+  }
+
+
 }

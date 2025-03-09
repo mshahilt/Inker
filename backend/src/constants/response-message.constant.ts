@@ -11,5 +11,6 @@ export const HttpResponse = {
   USER_CREATION_FAILED: "User creation failed",
   USER_CREATION_SUCCESS: "User created successfully",
   EMAIL_EXIST: "Email already exist",
-  INVALID_EMAIL: "Invalid email address"
+  INVALID_EMAIL: "Invalid email address",
+  UNEXPECTED_KEY_FOUND: "Unexpected key found",
 };
