@@ -25,7 +25,7 @@ profileRouter.patch(
   profileController.editUsername.bind(profileController)
 );
 
-profileRouter.patch(
+profileRouter.put(
   "/update-profile",
   validate(updateProfileSchema),
   verifyToken('user'),
