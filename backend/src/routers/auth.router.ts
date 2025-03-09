@@ -1,11 +1,10 @@
 import { Router } from "express";
-import { AuthController } from "../controllers/implementation/auth.controller";
-import { AuthService } from "../services/implementation/auth.service";
-import { UserRepository } from "../repositories/implementation/user.repository";
-import validate from "@/middlewares/validate.middleware";
-import signupSchema from "@/schema/signup-schema";
-import signinSchema from "@/schema/signin.schema";
-import verifyOtpSchema from "@/schema/verify-otp.schema";
+import { AuthController } from "@/controllers/implementation/auth.controller";
+import { AuthService } from "@/services/implementation/auth.service";
+import { UserRepository } from "@/repositories/implementation/user.repository";
+import { signinSchema, signupSchema, verifyOtpSchema } from "@/schema";
+import { validate } from "@/middlewares";
+
 
 const authRouter = Router();
 
@@ -14,8 +13,7 @@ const authService = new AuthService(userRepository);
 const authController = new AuthController(authService);
 
 authRouter.post(
-  "/register",
-  validate(signupSchema),
+  "/register", validate(signupSchema),
   authController.signup.bind(authController)
 );
 authRouter.post(
