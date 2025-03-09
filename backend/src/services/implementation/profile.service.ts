@@ -4,7 +4,6 @@ import { createHttpError } from "@/utils/http-error.util";
 import { HttpStatus } from "@/constants/status.constant";
 import { HttpResponse } from "@/constants/response-message.constant";
 import { IUserModel } from "@/models/implementation/user.model";
-import { IUser } from "shared/types";
 
 
 //!   Implementation for Profile Service
