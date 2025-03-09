@@ -1,6 +1,6 @@
 import { HttpResponse } from "@/constants/response-message.constant";
 import { z } from "zod";
-const signinSchema = z
+export const signinSchema = z
   .object({
     email: z.string().email(HttpResponse.INVALID_EMAIL),
     password: z
@@ -16,5 +16,3 @@ const signinSchema = z
       ),
   })
   .strict();
-
-export default signinSchema;
