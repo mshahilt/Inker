@@ -57,9 +57,9 @@ export abstract class BaseRepository<T extends Document> {
         return this.model.findOne(filter);
     }
 
-    async findByUsernameOrEmail (value: string) : Promise<T | null> {
-        const filter : FilterQuery<T> = {
-            $or: [{email : value} , {username:value}]
+    async findByUsernameOrEmail(value: string): Promise<T | null> {
+        const filter: FilterQuery<T> = {
+            $or: [{ email: value }, { username: value }]
         }
 
         return this.model.findOne(filter);
