@@ -16,8 +16,8 @@ const BlogCard: FC<BlogCardProps> = ({ post }) => {
     <div className="max-w-[400px] w-full rounded-lg justify-items-stretch">
       <div className="flex justify-between ">
       <h2 className="text-lg font-bold text-x dark:text-white text-gray-800 w-[80%] hover:cursor-pointer line-clamp-2">
-  {post.title}
-</h2>
+          {post.title}
+        </h2>
 
         <button>
           <EllipsisVertical className="rounded-xl hover:cursor-pointer"/>

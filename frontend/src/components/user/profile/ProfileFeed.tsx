@@ -3,7 +3,7 @@ import BlogCard from "../common/BlogCard";
 import { ArrowBigUp,ArrowBigDown } from "lucide-react";
 import { Link } from "react-router-dom";
 const TAB_OPTIONS = ["Posts", "Archieve", "Saved"] as const;
-const dummyPosts = [
+export const dummyPosts = [
   {
     title: "Mastering JavaScript Closures",
     tags: ["javascript", "functional-programming", "advanced"],
