@@ -16,9 +16,11 @@ import { JwtPayload } from "jsonwebtoken";
 
 //!   Implementation for Auth Service
 export class AuthService implements IAuthService {
-  constructor(private _userRepository: IUserRepository) {}
+  constructor(private _userRepository: IUserRepository) { }
 
-  async signup(user: IUser): Promise<string> {
+  async signup(
+    user: IUser
+  ): Promise<string> {
     const userExist = await this._userRepository.findByEmail(user.email);
 
     if (userExist) {
@@ -47,7 +49,11 @@ export class AuthService implements IAuthService {
     return user.email;
   }
 
-  async signin(identifier: string, password: string): Promise<{ accessToken: string; refreshToken: string }> {
+
+  async signin(
+    identifier: string,
+    password: string
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     const user = await this._userRepository.findOneWithUsernameOrEmail(identifier);
 
     if (!user) {
@@ -68,7 +74,11 @@ export class AuthService implements IAuthService {
     return { accessToken, refreshToken };
   }
 
-  async verifyOtp(otp: string, email: string): Promise<{ status: number; message: string }> {
+
+  async verifyOtp(
+    otp: string,
+    email: string
+  ): Promise<{ status: number; message: string }> {
     //get the stored data from redis
     const storedDataString = await redisClient.get(email);
     if (!storedDataString) {
@@ -106,7 +116,10 @@ export class AuthService implements IAuthService {
     };
   }
 
-  async verifyForgotPassword(email: string): Promise<{ status: number; message: string }> {
+
+  async verifyForgotPassword(
+    email: string
+  ): Promise<{ status: number; message: string }> {
     const isExist = await this._userRepository.findByEmail(email);
 
     if (!isExist) {
@@ -130,7 +143,11 @@ export class AuthService implements IAuthService {
     };
   }
 
-  async getResetPassword(token: string, password: string): Promise<{ status: number; message: string }> {
+
+  async getResetPassword(
+    token: string,
+    password: string
+  ): Promise<{ status: number; message: string }> {
     //get email from redis
     const getEmail = await redisClient.get(token);
     if (!getEmail) {
@@ -154,14 +171,17 @@ export class AuthService implements IAuthService {
     };
   }
 
-  async refreshAccessToken(token: string): Promise<string> {
 
-    if(!token){
+  async refreshAccessToken(
+    token: string
+  ): Promise<string> {
+
+    if (!token) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.NO_TOKEN);
     }
 
     const decoded = verifyRefreshToken(token) as JwtPayload;
-    if(!decoded) {
+    if (!decoded) {
       throw createHttpError(HttpStatus.NO_CONTENT, HttpResponse.TOKEN_EXPIRED);
     }
 
@@ -170,22 +190,7 @@ export class AuthService implements IAuthService {
     const accessToken = generateAccessToken(payload);
 
     return accessToken;
-
   }
 
-  async usernameUpdate(
-    id: string,
-    username: string
-  ): Promise<string | undefined> {
-    const isExist = await this._userRepository.findByUsername(username);
-    if (isExist?._id == id) {
-      throw createHttpError(HttpStatus.BAD_REQUEST, HttpResponse.SAME_USERNAME);
-    }
-    if (isExist) {
-      throw createHttpError(HttpStatus.CONFLICT, HttpResponse.USERNAME_EXIST);
-    }
 
-    const user = await this._userRepository.updateUsername(id, username);
-    return user ? user.username : undefined;
-  }
 }

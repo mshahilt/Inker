@@ -39,7 +39,7 @@ const userSchema = new Schema<IUserModel>(
     },
     socialLinks: [
       {
-        type: {
+        platform: {
           type: String,
         },
         url: {

@@ -2,14 +2,17 @@ import { Request, Response, NextFunction } from "express";
 import { IAuthService } from "../../services/interface/IAuthService";
 import { IAuthController } from "../interface/IAuthController";
 import { HttpStatus } from "@/constants/status.constant";
-import { HttpResponse } from "@/constants/response-message.constant";
 
 export class AuthController implements IAuthController {
-  constructor(private _authService: IAuthService) {}
+  constructor(private _authService: IAuthService) { }
 
-  async signup(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async signup(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+  ): Promise<void> {
     try {
-    
+
       const user = await this._authService.signup(req.body);
 
       res.status(HttpStatus.OK).json({
@@ -20,7 +23,12 @@ export class AuthController implements IAuthController {
     }
   }
 
-  async signin(req: Request, res: Response, next: NextFunction): Promise<void> {
+
+  async signin(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+  ): Promise<void> {
     try {
       const { email, username, password } = req.body;
 
@@ -38,6 +46,7 @@ export class AuthController implements IAuthController {
       next(err);
     }
   }
+  
 
   async verifyOtp(
     req: Request,
@@ -57,21 +66,31 @@ export class AuthController implements IAuthController {
     }
   }
 
-  async forgotPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+
+  async forgotPassword(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+  ): Promise<void> {
     try {
       const { email } = req.body;
       const verifyForgotPassword = await this._authService.verifyForgotPassword(email);
       res.status(HttpStatus.OK).json(verifyForgotPassword);
-      
+
     } catch (error) {
       next(error)
     }
   }
 
-  async resetPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+
+  async resetPassword(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+  ): Promise<void> {
     try {
-      const {password,token} = req.body;
-      const updateUserPassword = await this._authService.getResetPassword(token,password);
+      const { password, token } = req.body;
+      const updateUserPassword = await this._authService.getResetPassword(token, password);
       res.status(HttpStatus.OK).json(updateUserPassword)
 
     } catch (error) {
@@ -79,24 +98,19 @@ export class AuthController implements IAuthController {
     }
   }
 
-  async refreshAccessToken(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try{
+
+  async refreshAccessToken(
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+  ): Promise<void> {
+    try {
       const { refreshToken } = req.cookies;
 
       const accessToken = await this._authService.refreshAccessToken(refreshToken);
 
       res.status(HttpStatus.OK).json(accessToken);
-    }catch(error) {
-      next(error)
-    }
-  }
-  async editUsername (req:Request,res:Response,next:NextFunction):Promise<void>{
-    try{
-      const { username } = req.body
-      const { id } = JSON.parse(req.headers["x-user-payload"] as string)
-      const updatedUsername = await this._authService.usernameUpdate(id, username)
-      res.status(HttpStatus.OK).json({message: HttpResponse.USERNAME_CHANGED, username: updatedUsername})
-    }catch(error){
+    } catch (error) {
       next(error)
     }
   }

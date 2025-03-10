@@ -10,7 +10,7 @@ export interface IUser {
     profilePicture?: string;
     socialLinks: { type: string; url: string }[];
     resume?: string;
-    dateOfBirth: Date;
+    dateOfBirth?: Date;
     createdAt: Date;
     updatedAt: Date;
 }
