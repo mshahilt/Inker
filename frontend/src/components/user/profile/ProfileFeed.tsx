@@ -56,7 +56,7 @@ export const dummyPosts = [
 ];
 
 const ProfileFeed: FC = () => {
-  const [activeTab, setActiveTab] = useState<"Posts" | "Archive" | "Saved">(
+  const [activeTab, setActiveTab] = useState<"Posts" | "Archieve" | "Saved">(
     "Posts"
   );
 
