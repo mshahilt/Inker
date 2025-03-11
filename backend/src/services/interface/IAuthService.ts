@@ -1,5 +1,4 @@
 import { IUser } from "shared/types";
-
 export interface IAuthService {
 
   signup(user: IUser): Promise<string>;
