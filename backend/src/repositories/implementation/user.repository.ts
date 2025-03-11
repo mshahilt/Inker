@@ -2,6 +2,7 @@ import { IUserRepository } from "../interface/IUserRepository";
 import User, { IUserModel } from "../../models/implementation/user.model";
 import { BaseRepository } from "../base.repository";
 import { Types } from "mongoose";
+import { toObjectId } from "@/utils";
 
 export class UserRepository extends BaseRepository<IUserModel> implements IUserRepository {
   constructor() {
@@ -25,23 +26,6 @@ export class UserRepository extends BaseRepository<IUserModel> implements IUserR
     }
   }
 
-  async findUserById(id: Types.ObjectId): Promise<IUserModel | null> {
-    try {
-      return await this.findById(id)
-    } catch (error) {
-      console.error(error)
-      throw new Error("Error finding user by id")
-    }
-  }
-
-  async update(id: Types.ObjectId, data: Partial<IUserModel>): Promise<IUserModel | null> {
-    try {
-      return await this.findByIdAndUpdate(id, data)
-    } catch (error) {
-      console.error(error)
-      throw new Error("Error updating user by id")
-    }
-  }
   async findByUsername(username: string): Promise<IUserModel | null> {
     try {
       return await this.findOne({ username });
@@ -89,12 +73,21 @@ export class UserRepository extends BaseRepository<IUserModel> implements IUserR
 
   async updateUserProfile(id: string, updateData: Partial<IUserModel>): Promise<IUserModel | null> {
     try {
-      return await this.model.findByIdAndUpdate(id, 
+      return await this.model.findByIdAndUpdate(id,
         { $set: { ...updateData } },
         { new: true, upsert: true, runValidators: true })
     } catch (error) {
       console.log(error)
       throw new Error("error while updating username")
+    }
+  }
+
+  async updateEmail(id: string, email: string): Promise<IUserModel | null> {
+    try {
+      return await this.findByIdAndUpdate(toObjectId(id), { $set: { email } })
+    } catch (error) {
+      console.log(error)
+      throw new Error("error while updating email")
     }
   }
 }
