@@ -1,23 +1,23 @@
 import { hashPassword } from "@/utils";
 import { model, Schema, Document } from "mongoose";
-// import { IUser } from "shared/types";
+import { IUser } from "shared/types";
 
-export interface IUser {
-  _id: string;
-  username: string;
-  name: string;
-  email: string;
-  password: string;
-  status: "active" | "blocked";
-  role: "user" | "moderator";
-  bio: string;
-  profile_picture?: string;
-  social_links: { type: string; url: string }[];
-  resume?: string;
-  date_of_birth: Date;
-  created_at: Date;
-  updated_at: Date;
-}
+// export interface IUser {
+//   _id: string;
+//   username: string;
+//   name: string;
+//   email: string;
+//   password: string;
+//   status: "active" | "blocked";
+//   role: "user" | "moderator";
+//   bio: string;
+//   profile_picture?: string;
+//   social_links: { type: string; url: string }[];
+//   resume?: string;
+//   date_of_birth: Date;
+//   created_at: Date;
+//   updated_at: Date;
+// }
 
 export interface IUserModel extends Document, Omit<IUser, "_id"> { }
 
@@ -52,12 +52,12 @@ const userSchema = new Schema<IUserModel>(
     bio: {
       type: String,
     },
-    profile_picture: {
+    profilePicture: {
       type: String,
     },
-    social_links: [
+    socialLinks: [
       {
-        type: {
+        platform: {
           type: String,
         },
         url: {
@@ -68,7 +68,7 @@ const userSchema = new Schema<IUserModel>(
     resume: {
       type: String,
     },
-    date_of_birth: {
+    dateOfBirth: {
       type: Date,
     },
   },
@@ -79,7 +79,7 @@ const userSchema = new Schema<IUserModel>(
 );
 
 
-userSchema.pre("save", async function (next) {
+userSchema.pre<IUserModel>("save", async function (next) {
   if (this.isModified("password")) {
     this.password = await hashPassword(this.password)
   }

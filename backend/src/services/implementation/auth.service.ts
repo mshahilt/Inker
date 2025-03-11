@@ -1,27 +1,32 @@
-import { IUserRepository } from "@/repositories/interface/IUserRepository";
-import {
-  comparePassword,
-  generateAccessToken,
-  generateOTP,
-  generateRefreshToken,
-  sendOtpEmail,
-} from "@/utils";
-
+import { IUserRepository } from "../../repositories/interface/IUserRepository";
 import { createHttpError } from "@/utils/http-error.util";
 import { HttpStatus } from "@/constants/status.constant";
 import { HttpResponse } from "@/constants/response-message.constant";
 import { IUser } from "shared/types";
 import { IUserModel } from "@/models/implementation/user.model";
 import { generateUniqueUsername } from "@/utils/generate-uniq-username";
-import { redisClient } from "@/configs/redis.config";
+
+import { nanoid } from "nanoid";
+import { JwtPayload } from "jsonwebtoken";
+import {
+  comparePassword,
+  generateAccessToken,
+  generateOTP,
+  generateRefreshToken,
+  sendOtpEmail,
+  sendResetPasswordEmail,
+  verifyRefreshToken
+} from "@/utils";
 import { IAuthService } from "../interface";
+import { redisClient } from "@/configs/redis.config";
 
 //!   Implementation for Auth Service
 export class AuthService implements IAuthService {
-  constructor(private _userRepository: IUserRepository) { }
+  constructor(private readonly _userRepository: IUserRepository) { }
 
-  async signup(user: IUserModel): Promise<IUserModel> {
-    console.log("email is ", user.email)
+  async signup(
+    user: IUser
+  ): Promise<string> {
     const userExist = await this._userRepository.findByEmail(user.email);
 
     if (userExist) {
@@ -31,7 +36,7 @@ export class AuthService implements IAuthService {
 
     const otp = generateOTP();
 
-    await sendOtpEmail(user.email, Number(otp));
+    await sendOtpEmail(user.email, otp);
 
     const response = await redisClient.setEx(
       user.email,
@@ -43,32 +48,27 @@ export class AuthService implements IAuthService {
     );
 
     if (!response) {
-      throw createHttpError(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        HttpResponse.SERVER_ERROR
-      );
+      throw createHttpError(HttpStatus.INTERNAL_SERVER_ERROR, HttpResponse.SERVER_ERROR);
     }
 
-    return await this._userRepository.create(user)
+    return user.email
   }
 
+
   async signin(
-    email: string,
+    identifier: string,
     password: string
   ): Promise<{ accessToken: string; refreshToken: string }> {
-    const user = await this._userRepository.findOneWithUsernameOrEmail(email);
+    const user = await this._userRepository.findOneWithUsernameOrEmail(identifier);
 
     if (!user) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND);
     }
 
-    const isMatch = await comparePassword(password, user.password as string);
+    const isMatch = await comparePassword(password, user.password);
 
     if (!isMatch) {
-      throw createHttpError(
-        HttpStatus.UNAUTHORIZED,
-        HttpResponse.PASSWORD_INCORRECT
-      );
+      throw createHttpError(HttpStatus.UNAUTHORIZED, HttpResponse.PASSWORD_INCORRECT);
     }
 
     const payload = { id: user._id, role: user.role, email: user.email };
@@ -76,30 +76,26 @@ export class AuthService implements IAuthService {
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
+
     return { accessToken, refreshToken };
   }
+
 
   async verifyOtp(
     otp: string,
     email: string
   ): Promise<{ status: number; message: string }> {
-    //get the stored data from redis
     const storedDataString = await redisClient.get(email);
     if (!storedDataString) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.OTP_NOT_FOUND);
     }
 
-    //parsed from string to object
     const storedData = JSON.parse(storedDataString);
 
-    //validated the otp
-    if (storedData.otp !== otp)
-      throw createHttpError(HttpStatus.BAD_REQUEST, HttpResponse.OTP_INCORRECT);
+    if (storedData.otp !== otp) throw createHttpError(HttpStatus.BAD_REQUEST, HttpResponse.OTP_INCORRECT);
 
-    //get unique username
     const uniqUsername = await generateUniqueUsername(storedData.name)
 
-    //construct a user object
     const user = {
       username: uniqUsername,
       name: storedData.name,
@@ -107,15 +103,11 @@ export class AuthService implements IAuthService {
       password: storedData.password,
     };
 
-    //user creation
-    const createdUser = await this._userRepository.create(user as IUserModel);
-    if (!createdUser)
-      throw createHttpError(
-        HttpStatus.CONFLICT,
-        HttpResponse.USER_CREATION_FAILED
-      );
 
-    //delete the data from redis
+    const createdUser = await this._userRepository.create(user as IUserModel);
+
+    if (!createdUser) throw createHttpError(HttpStatus.CONFLICT, HttpResponse.USER_CREATION_FAILED);
+
     await redisClient.del(email);
 
     return {
@@ -123,4 +115,74 @@ export class AuthService implements IAuthService {
       message: HttpResponse.USER_CREATION_SUCCESS,
     };
   }
+
+
+  async verifyForgotPassword(
+    email: string
+  ): Promise<{ status: number; message: string }> {
+    const isExist = await this._userRepository.findByEmail(email);
+
+    if (!isExist) {
+      throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND);
+    }
+    const token = nanoid();
+
+    const storeOnReddis = await redisClient.setEx(token, 300, isExist.email);
+
+    if (!storeOnReddis) {
+      throw createHttpError(HttpStatus.INTERNAL_SERVER_ERROR, HttpResponse.SERVER_ERROR);
+    }
+    await sendResetPasswordEmail(isExist.email, token);
+
+    return {
+      status: HttpStatus.OK,
+      message: HttpResponse.RESET_PASS_LINK,
+    };
+  }
+
+
+  async getResetPassword(
+    token: string,
+    password: string
+  ): Promise<{ status: number; message: string }> {
+    const getEmail = await redisClient.get(token);
+    if (!getEmail) {
+      throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.TOKEN_EXPIRED);
+    }
+
+    const updateUser = await this._userRepository.updatePassword(getEmail, password);
+    if (!updateUser) {
+      throw createHttpError(HttpStatus.INTERNAL_SERVER_ERROR, HttpResponse.SERVER_ERROR);
+    }
+
+    await redisClient.del(token);
+
+    return {
+      status: HttpStatus.OK,
+      message: HttpResponse.PASSWORD_CHANGE_SUCCESS,
+    };
+  }
+
+
+  async refreshAccessToken(
+    token: string
+  ): Promise<string> {
+
+    if (!token) {
+      throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.NO_TOKEN);
+    }
+
+    const decoded = verifyRefreshToken(token) as JwtPayload;
+    if (!decoded) {
+      throw createHttpError(HttpStatus.NO_CONTENT, HttpResponse.TOKEN_EXPIRED);
+    }
+
+    const payload = { id: decoded.id, role: decoded.role, email: decoded.email };
+
+    const accessToken = generateAccessToken(payload);
+
+    return accessToken;
+  }
+
+
 }

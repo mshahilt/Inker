@@ -7,10 +7,10 @@ export interface IUser {
     status: "active" | "blocked";
     role: "user" | "moderator";
     bio: string;
-    profile_picture?: string;
-    social_links: { type: string; url: string }[];
+    profilePicture?: string;
+    socialLinks: { type: string; url: string }[];
     resume?: string;
-    date_of_birth: Date;
-    created_at: Date;
-    updated_at: Date;
+    dateOfBirth?: Date;
+    createdAt: Date;
+    updatedAt: Date;
 }
