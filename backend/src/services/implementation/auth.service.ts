@@ -1,11 +1,9 @@
 import { IUserRepository } from "../../repositories/interface/IUserRepository";
+import { IAuthService } from "../interface/IAuthService";
 import { createHttpError } from "@/utils/http-error.util";
 import { HttpStatus } from "@/constants/status.constant";
 import { HttpResponse } from "@/constants/response-message.constant";
-import { IUser } from "shared/types";
 import { IUserModel } from "@/models/implementation/user.model";
-import { generateUniqueUsername } from "@/utils/generate-uniq-username";
-
 import { nanoid } from "nanoid";
 import { JwtPayload } from "jsonwebtoken";
 import {
@@ -13,19 +11,21 @@ import {
   generateAccessToken,
   generateOTP,
   generateRefreshToken,
+  hashPassword,
   sendOtpEmail,
   sendResetPasswordEmail,
+  generateUniqueUsername,
   verifyRefreshToken
 } from "@/utils";
-import { IAuthService } from "../interface";
-import { redisClient } from "@/configs/redis.config";
+import { redisClient } from "@/configs";
+
 
 //!   Implementation for Auth Service
 export class AuthService implements IAuthService {
   constructor(private readonly _userRepository: IUserRepository) { }
 
   async signup(
-    user: IUser
+    user: IUserModel
   ): Promise<string> {
     const userExist = await this._userRepository.findByEmail(user.email);
 
@@ -65,7 +65,7 @@ export class AuthService implements IAuthService {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND);
     }
 
-    const isMatch = await comparePassword(password, user.password);
+    const isMatch = await comparePassword(password, user.password as string);
 
     if (!isMatch) {
       throw createHttpError(HttpStatus.UNAUTHORIZED, HttpResponse.PASSWORD_INCORRECT);
@@ -75,7 +75,6 @@ export class AuthService implements IAuthService {
 
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
-
 
     return { accessToken, refreshToken };
   }
@@ -102,7 +101,6 @@ export class AuthService implements IAuthService {
       email: storedData.email,
       password: storedData.password,
     };
-
 
     const createdUser = await this._userRepository.create(user as IUserModel);
 
@@ -150,7 +148,9 @@ export class AuthService implements IAuthService {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.TOKEN_EXPIRED);
     }
 
-    const updateUser = await this._userRepository.updatePassword(getEmail, password);
+    const hashedPassword = await hashPassword(password);
+
+    const updateUser = await this._userRepository.updatePassword(getEmail, hashedPassword);
     if (!updateUser) {
       throw createHttpError(HttpStatus.INTERNAL_SERVER_ERROR, HttpResponse.SERVER_ERROR);
     }
