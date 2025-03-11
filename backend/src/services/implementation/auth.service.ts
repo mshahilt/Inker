@@ -18,6 +18,7 @@ import {
   verifyRefreshToken
 } from "@/utils";
 import { redisClient } from "@/configs";
+import { IUser } from "shared/types";
 
 
 //!   Implementation for Auth Service
@@ -25,7 +26,7 @@ export class AuthService implements IAuthService {
   constructor(private readonly _userRepository: IUserRepository) { }
 
   async signup(
-    user: IUserModel
+    user: IUser
   ): Promise<string> {
     const userExist = await this._userRepository.findByEmail(user.email);
 
