@@ -5,11 +5,11 @@ import { HttpResponse } from "@/constants/response-message.constant";
 import { IProfileService } from "@/services/interface/IProfileService";
 
 export class ProfileController implements IProfileController {
-  constructor(private _profileService: IProfileService) { }
+  constructor(private readonly _profileService: IProfileService) { }
 
   async getProfile(
-    req: Request, 
-    res: Response, 
+    req: Request,
+    res: Response,
     next: NextFunction
   ): Promise<void> {
     try {
@@ -23,8 +23,8 @@ export class ProfileController implements IProfileController {
 
 
   async editUsername(
-    req: Request, 
-    res: Response, 
+    req: Request,
+    res: Response,
     next: NextFunction
   ): Promise<void> {
     try {
@@ -39,16 +39,28 @@ export class ProfileController implements IProfileController {
 
 
   async updateProfile(
-    req: Request, 
-    res: Response, 
+    req: Request,
+    res: Response,
     next: NextFunction
   ): Promise<void> {
     try {
       const { id } = JSON.parse(req.headers["x-user-payload"] as string)
       const updateData = req.body
-      const updatedData = await this._profileService.updateProfile(id,updateData)
+      const updatedData = await this._profileService.updateProfile(id, updateData)
 
       res.status(HttpStatus.OK).json({ message: HttpResponse.RESOURCE_UPDATED, updatedData })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async updateEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { userId } = req.params
+      const { email } = req.body;
+      const updatedEmail = await this._profileService.updateEmail(userId, email)
+
+      res.status(HttpStatus.OK).json({ message: HttpResponse.RESOURCE_UPDATED, updatedEmail })
     } catch (error) {
       next(error)
     }

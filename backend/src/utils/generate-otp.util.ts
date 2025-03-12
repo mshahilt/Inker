@@ -1,7 +1,6 @@
-export default function otpGenerator() {
-  let otp = "";
-  for (let i = 0; i < 6; i++) {
-    otp += Math.floor(Math.random() * 10);
-  }
-  return otp;
+import crypto from "crypto"
+import { START_INTERVAL, END_INTERVAL } from "@/constants"
+
+export const generateOTP = () => {
+    return crypto.randomInt(START_INTERVAL, END_INTERVAL).toString()
 }

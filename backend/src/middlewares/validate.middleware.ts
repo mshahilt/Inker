@@ -4,7 +4,7 @@ import { HttpStatus } from "@/constants/status.constant";
 import { HttpResponse } from "@/constants/response-message.constant";
 import formatZodErrors from "@/utils/format-zod-error.util";
 
-const validate =
+export const validate =
   (schema: ZodSchema) =>
   (req: Request, res: Response, next: NextFunction): void => {
     try {
@@ -21,4 +21,3 @@ const validate =
     }
   };
 
-export default validate;

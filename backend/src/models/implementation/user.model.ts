@@ -1,7 +1,25 @@
+import { hashPassword } from "@/utils";
 import { model, Schema, Document } from "mongoose";
 import { IUser } from "shared/types";
 
-export interface IUserModel extends Document, Omit<IUser, "_id"> {}
+// export interface IUser {
+//   _id: string;
+//   username: string;
+//   name: string;
+//   email: string;
+//   password: string;
+//   status: "active" | "blocked";
+//   role: "user" | "moderator";
+//   bio: string;
+//   profile_picture?: string;
+//   social_links: { type: string; url: string }[];
+//   resume?: string;
+//   date_of_birth: Date;
+//   created_at: Date;
+//   updated_at: Date;
+// }
+
+export interface IUserModel extends Document, Omit<IUser, "_id"> { }
 
 const userSchema = new Schema<IUserModel>(
   {
@@ -55,9 +73,18 @@ const userSchema = new Schema<IUserModel>(
     },
   },
   {
-    timestamps: true,
+    timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
+
   }
 );
+
+
+userSchema.pre<IUserModel>("save", async function (next) {
+  if (this.isModified("password")) {
+    this.password = await hashPassword(this.password)
+  }
+  next()
+})
 
 const User = model<IUserModel>("User", userSchema);
 export default User;
