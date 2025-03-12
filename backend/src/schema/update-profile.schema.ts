@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const updateProfileSchema = z.object({
+export const updateProfileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").optional(),
   bio: z.string().max(500, "Bio cannot exceed 500 characters").optional(),
   resume: z.string().url("Invalid resume URL").optional(),
@@ -12,4 +12,3 @@ const updateProfileSchema = z.object({
     ).optional(),
 });
 
-export default updateProfileSchema

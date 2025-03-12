@@ -1,6 +1,6 @@
 import {z} from "zod";
 
-const resetPasswordSchema = z.object({
+export const resetPasswordSchema = z.object({
     token : z.string().trim().regex(/^[A-Za-z0-9_-]{21}$/, "Invalid token!"),
     password: z
     .string()
@@ -13,6 +13,3 @@ const resetPasswordSchema = z.object({
       "Password must contain at least one special character"
     ),
 })
-
-
-export default resetPasswordSchema;

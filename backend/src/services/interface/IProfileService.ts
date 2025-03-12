@@ -8,4 +8,6 @@ export interface IProfileService {
 
     updateProfile(id: string, updateData: Partial<IUserModel>): Promise<IUserModel>;
 
+    updateEmail(id: string, email: string): Promise<IUserModel>
+
 }
