@@ -16,6 +16,17 @@ const names: Record<string, string> = {
   ijas9118: "Ijas Ahammed",
   AJMALAJU3: "Ajmal Aliyar",
   MrLionByte: "Farhan Mahmood",
+  shreedev44: "Shreedev",
+  JasirBasheer: "Jasir Basheer",
+  "lenz-B": "Muhammed Labeeb",
+  muhammedsirajudeen: "Muhammed Sirajudeen",
+  rahil234: "Rahil",
+  SujithVSuresh: "Sujith V S",
+  TheAfsal: "Afsal M",
+  allajahzan: "Ahsan allaj pk",
+  MelbinMathewM: "Melbin Mathew",
+  Shammasahamedp: "Shammas Ahamed p",
+  roshnnjabir: "Roshan Jabir",
 };
 
 const Community = () => {
