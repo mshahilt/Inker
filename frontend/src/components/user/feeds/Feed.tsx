@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { dummyPosts } from "../profile/ProfileFeed";
 import BlogCard from "../common/BlogCard";
 import {
   FaRegComment,
@@ -9,6 +8,58 @@ import {
 } from "react-icons/fa";
 import char from "../../../assets/char3.jpeg";
 import { ArrowBigDown, ArrowBigUp, EllipsisVertical } from "lucide-react";
+
+const dummyPosts = [
+  {
+    title: "Mastering JavaScript Closures",
+    tags: ["javascript", "functional-programming", "advanced"],
+    date: "Jan 15",
+    minute: 5,
+    imageURL:
+      "https://tse1.mm.bing.net/th?id=OIP.kkJ4tBMv2tT9OqxmUWlQFgHaEK&pid=Api&P=0&h=180",
+    upvotes: 23,
+    downvotes: 4,
+  },
+  {
+    title: "Understanding React's Reconciliation Algorithm",
+    tags: ["react", "performance", "virtual-dom",'sdfdf'],
+    date: "Mar 10",
+    minute: 8,
+    imageURL:
+      "https://tse1.mm.bing.net/th?id=OIP.lyFjc5YkrtksZ1LbAsPuGAHaD4&pid=Api&P=0&h=180",
+    upvotes: 30,
+    downvotes: 1,
+  },
+  {
+    title: "Git Commands That Might Save You One Day",
+    tags: ["productivity", "git", "+1"],
+    date: "Feb 20",
+    minute: 7,
+    imageURL:
+      "https://i.morioh.com/2023/08/18/a0ecc9b5.webp",
+    upvotes: 15,
+    downvotes: 2,
+  },
+  {
+    title: "Building Scalable Node.js Applications",
+    tags: ["nodejs", "backend", "scalability"],
+    date: "Dec 05",
+    minute: 10,
+    imageURL:
+      "https://tse4.mm.bing.net/th?id=OIP.W1ZnAvRNWYSyBsBc0NdwpgHaER&pid=Api&P=0&h=180",
+    upvotes: 18,
+    downvotes: 3,
+  },
+  {
+    title: "A Beginner’s Guide to MongoDB Indexing",
+    tags: ["mongodb", "database", "performance"],
+    date: "Nov 22",
+    minute: 6,
+    imageURL: "https://i.morioh.com/2023/08/18/a0ecc9b5.webp",
+    upvotes: 12,
+    downvotes: 5,
+  },
+];
 
 const Feeds = () => {
   return (
