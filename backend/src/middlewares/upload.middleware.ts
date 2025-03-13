@@ -1,15 +1,23 @@
 import { Request, Response, NextFunction } from 'express';
 import multer from 'multer';
 
+declare module 'express' {
+    interface Request {
+        fileValidationError?: string;
+    }
+}
+
 const storage = multer.memoryStorage();
 
 const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
     if (!allowedTypes.includes(file.mimetype)) {
-        return cb(new Error('Invalid file type. Only JPEG, JPG, and PNG allowed!') as any, false);
+        req.fileValidationError = 'Invalid file type. Only JPEG, JPG, and PNG allowed!';
+        cb(null, false);
+    } else {
+        cb(null, true);
     }
-    cb(null, true);
 };
 
 const upload = multer({
@@ -17,6 +25,18 @@ const upload = multer({
     fileFilter,
     limits: { fileSize: 5 * 1024 * 1024 },
 });
+
+export const handleInvalidFile = (req: Request, res: Response, next: NextFunction) => {
+    if (req.fileValidationError) {
+        return res.status(400).json({ error: req.fileValidationError });
+    }
+
+    if (!req.file && req.method !== 'GET') {
+        return res.status(400).json({ error: 'Please provide a valid image file' });
+    }
+
+    next();
+};
 
 // Error handler - single file
 export const uploadMiddleware = (field: string) => {
