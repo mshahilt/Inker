@@ -6,4 +6,5 @@ export { generateOTP } from "./generate-otp.util";
 export { hashPassword, comparePassword } from "./bcrypt.util";
 export { checkEmailExistence } from "./email-verification.utils";
 export { toObjectId } from "./convert-object-id.utils";
-export { generateUniqueUsername } from "./generate-uniq-username"
+export { generateUniqueUsername } from "./generate-uniq-username";
+export { uploadToCloudinary, generateSignedUrl } from "./cloudinary.util";
