@@ -1,6 +1,8 @@
+import { Area } from "react-easy-crop";
+
 export const getCroppedImg = async (
     imageSrc: String, 
-    croppedAreaPixels: { width: number; height: number; x: number; y: number; }
+    croppedAreaPixels: Area
     ):Promise<string> => {
   const image = await createImage(imageSrc as string);
   const canvas = document.createElement("canvas");

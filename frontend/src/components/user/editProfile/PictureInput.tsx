@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import { FC, useState, useRef, useCallback } from "react";
 import ImageModal from "./ImageModal";
 import { getCroppedImg } from "./cropImage";
+import { Area } from "react-easy-crop";
 
 const PictureInput: FC = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -12,12 +13,7 @@ const PictureInput: FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<{
-    width: number;
-    height: number;
-    x: number;
-    y: number;
-  }| null>(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
   // Handle file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,8 +41,8 @@ const PictureInput: FC = () => {
     setCroppedImage(null);
   }
 
-  const onCropComplete = useCallback((_val: any, 
-    croppedAreaPixels: { width: number; height: number; x: number; y: number }) => {
+  const onCropComplete = useCallback((_val: Area, 
+    croppedAreaPixels: Area) => {
    setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 

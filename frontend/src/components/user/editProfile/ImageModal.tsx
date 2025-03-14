@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import Cropper from 'react-easy-crop';
+import Cropper, { Area } from 'react-easy-crop';
 
 interface ImageModalProps {
     image: string | null;
@@ -7,8 +7,8 @@ interface ImageModalProps {
     setCrop: React.Dispatch<React.SetStateAction<{ x: number; y: number }>>;
     zoom: number;
     setZoom: React.Dispatch<React.SetStateAction<number>>;
-    onCropComplete: (croppedArea: { x: number; y: number; width: number; height: number }, 
-      croppedAreaPixels: { width: number; height: number; x: number; y: number }) => void;
+    onCropComplete: (croppedArea: Area, 
+      croppedAreaPixels: Area) => void;
     handleSave: () => void;
     closeModal: () => void;
   }
