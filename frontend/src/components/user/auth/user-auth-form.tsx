@@ -14,6 +14,11 @@ import { toast } from "sonner"
 import { AuthService } from "@/services/authServices"
 import { useNavigate } from "react-router-dom"
 import { loginSchema, registerSchema } from "@/schemas/authSchema"
+import {
+    Credenza,
+    CredenzaTrigger,
+} from "@/components/ui/credenza"
+import ForgetPassword from "./ForgetPassword"
 
 interface UserAuthFormProps {
     authState: "login" | "register"
@@ -110,9 +115,12 @@ export const UserAuthForm: FC<UserAuthFormProps> = ({ authState, onStateChange }
 
                     <p>
                         <div className='flex items-center justify-center'>
-                            <Button variant="link" className='text-sm font-medium text-muted-foreground hover:opacity-75' onClick={() => onStateChange("register")}>
-                                ForgetPassword?
-                            </Button>
+                            <Credenza>
+                                <CredenzaTrigger asChild>
+                                    <button>Forget Password</button>
+                                </CredenzaTrigger>
+                                <ForgetPassword />
+                            </Credenza>
                         </div>
                         Don't have an account?{" "}
                         <Button variant="link" onClick={() => onStateChange("register")}>

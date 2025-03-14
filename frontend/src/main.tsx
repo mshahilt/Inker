@@ -9,7 +9,7 @@ import { store } from './store/store.ts'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
-        <App />
+      <div vaul-drawer-wrapper="" className="bg-background"><App /></div>
     </Provider>
     <Toaster richColors />
   </StrictMode>,
