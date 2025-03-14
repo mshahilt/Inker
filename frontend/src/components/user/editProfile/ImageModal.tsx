@@ -7,7 +7,8 @@ interface ImageModalProps {
     setCrop: React.Dispatch<React.SetStateAction<{ x: number; y: number }>>;
     zoom: number;
     setZoom: React.Dispatch<React.SetStateAction<number>>;
-    onCropComplete: (croppedArea: any, croppedAreaPixels: { width: number; height: number; x: number; y: number }) => void;
+    onCropComplete: (croppedArea: { x: number; y: number; width: number; height: number }, 
+      croppedAreaPixels: { width: number; height: number; x: number; y: number }) => void;
     handleSave: () => void;
     closeModal: () => void;
   }
