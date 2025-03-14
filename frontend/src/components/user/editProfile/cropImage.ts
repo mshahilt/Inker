@@ -1,7 +1,7 @@
 import { Area } from "react-easy-crop";
 
 export const getCroppedImg = async (
-    imageSrc: String, 
+    imageSrc: string, 
     croppedAreaPixels: Area
     ):Promise<string> => {
   const image = await createImage(imageSrc as string);
