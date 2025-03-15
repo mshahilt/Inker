@@ -1,6 +1,6 @@
 import { HttpResponse } from "@/constants/response-message.constant";
 import { z } from "zod";
-const signupSchema = z
+export const signupSchema = z
   .object({
     email: z.string().email(HttpResponse.INVALID_EMAIL),
     name: z
@@ -22,4 +22,3 @@ const signupSchema = z
   })
   .strict();
 
-export default signupSchema;

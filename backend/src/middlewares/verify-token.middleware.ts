@@ -2,25 +2,22 @@ import { Request, Response, NextFunction } from "express";
 import { verifyAccessToken } from "@/utils/jwt.util";
 import { HttpResponse } from "@/constants/response-message.constant";
 import { HttpStatus } from "@/constants/status.constant";
+import { createHttpError } from "@/utils/http-error.util";
 
 export default function (
   userLevel: "user" | "admin" | "moderator"
-): (req: Request, res: Response, next: NextFunction) => void | Response {
-  return (req: Request, res: Response, next: NextFunction): void | Response => {
+): (req: Request, res: Response, next: NextFunction) => void {
+  return (req: Request, res: Response, next: NextFunction): void => {
     try {
       const authHeader = req.headers.authorization;
 
       if (!authHeader || !authHeader.startsWith("Bearer")) {
-        return res
-          .status(HttpStatus.UNAUTHORIZED)
-          .json({ error: HttpResponse.NO_TOKEN });
+        throw createHttpError(HttpStatus.UNAUTHORIZED, HttpResponse.NO_TOKEN)
       }
 
       const token = authHeader.split(" ")[1];
       if (!token) {
-        return res
-          .status(HttpStatus.UNAUTHORIZED)
-          .json({ error: HttpResponse.NO_TOKEN });
+        throw createHttpError(HttpStatus.UNAUTHORIZED, HttpResponse.NO_TOKEN)
       }
 
       const payload = verifyAccessToken(token) as {
@@ -30,9 +27,7 @@ export default function (
       };
 
       if (payload.role !== userLevel) {
-        return res
-          .status(HttpStatus.UNAUTHORIZED)
-          .json({ error: HttpResponse.UNAUTHORIZED });
+        throw createHttpError(HttpStatus.UNAUTHORIZED, HttpResponse.UNAUTHORIZED)
       }
 
       req.headers["x-user-payload"] = JSON.stringify(payload);
@@ -41,13 +36,9 @@ export default function (
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err.name === "TokenExpiredError") {
-        return res
-          .status(HttpStatus.FORBIDDEN)
-          .json({ error: HttpResponse.TOKEN_EXPIRED });
+        throw createHttpError(HttpStatus.FORBIDDEN, HttpResponse.TOKEN_EXPIRED)
       } else {
-        return res
-          .status(HttpStatus.UNAUTHORIZED)
-          .json({ error: HttpResponse.TOKEN_EXPIRED });
+        throw createHttpError(HttpStatus.UNAUTHORIZED, HttpResponse.TOKEN_EXPIRED)
       }
     }
   };

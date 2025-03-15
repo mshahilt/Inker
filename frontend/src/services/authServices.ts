@@ -16,10 +16,14 @@ interface OtpData {
   otp: string;
 }
 
+interface forgetPasswordData {
+  email: string
+}
+
 export const AuthService = {
-  loginService: async (data: LoginData): Promise<{ status: number; message: string}> => {
+  loginService: async (data: LoginData): Promise<{ status: number; message: string }> => {
     try {
-      const response = await axiosInstance.post<{ status: number; message: string}> ("/api/auth/login", data);
+      const response = await axiosInstance.post<{ status: number; message: string }>("/api/auth/login", data);
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
@@ -28,9 +32,9 @@ export const AuthService = {
     }
   },
 
-  registerService: async (data: RegisterData): Promise<{ status: number; message: string}>  => {
+  registerService: async (data: RegisterData): Promise<{ status: number; message: string }> => {
     try {
-      const response = await axiosInstance.post<{ status: number; message: string}> ("/api/auth/register", data);
+      const response = await axiosInstance.post<{ status: number; message: string }>("/api/auth/register", data);
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
@@ -39,9 +43,9 @@ export const AuthService = {
     }
   },
 
-  googleAuth: async (data: Omit<RegisterData, "password">): Promise<{ status: number; message: string}>  => {
+  googleAuth: async (data: Omit<RegisterData, "password">): Promise<{ status: number; message: string }> => {
     try {
-      const response = await axiosInstance.post<{ status: number; message: string}> ("/api/auth/google-auth", data);
+      const response = await axiosInstance.post<{ status: number; message: string }>("/api/auth/google-auth", data);
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
@@ -60,4 +64,14 @@ export const AuthService = {
       throw new Error(errorMessage);
     }
   },
+  forgetPasswordService: async (data: forgetPasswordData): Promise<{ status: number; message: string }> => {
+    try {
+      const response = await axiosInstance.post<{ status: number; message: string }>("/api/auth/forgot-password", data);
+      return response.data;
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ error: string }>;
+      const errorMessage = err.response?.data?.error || "ForgetPassword Service failed. Please try again.";
+      throw new Error(errorMessage);
+    }
+  }
 };

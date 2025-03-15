@@ -1,7 +1,7 @@
 import { HttpResponse } from "@/constants/response-message.constant";
 import { z } from "zod";
 
-const signinSchema = z
+export const signinSchema = z
   .object({
     email: z.string().email(HttpResponse.INVALID_EMAIL).optional(),
     username: z
@@ -24,5 +24,3 @@ const signinSchema = z
     message: "Either email or username is required",
     path: ["email"], 
   });
-
-export default signinSchema;
