@@ -2,7 +2,8 @@ import type React from "react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { prism } from "react-syntax-highlighter/dist/esm/styles/prism";
-import type { ReactMarkdownOptions } from "react-markdown"; 
+import ReactMarkdownOptions from "react-markdown";
+
 
 interface MarkdownRendererProps {
   content: string;
@@ -36,7 +37,7 @@ interface CodeProps {
 }
 
 export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
-  const markdownComponents: Partial<ReactMarkdownOptions["components"]> = {
+  const markdownComponents: Partial<typeof ReactMarkdownOptions> = {
     h1: ({ children }: HeadingProps) => (
       <h1 className="text-3xl font-bold text-foreground mb-4">{children}</h1>
     ),
