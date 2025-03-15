@@ -1,33 +1,41 @@
 import { IUserRepository } from "../../repositories/interface/IUserRepository";
 import { IAuthService } from "../interface/IAuthService";
-import generateOtp from "../../utils/generate-otp.util";
-import { sendOtpEmail, sendResetPasswordEmail } from "../../utils/send-email.util";
-import { redisClient } from "../../configs/redis.config";
-import { hashPassword, comparePassword } from "../../utils/bcrypt.util";
-import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../../utils/jwt.util";
 import { createHttpError } from "@/utils/http-error.util";
 import { HttpStatus } from "@/constants/status.constant";
 import { HttpResponse } from "@/constants/response-message.constant";
-import { generateUniqueUsername } from "@/utils/generate-uniq-username";
-import { IUser } from "shared/types";
 import { IUserModel } from "@/models/implementation/user.model";
 import { nanoid } from "nanoid";
 import { JwtPayload } from "jsonwebtoken";
+import {
+  comparePassword,
+  generateAccessToken,
+  generateOTP,
+  generateRefreshToken,
+  hashPassword,
+  sendOtpEmail,
+  sendResetPasswordEmail,
+  generateUniqueUsername,
+  verifyRefreshToken
+} from "@/utils";
+import { redisClient } from "@/configs";
+import { IUser } from "shared/types";
+
 
 //!   Implementation for Auth Service
 export class AuthService implements IAuthService {
-  constructor(private _userRepository: IUserRepository) {}
+  constructor(private readonly _userRepository: IUserRepository) { }
 
-  async signup(user: IUser): Promise<string> {
+  async signup(
+    user: IUser
+  ): Promise<string> {
     const userExist = await this._userRepository.findByEmail(user.email);
 
     if (userExist) {
       throw createHttpError(HttpStatus.CONFLICT, HttpResponse.USER_EXIST);
     }
 
-    user.password = await hashPassword(user.password as string);
 
-    const otp = generateOtp();
+    const otp = generateOTP();
 
     await sendOtpEmail(user.email, otp);
 
@@ -44,10 +52,14 @@ export class AuthService implements IAuthService {
       throw createHttpError(HttpStatus.INTERNAL_SERVER_ERROR, HttpResponse.SERVER_ERROR);
     }
 
-    return user.email;
+    return user.email
   }
 
-  async signin(identifier: string, password: string): Promise<{ accessToken: string; refreshToken: string }> {
+
+  async signin(
+    identifier: string,
+    password: string
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     const user = await this._userRepository.findOneWithUsernameOrEmail(identifier);
 
     if (!user) {
@@ -68,23 +80,22 @@ export class AuthService implements IAuthService {
     return { accessToken, refreshToken };
   }
 
-  async verifyOtp(otp: string, email: string): Promise<{ status: number; message: string }> {
-    //get the stored data from redis
+
+  async verifyOtp(
+    otp: string,
+    email: string
+  ): Promise<{ status: number; message: string }> {
     const storedDataString = await redisClient.get(email);
     if (!storedDataString) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.OTP_NOT_FOUND);
     }
 
-    //parsed from string to object
     const storedData = JSON.parse(storedDataString);
 
-    //validated the otp
     if (storedData.otp !== otp) throw createHttpError(HttpStatus.BAD_REQUEST, HttpResponse.OTP_INCORRECT);
 
-    //get unique username
-    const uniqUsername = await generateUniqueUsername(storedData.name);
+    const uniqUsername = await generateUniqueUsername(storedData.name)
 
-    //construct a user object
     const user = {
       username: uniqUsername,
       name: storedData.name,
@@ -92,12 +103,10 @@ export class AuthService implements IAuthService {
       password: storedData.password,
     };
 
-    //user creation
     const createdUser = await this._userRepository.create(user as IUserModel);
 
     if (!createdUser) throw createHttpError(HttpStatus.CONFLICT, HttpResponse.USER_CREATION_FAILED);
 
-    //delete the data from redis
     await redisClient.del(email);
 
     return {
@@ -106,13 +115,15 @@ export class AuthService implements IAuthService {
     };
   }
 
-  async verifyForgotPassword(email: string): Promise<{ status: number; message: string }> {
+
+  async verifyForgotPassword(
+    email: string
+  ): Promise<{ status: number; message: string }> {
     const isExist = await this._userRepository.findByEmail(email);
 
     if (!isExist) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND);
     }
-    //generate nanoid for token
     const token = nanoid();
 
     const storeOnReddis = await redisClient.setEx(token, 300, isExist.email);
@@ -120,8 +131,6 @@ export class AuthService implements IAuthService {
     if (!storeOnReddis) {
       throw createHttpError(HttpStatus.INTERNAL_SERVER_ERROR, HttpResponse.SERVER_ERROR);
     }
-
-    //send mail
     await sendResetPasswordEmail(isExist.email, token);
 
     return {
@@ -130,14 +139,16 @@ export class AuthService implements IAuthService {
     };
   }
 
-  async getResetPassword(token: string, password: string): Promise<{ status: number; message: string }> {
-    //get email from redis
+
+  async getResetPassword(
+    token: string,
+    password: string
+  ): Promise<{ status: number; message: string }> {
     const getEmail = await redisClient.get(token);
     if (!getEmail) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.TOKEN_EXPIRED);
     }
 
-    //hash password
     const hashedPassword = await hashPassword(password);
 
     const updateUser = await this._userRepository.updatePassword(getEmail, hashedPassword);
@@ -145,7 +156,6 @@ export class AuthService implements IAuthService {
       throw createHttpError(HttpStatus.INTERNAL_SERVER_ERROR, HttpResponse.SERVER_ERROR);
     }
 
-    //delete data from reddis
     await redisClient.del(token);
 
     return {
@@ -154,14 +164,17 @@ export class AuthService implements IAuthService {
     };
   }
 
-  async refreshAccessToken(token: string): Promise<string> {
 
-    if(!token){
+  async refreshAccessToken(
+    token: string
+  ): Promise<string> {
+
+    if (!token) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.NO_TOKEN);
     }
 
     const decoded = verifyRefreshToken(token) as JwtPayload;
-    if(!decoded) {
+    if (!decoded) {
       throw createHttpError(HttpStatus.NO_CONTENT, HttpResponse.TOKEN_EXPIRED);
     }
 
@@ -170,6 +183,7 @@ export class AuthService implements IAuthService {
     const accessToken = generateAccessToken(payload);
 
     return accessToken;
-
   }
+
+
 }

@@ -1,5 +1,4 @@
 import { IUser } from "shared/types";
-
 export interface IAuthService {
 
   signup(user: IUser): Promise<string>;
@@ -13,4 +12,5 @@ export interface IAuthService {
   getResetPassword(token: string, password: string): Promise<{ status: number; message: string }>;
 
   refreshAccessToken(token: string): Promise<string>;
+
 }
