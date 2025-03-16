@@ -41,4 +41,15 @@ export const blogService = {
       throw new Error(err.response?.data?.error || "Blog deletion failed.");
     }
   },
+
+  editBlogService: async (data: BlogData): Promise<{ status: number; message: string }> => {
+    try {
+      const response = await axiosInstance.put<{status: number; message: string;}>("/api/blog", data);
+      return response.data
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ error: string }>;
+      toast.error(err.response?.data?.error || "Blog update failed. Please try again.");
+      throw new Error(err.response?.data?.error || "Blog update failed.");
+    }
+  }
 };
