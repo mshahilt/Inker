@@ -21,8 +21,8 @@ export const blogService = {
       return response.data
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
-      toast.error(err.response?.data?.error || "Login failed. Please try again.");
-      throw new Error(err.response?.data?.error || "Login failed.");
+      toast.error(err.response?.data?.error || "Blog creation failed. Please try again.");
+      throw new Error(err.response?.data?.error || "Blog creation failed.");
     }
   },
 };
