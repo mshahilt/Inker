@@ -21,9 +21,9 @@ interface forgetPasswordData {
 }
 
 export const AuthService = {
-  loginService: async (data: LoginData): Promise<{ status: number; message: string }> => {
+  loginService: async (data: LoginData): Promise<{ accessToken: string }> => {
     try {
-      const response = await axiosInstance.post<{ status: number; message: string }>("/api/auth/login", data);
+      const response = await axiosInstance.post<{ accessToken: string }>("/api/auth/login", data, { withCredentials: true });
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
@@ -32,9 +32,9 @@ export const AuthService = {
     }
   },
 
-  registerService: async (data: RegisterData): Promise<{ status: number; message: string }> => {
+  registerService: async (data: RegisterData): Promise<{ accessToken: string }> => {
     try {
-      const response = await axiosInstance.post<{ status: number; message: string }>("/api/auth/register", data);
+      const response = await axiosInstance.post<{ accessToken: string }>("/api/auth/register", data, { withCredentials: true });
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
@@ -43,9 +43,9 @@ export const AuthService = {
     }
   },
 
-  googleAuth: async (data: Omit<RegisterData, "password">): Promise<{ status: number; message: string }> => {
+  googleAuth: async (data: Omit<RegisterData, "password">): Promise<{ accessToken: string }> => {
     try {
-      const response = await axiosInstance.post<{ status: number; message: string }>("/api/auth/google-auth", data);
+      const response = await axiosInstance.post<{ accessToken: string }>("/api/auth/google-auth", data, { withCredentials: true });
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;

@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "@/services/authServices";
 import { toast } from "sonner";
+import { TokenUtils } from "@/utils/tokenUtil";
 
 interface DecodedUser {
   name: string;
@@ -23,7 +24,8 @@ const GoogleAuth: React.FC = () => {
     const decodedUser: DecodedUser = jwtDecode<DecodedUser>(response.credential);
 
     try {
-      await AuthService.googleAuth({ email: decodedUser.email, name: decodedUser.name });
+      const { accessToken } = await AuthService.googleAuth({ email: decodedUser.email, name: decodedUser.name });
+      TokenUtils.setToken(accessToken)
       toast.success("Logged in successfully");
       navigate("/home");
     } catch (error: unknown) {
