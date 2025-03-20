@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import { ThumbnailUploader } from "./ThumbnailUploader";
 import { AttachmentArea } from "./AttatchmentArea";
-import { setTitle, setContent, setActiveTab, addBlog } from "@/store/blogSlice";
+import { setTitle, setContent, setActiveTab, addBlog } from "@/store/slices/blogSlice";
 import type { RootState } from "@/store/store";
 import { MarkdownRenderer } from "./MarkdownRenderer";
 import { TabMode } from "@/types";

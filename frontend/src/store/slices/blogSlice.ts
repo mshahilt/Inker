@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { Blog, ViewMode, TabMode, BlogEditorState } from '@/types/index'
 
-
-
 const initialState: BlogEditorState = {
   title: "",
   content: "",
@@ -13,6 +11,8 @@ const initialState: BlogEditorState = {
   blogs: [],
   viewMode: "editor",
 };
+
+
 
 const blogEditorSlice = createSlice({
   name: "blogEditor",

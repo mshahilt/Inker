@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setThumbnail, setSaved } from "@/store/blogSlice";
+import { setThumbnail, setSaved } from "@/store/slices/blogSlice";
 import type { RootState } from "@/store/store";
 import { Camera, X } from "lucide-react";
 import { Label } from "@/components/ui/label";

@@ -28,7 +28,7 @@ interface ProfileData extends UpdateProfileData {
 
 
 
-export const AuthService = {
+export const ProfileService = {
   updateProfileService: async (data: UpdateProfileData): Promise<{ status: number; message: string, updatedFields: string[]}> => {
     try {
       const response = await axiosInstance.put<{ status: number; message: string, updatedFields: string[]}> ("/api/profile/update", data);

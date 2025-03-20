@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Paperclip, Link2, X } from "lucide-react";
-import { addAttachment, removeAttachment, setSaved, insertLink } from "@/store/blogSlice";
+import { addAttachment, removeAttachment, setSaved, insertLink } from "@/store/slices/blogSlice";
 import type { RootState } from "@/store/store";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";

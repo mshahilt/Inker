@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setViewMode } from "@/store/blogSlice";
+import { setViewMode } from "@/store/slices/blogSlice";
 import type { RootState } from "@/store/store";
 import { Editor } from "./Editor";
 import { BlogList } from "./BlogList";
