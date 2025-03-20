@@ -12,6 +12,8 @@ const initialState: BlogEditorState = {
   viewMode: "editor",
 };
 
+
+
 const blogEditorSlice = createSlice({
   name: "blogEditor",
   initialState,
