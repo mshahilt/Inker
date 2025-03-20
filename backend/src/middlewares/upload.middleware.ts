@@ -41,7 +41,6 @@ export const handleInvalidFile = (req: Request, res: Response, next: NextFunctio
 // Error handler - single file
 export const uploadMiddleware = (field: string) => {
     return (req: Request, res: Response, next: NextFunction) => {
-        console.log(req.file,'hh')
         upload.single(field)(req, res, (err) => {
             if (err instanceof multer.MulterError) {
                 if (err.code === 'LIMIT_FILE_SIZE') {
