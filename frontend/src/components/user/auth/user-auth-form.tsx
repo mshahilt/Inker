@@ -19,6 +19,7 @@ import {
     CredenzaTrigger,
 } from "@/components/ui/credenza"
 import ForgetPassword from "./ForgetPassword"
+import { TokenUtils } from "@/utils/tokenUtil"
 
 interface UserAuthFormProps {
     authState: "login" | "register"
@@ -39,11 +40,13 @@ export const UserAuthForm: FC<UserAuthFormProps> = ({ authState, onStateChange }
 
         try {
             if (authState === 'login') {
-                await AuthService.loginService(data);
+                const { accessToken } = await AuthService.loginService(data);
+                TokenUtils.setToken(accessToken)
                 toast.success("Logged in successfully");
                 navigate('/home');
             } else {
-                await AuthService.registerService(data as { email: string; password: string; name: string; });
+                const { accessToken } = await AuthService.registerService(data as { email: string; password: string; name: string; });
+                TokenUtils.setToken(accessToken)
                 toast.success("OTP shared successfully");
                 navigate('/otp-verification', { state: { email: data.email } });
             }
