@@ -2,22 +2,16 @@ import { axiosInstance } from "@/config/axios";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 
-interface BlogData {
-  title: string;
-  author: string;
-  authorId: string;
-  tags: string[];
-  thumbnail: {
-    type: string;
-    url: string;
-  };
-  content: string;
-}
+
 
 export const blogService = {
-  createBlogService: async (data: BlogData): Promise<{ status: number; message: string }> => {
+  createBlogService: async (formData: FormData): Promise<{ status: number; message: string }> => {
     try {
-      const response = await axiosInstance.post<{status: number; message: string;}>("/api/blog", data);
+      const response = await axiosInstance.post<{status: number; message: string;}>("/api/blog", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return response.data
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
@@ -42,9 +36,13 @@ export const blogService = {
     }
   },
 
-  editBlogService: async (data: BlogData): Promise<{ status: number; message: string }> => {
+  editBlogService: async (formData: FormData): Promise<{ status: number; message: string }> => {
     try {
-      const response = await axiosInstance.put<{status: number; message: string;}>("/api/blog", data);
+      const response = await axiosInstance.put<{status: number; message: string;}>("/api/blog", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return response.data
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;

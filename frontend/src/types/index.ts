@@ -9,7 +9,10 @@ export interface Blog {
   authorId: string;
   tags: string[];
   thumbnail: { type: string; url: string } | null;
-  attachments: File[];
+  attachments: Array<{
+    name: string;
+    url: string;
+  }>;
   attachmentUrls: string[];
   createdAt: string;
   updatedAt: string;
@@ -20,12 +23,19 @@ export interface BlogEditorState {
   content: string;
   activeTab: TabMode;
   saved: boolean;
-  thumbnail: File | null;
-  attachments: File[];
+  thumbnail: null | {
+    name: string;
+    url: string;
+  };
+  attachments: Array<{
+    name: string;
+    url: string;
+  }>;
   attachmentUrls: string[];
   blogs: Blog[];
   viewMode: ViewMode;
   loading: boolean;
   error: string | null;
   editingBlogId: string | null;
+  tags: string[];
 }

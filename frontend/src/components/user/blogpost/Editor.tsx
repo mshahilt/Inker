@@ -1,45 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MDEditor, { commands } from "@uiw/react-md-editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Check } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { X } from "lucide-react";
 import { ThumbnailUploader } from "./ThumbnailUploader";
-import { setTitle, setContent, addBlog, updateBlog, addAttachment, resetEditor } from "@/store/slices/blogSlice";
+
+import { 
+  setTitle, 
+  setContent, 
+  addAttachment,
+  addTag,
+  removeTag,
+  saveBlog
+} from "@/store/slices/blogSlice";
 import type { RootState } from "@/store/store";
+import { AppDispatch } from "@/store/store";
 
 export const Editor: React.FC = () => {
-  const dispatch = useDispatch();
-  const { title, content, saved, thumbnail, attachments, attachmentUrls, editingBlogId } = useSelector(
+  const dispatch = useDispatch<AppDispatch>();
+  const { title, content, saved, editingBlogId, tags, loading } = useSelector(
     (state: RootState) => state.blogEditor
   );
+  const [newTag, setNewTag] = useState("");
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setTitle(e.target.value));
   };
 
+  const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && newTag.trim()) {
+      dispatch(addTag(newTag.trim()));
+      setNewTag("");
+    }
+  };
+
   const handleSave = () => {
-    const blogData = {
-      _id: editingBlogId || Date.now().toString(),
+    dispatch(saveBlog({
       title,
       content,
-      author: "Current User",
-      authorId: "user-1",
-      tags: [],
-      thumbnail: thumbnail ? { type: "image", url: thumbnail ? URL.createObjectURL(thumbnail) : "" } : null,
-      attachments,
-      attachmentUrls,
-      createdAt: editingBlogId ? new Date().toISOString() : new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    if (editingBlogId) {
-      dispatch(updateBlog(blogData));
-    } else {
-      dispatch(addBlog(blogData));
-    }
-    dispatch(resetEditor());
+      thumbnail: null, 
+      attachments: [], 
+      tags,
+      editingBlogId
+    }));
   };
 
   const imageCommand = {
@@ -65,20 +71,44 @@ export const Editor: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div data-color-mode="dark">
       <ThumbnailUploader />
       <div className="relative">
         <Input
           value={title}
           onChange={handleTitleChange}
           placeholder="Post Title*"
-          className="pr-12 rounded-md border-input bg-background text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-ring"
+          className="pr-12"
         />
         <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
           {250 - title.length}
         </span>
       </div>
-      <Card className="border rounded-lg overflow-hidden">
+      
+      <div className="mt-4">
+        <Input
+          value={newTag}
+          onChange={(e) => setNewTag(e.target.value)}
+          onKeyDown={handleAddTag}
+          placeholder="Add tags (press Enter)"
+          className="mb-2"
+        />
+        <div className="flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <Badge key={tag} variant="secondary" className="flex items-center gap-1">
+              {tag}
+              <button
+                onClick={() => dispatch(removeTag(tag))}
+                className="ml-1 hover:text-destructive"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </Badge>
+          ))}
+        </div>
+      </div>
+
+      <Card className="border rounded-lg overflow-hidden mt-6">
         <MDEditor
           value={content}
           onChange={(value) => dispatch(setContent(value || ""))}
@@ -98,22 +128,16 @@ export const Editor: React.FC = () => {
             commands.image,
             imageCommand
           ]}
-          className="bg-background text-foreground"
         />
-        
+       
       </Card>
-      <div className="flex justify-between items-center">
-        {saved && (
-          <div className="flex items-center text-sm text-muted-foreground">
-            <Check className="w-4 h-4 mr-1" />
-            Saved
-          </div>
-        )}
+      <div className="flex justify-end mt-4">
         <Button
           onClick={handleSave}
-          className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md"
+          disabled={loading}
+          className=""
         >
-          {editingBlogId ? "Update" : "Save"}
+          {loading ? "Saving..." : (editingBlogId ? "Update" : "Save")}
         </Button>
       </div>
     </div>
