@@ -21,7 +21,7 @@ import { AppDispatch } from "@/store/store";
 
 export const Editor: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { title, content, saved, editingBlogId, tags, loading } = useSelector(
+  const { title, content, editingBlogId, tags, loading } = useSelector(
     (state: RootState) => state.blogEditor
   );
   const [newTag, setNewTag] = useState("");
