@@ -1,12 +1,19 @@
-export interface Blog {
-  title: string;
-  content: string;
-  thumbnail: File | null;
-  attachments: File[];
-}
-
 export type ViewMode = "editor" | "blogs";
 export type TabMode = "write" | "preview";
+
+export interface Blog {
+  _id: string;
+  title: string;
+  content: string;
+  author: string;
+  authorId: string;
+  tags: string[];
+  thumbnail: { type: string; url: string } | null;
+  attachments: File[];
+  attachmentUrls: string[];
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface BlogEditorState {
   title: string;
@@ -15,6 +22,10 @@ export interface BlogEditorState {
   saved: boolean;
   thumbnail: File | null;
   attachments: File[];
+  attachmentUrls: string[];
   blogs: Blog[];
   viewMode: ViewMode;
+  loading: boolean;
+  error: string | null;
+  editingBlogId: string | null;
 }
