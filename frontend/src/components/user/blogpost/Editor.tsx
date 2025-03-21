@@ -1,35 +1,77 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import MDEditor, { commands } from "@uiw/react-md-editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Check } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { X } from "lucide-react";
 import { ThumbnailUploader } from "./ThumbnailUploader";
-import { AttachmentArea } from "./AttatchmentArea";
-import { setTitle, setContent, setActiveTab, addBlog } from "@/store/slices/blogSlice";
+
+import { 
+  setTitle, 
+  setContent, 
+  addAttachment,
+  addTag,
+  removeTag,
+  saveBlog
+} from "@/store/slices/blogSlice";
 import type { RootState } from "@/store/store";
-import { MarkdownRenderer } from "./MarkdownRenderer";
-import { TabMode } from "@/types";
+import { AppDispatch } from "@/store/store";
 
 export const Editor: React.FC = () => {
-  const dispatch = useDispatch();
-  const { title, content, activeTab, saved } = useSelector((state: RootState) => state.blogEditor);
-  const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const { title, content, editingBlogId, tags, loading } = useSelector(
+    (state: RootState) => state.blogEditor
+  );
+  const [newTag, setNewTag] = useState("");
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setTitle(e.target.value));
   };
 
-  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    dispatch(setContent(e.target.value));
+  const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && newTag.trim()) {
+      dispatch(addTag(newTag.trim()));
+      setNewTag("");
+    }
   };
 
-  const handlePost = () => {
-    dispatch(addBlog({ title, content, thumbnail: null, attachments: [] }));
+  const handleSave = () => {
+    dispatch(saveBlog({
+      title,
+      content,
+      thumbnail: null, 
+      attachments: [], 
+      tags,
+      editingBlogId
+    }));
+  };
+
+  const imageCommand = {
+    name: 'image',
+    keyCommand: 'image',
+    buttonProps: { 'aria-label': 'Insert image' },
+    icon: <svg width="12" height="12" viewBox="0 0 20 20"><path fill="currentColor" d="M15 9c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm4-7H1c-.55 0-1 .45-1 1v14c0 .55.45 1 1 1h18c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 13l-6-5-2 2-4-5-4 8V4h16v11z"/></svg>,
+    execute: (state: { selectedText: string }, api: { replaceSelection: (text: string) => void }) => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.onchange = async (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (file) {
+          const url = URL.createObjectURL(file);
+          dispatch(addAttachment({ file, url }));
+          const imageMarkdown = `![${file.name}](${url})`;
+          api.replaceSelection(imageMarkdown);
+        }
+      };
+      input.click();
+    },
   };
 
   return (
-    <>
+    <div data-color-mode="dark">
       <ThumbnailUploader />
       <div className="relative">
         <Input
@@ -43,59 +85,61 @@ export const Editor: React.FC = () => {
         </span>
       </div>
       
-      <Card className="border rounded-lg overflow-hidden">
-        <div className="flex justify-between items-center px-4 py-3 border-b">
-          <div className="flex gap-4">
-            {(["write", "preview"] as TabMode[]).map((tab) => (
-              <Button
-                key={tab}
-                variant="ghost"
-                onClick={() => dispatch(setActiveTab(tab))}
-                className={`relative px-3 py-2 text-sm font-medium transition ${
-                  activeTab === tab
-                    ? "text-primary after:w-full after:h-[2px] after:bg-primary after:absolute after:bottom-0 after:left-0"
-                    : "text-muted-foreground"
-                }`}
+      <div className="mt-4">
+        <Input
+          value={newTag}
+          onChange={(e) => setNewTag(e.target.value)}
+          onKeyDown={handleAddTag}
+          placeholder="Add tags (press Enter)"
+          className="mb-2"
+        />
+        <div className="flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <Badge key={tag} variant="secondary" className="flex items-center gap-1">
+              {tag}
+              <button
+                onClick={() => dispatch(removeTag(tag))}
+                className="ml-1 hover:text-destructive"
               >
-                {tab === "write" ? "Write" : "Preview"}
-              </Button>
-            ))}
-          </div>
-          {saved && (
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Check className="w-4 h-4 mr-1" />
-              Saved
-            </div>
-          )}
+                <X className="h-3 w-3" />
+              </button>
+            </Badge>
+          ))}
         </div>
-
-        <div className="p-4 min-h-[300px]">
-          {activeTab === "write" ? (
-            <textarea
-              ref={textAreaRef}
-              className="w-full h-72 bg-background border-0 outline-none resize-none text-foreground placeholder-muted-foreground rounded-md p-3 focus:ring-2 focus:ring-primary"
-              placeholder="Write your post content in Markdown here..."
-              value={content}
-              onChange={handleContentChange}
-            />
-          ) : (
-            <div className="space-y-4 p-3 rounded-md">
-              {title && <h1 className="text-4xl font-bold text-foreground">{title}</h1>}
-              {content ? (
-                <MarkdownRenderer content={content} />
-              ) : (
-                <p className="text-muted-foreground italic">Nothing to preview yet...</p>
-              )}
-            </div>
-          )}
-        </div>
-
-        <AttachmentArea />
-      </Card>
-
-      <div className="flex justify-end pt-4">
-        <Button onClick={handlePost}>Post</Button>
       </div>
-    </>
+
+      <Card className="border rounded-lg overflow-hidden mt-6">
+        <MDEditor
+          value={content}
+          onChange={(value) => dispatch(setContent(value || ""))}
+          preview="edit"
+          height={300}
+          commands={[
+            commands.bold,
+            commands.italic,
+            commands.strikethrough,
+            commands.hr,
+            commands.title,
+            commands.divider,
+            commands.link,
+            commands.quote,
+            commands.code,
+            commands.codeBlock,
+            commands.image,
+            imageCommand
+          ]}
+        />
+       
+      </Card>
+      <div className="flex justify-end mt-4">
+        <Button
+          onClick={handleSave}
+          disabled={loading}
+          className=""
+        >
+          {loading ? "Saving..." : (editingBlogId ? "Update" : "Save")}
+        </Button>
+      </div>
+    </div>
   );
 };
