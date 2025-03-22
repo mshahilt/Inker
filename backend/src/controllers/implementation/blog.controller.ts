@@ -1,36 +1,3 @@
-// import { Request, Response, NextFunction } from "express";
-// import { IBlogController } from "../interface/IBlogController";
-// import { IBlogService } from "@/services/interface/IBlogService";
-// import { IBlog, ICreateBlogRequestDTO } from "shared/types";
-// import { HttpStatus } from "@/constants";
-
-// export class BlogController implements IBlogController {
-//   constructor(private _blogService: IBlogService) {}
-
-//   async createBlog(
-//     req: Request,
-//     res: Response,
-//     next: NextFunction
-//   ): Promise<void> {
-//     try {
-//       const { id } = JSON.parse(req.headers["x-user-payload"] as string);
-//       const { title, thumbnail, content, authorName } =
-//         req.body as ICreateBlogRequestDTO;
-//       const response = await this._blogService.create({
-//         title,
-//         thumbnail,
-//         content,
-//         authorName,
-//         authorId:id
-//       });
-
-//       res.status(HttpStatus.CREATED).json(response);
-//     } catch (err) {
-//       next(err);
-//     }
-//   }
-// }
-
 import { NextFunction, Request, Response } from "express";
 import { IBlogController } from "../interface/IBlogController";
 import { IBlogService } from "@/services/interface/IBlogService";
