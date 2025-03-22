@@ -37,6 +37,7 @@ import { IBlogService } from "@/services/interface/IBlogService";
 import { Types } from "mongoose";
 import { HttpStatus } from "@/constants";
 import { CreateBlogRequestType } from "@/schema/create-blog.schema";
+import { EditBlogRequestType } from "@/schema";
 
 export class BlogController implements IBlogController {
   constructor(private blogService: IBlogService) {}
@@ -49,7 +50,6 @@ export class BlogController implements IBlogController {
     try {
       const blogData = req.body as CreateBlogRequestType;
       const { id } = JSON.parse(req.headers["x-user-payload"] as string);
-      console.log("id", id);
       const createdBlog = await this.blogService.createBlog({
         ...blogData,
         authorId: id,
@@ -94,7 +94,7 @@ export class BlogController implements IBlogController {
   ): Promise<void> {
     try {
       const blogId = new Types.ObjectId(req.params.id);
-      const updateData = req.body;
+      const updateData = req.body as EditBlogRequestType;
       const updatedBlog = await this.blogService.updateBlog(blogId, updateData);
 
       res.status(HttpStatus.OK).json(updatedBlog);

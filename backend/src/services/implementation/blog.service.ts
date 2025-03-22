@@ -17,7 +17,6 @@ export class BlogService implements IBlogService {
   }
 
   async createBlog(blogData: Partial<IBlogModel>): Promise<IBlogModel> {
-    console.log("blog", blogData);
     const authorId = blogData.authorId;
     if (!authorId) {
       throw createHttpError(
@@ -54,6 +53,7 @@ export class BlogService implements IBlogService {
       blogId,
       updateData
     );
+    console.log("updateData", updateData);
     if (!updatedBlog) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.BLOG_NOT_FOUND);
     }
