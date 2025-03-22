@@ -3,7 +3,7 @@ import { IBlog } from "shared/types";
 
 export interface IBlogModel extends Document, Omit<IBlog, "_id" | "authorId"> {
   authorId: Types.ObjectId;
-}
+};
 const blogSchema = new Schema<IBlogModel>(
   {
     authorId: {
