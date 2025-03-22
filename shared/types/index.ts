@@ -28,3 +28,11 @@ export interface IBlog {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface ICreateBlogRequestDTO {
+  title: string;
+  thumbnail: string;
+  content: string;
+  authorName: string;
+  authorId: string;
+}
