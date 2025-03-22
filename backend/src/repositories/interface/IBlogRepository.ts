@@ -1,6 +1,5 @@
 import { IBlogModel } from "@/models/implementation/blog.model";
 import { Types } from "mongoose";
-import { IBlog } from "shared/types";
 
 export interface IBlogRepository {
   createBlog(blogData: Partial<IBlogModel>): Promise<IBlogModel>;
