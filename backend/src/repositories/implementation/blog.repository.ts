@@ -12,26 +12,26 @@ export class BlogRepository
   }
 
   async createBlog(blogData: Partial<IBlogModel>): Promise<IBlogModel> {
-    const newBlog = await this.create(blogData); // Uses BaseRepository's create method
+    const newBlog = await this.create(blogData);
     return newBlog;
   }
 
   async findBlogById(blogId: Types.ObjectId): Promise<IBlogModel | null> {
-    return this.findById(blogId); // Uses BaseRepository's findById method
+    return this.findById(blogId);
   }
 
   async findAllBlogs(): Promise<IBlogModel[]> {
-    return this.findAll(); // Uses BaseRepository's findAll method
+    return this.findAll();
   }
 
   async updateBlog(
     blogId: Types.ObjectId,
     updateData: Partial<IBlogModel>
   ): Promise<IBlogModel | null> {
-    return this.update(blogId, updateData); // Uses BaseRepository's update method
+    return this.update(blogId, updateData);
   }
 
   async deleteBlog(blogId: Types.ObjectId): Promise<IBlogModel | null> {
-    return this.delete(blogId); // Uses BaseRepository's delete method
+    return this.delete(blogId);
   }
 }

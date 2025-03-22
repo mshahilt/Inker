@@ -25,4 +25,6 @@ router.put(
   blogController.updateBlog.bind(blogController)
 );
 
+router.delete("/:id", blogController.deleteBlog.bind(blogController));
+
 export default router;
