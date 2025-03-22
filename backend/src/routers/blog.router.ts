@@ -21,6 +21,8 @@ router.post(
 
 router.get("/", blogController.getAllBlogs.bind(blogController));
 
+router.get("/:id", blogController.getBlogById.bind(blogController));
+
 router.put(
   "/:id",
   validate(editBlogSchema),
