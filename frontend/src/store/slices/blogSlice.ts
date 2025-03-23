@@ -16,61 +16,88 @@ const initialState: BlogEditorState = {
   error: null,
   editingBlogId: null,
   tags: [],
+  currentBlog: null,
 };
 
 interface SaveBlogPayload {
   title: string;
   content: string;
-  thumbnail: File | null;
-  attachments: File[];
   tags: string[];
   editingBlogId: string | null;
+}
+
+interface DeleteBlogPayload {
+  blogId: string;
+  authorId: string;
 }
 
 // Thunks
 export const saveBlog = createAsyncThunk(
   "blogEditor/saveBlog",
-  async ({ title, content, thumbnail, attachments, tags, editingBlogId }: SaveBlogPayload, { rejectWithValue }) => {
+  async ({ title, content, tags, editingBlogId }: SaveBlogPayload, { rejectWithValue }) => {
     try {
-      // Create FormData for file uploads
-      const formData = new FormData();
-      if (thumbnail) formData.append("thumbnail", thumbnail);
-      attachments.forEach((file, index) => {
-        formData.append(`attachment${index}`, file);
-      });
-
-      // Add other data
-      formData.append("title", title);
-      formData.append("content", content);
-      formData.append("tags", JSON.stringify(tags));
-
-      console.log('formData', formData.content);
-
-      if (editingBlogId) {
-        await blogService.editBlogService(formData);
-      } else {
-        await blogService.createBlogService(formData);
-      }
-
-      return { 
+      const blogData = { 
         title, 
-        content,
-        thumbnailData: thumbnail ? {
-          url: URL.createObjectURL(thumbnail),
-          name: thumbnail.name
-        } : null,
-        attachmentData: attachments.map(file => ({
-          url: URL.createObjectURL(file),
-          name: file.name
-        })),
-        tags,
-        editingBlogId 
+        content, 
+        tags: JSON.stringify(tags) // Convert array to string for API
       };
+      if (editingBlogId) {
+        await blogService.editBlogService({ ...blogData, blogId: editingBlogId });
+      } else {
+        await blogService.createBlogService(blogData);
+      }
+      return { title, content, tags, editingBlogId };
     } catch (error: unknown) {
       if (error instanceof Error) {
         return rejectWithValue(error.message);
       }
       return rejectWithValue("An unknown error occurred");
+    }
+  }
+);
+
+export const getBlogs = createAsyncThunk(
+  "blogEditor/getBlogs",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await blogService.getAllBlogsService();
+      return response; 
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Failed to fetch blogs");
+    }
+  }
+);
+
+
+export const deleteBlog = createAsyncThunk(
+  "blogEditor/deleteBlog",
+  async ({ blogId, authorId }: DeleteBlogPayload, { rejectWithValue }) => {
+    try {
+      await blogService.deleteBlogService({ blogId, authorId });
+      return blogId;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Failed to delete blog");
+    }
+  }
+);
+
+export const getBlogById = createAsyncThunk(
+  "blogEditor/getBlogById",
+  async (blogId: string, { rejectWithValue }) => {
+    try {
+      const response = await blogService.getBlogByIdService(blogId);
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Failed to fetch blog");
     }
   }
 );
@@ -122,10 +149,7 @@ export const blogSlice = createSlice({
       state.saved = false;
     },
     addAttachment: (state, action: PayloadAction<{ url: string; name: string }>) => {
-      state.attachments.push({
-        url: action.payload.url,
-        name: action.payload.name
-      });
+      state.attachments.push({ url: action.payload.url, name: action.payload.name });
       state.attachmentUrls.push(action.payload.url);
       state.saved = false;
     },
@@ -144,7 +168,7 @@ export const blogSlice = createSlice({
       state.saved = false;
       state.editingBlogId = null;
     },
-    setSaved: (state, action: PayloadAction<boolean>) => { 
+    setSaved: (state, action: PayloadAction<boolean>) => {
       state.saved = action.payload;
     },
     addTag: (state, action: PayloadAction<string>) => {
@@ -173,14 +197,16 @@ export const blogSlice = createSlice({
           content: action.payload.content,
           author: "Current User",
           authorId: "user-1",
+          authorName: "Current User",
           tags: action.payload.tags,
-          thumbnail: action.payload.thumbnailData,
-          attachments: action.payload.attachmentData,
-          attachmentUrls: action.payload.attachmentData.map(att => att.url),
+          thumbnail: null,
+          attachments: [],
+          attachmentUrls: [],
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
+          likes: 0,
+          comments: 0
         };
-
         if (action.payload.editingBlogId) {
           const index = state.blogs.findIndex(b => b._id === action.payload.editingBlogId);
           if (index !== -1) {
@@ -194,10 +220,44 @@ export const blogSlice = createSlice({
       .addCase(saveBlog.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
-        state.attachments = [];
-        state.thumbnail = null;
+      })
+      .addCase(getBlogs.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getBlogs.fulfilled, (state, action: PayloadAction<Blog[]>) => {
+        state.loading = false;
+        state.blogs = action.payload; 
+      })
+      .addCase(getBlogs.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(deleteBlog.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteBlog.fulfilled, (state, action: PayloadAction<string>) => {
+        state.loading = false;
+        state.blogs = state.blogs.filter((blog) => blog._id !== action.payload);
+      })
+      .addCase(deleteBlog.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(getBlogById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getBlogById.fulfilled, (state, action: PayloadAction<Blog>) => {
+        state.loading = false;
+        state.currentBlog = action.payload; 
+      })
+      .addCase(getBlogById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
-  }
+  },
 });
 
 export const {
