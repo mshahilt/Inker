@@ -6,4 +6,5 @@ export interface IBlogController {
   getAllBlogs(req: Request, res: Response, next: NextFunction): Promise<void>;
   updateBlog(req: Request, res: Response, next: NextFunction): Promise<void>;
   deleteBlog(req: Request, res: Response, next: NextFunction): Promise<void>;
+  uploadImage(req: Request, res: Response, next: NextFunction): Promise<void>;
 }

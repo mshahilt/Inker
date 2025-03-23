@@ -34,4 +34,5 @@ export class BlogRepository
   async deleteBlog(blogId: Types.ObjectId): Promise<IBlogModel | null> {
     return this.delete(blogId);
   }
+
 }

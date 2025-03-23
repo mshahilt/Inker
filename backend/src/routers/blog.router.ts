@@ -46,4 +46,9 @@ router.delete(
   blogController.deleteBlog.bind(blogController)
 );
 
+router.post(
+  '/uploadImage',
+  blogController.uploadImage.bind(blogController)
+)
+
 export default router;

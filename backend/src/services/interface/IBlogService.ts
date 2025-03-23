@@ -22,4 +22,5 @@ export interface IBlogService {
     updateData: Partial<IBlogModel>
   ): Promise<IBlogModel>;
   deleteBlog(blogId: Types.ObjectId): Promise<IBlogModel>;
+  uploadImage(file: Express.Multer.File): Promise<string>
 }

@@ -2,10 +2,11 @@ import { HttpResponse, HttpStatus } from "@/constants";
 import { IBlogService } from "../interface/IBlogService";
 import { IBlogModel } from "@/models/implementation/blog.model";
 import { BlogRepository } from "@/repositories/implementation/blog.repository";
-import { createHttpError } from "@/utils";
+import { createHttpError, uploadToCloudinary, generateSignedUrl } from "@/utils";
 import { Types } from "mongoose";
 import { IUserRepository } from "@/repositories/interface/IUserRepository";
 import { IBlogRepository } from "@/repositories/interface/IBlogRepository";
+import { v4 as uuidv4 } from "uuid";
 
 export class BlogService implements IBlogService {
   private blogRepository: IBlogRepository;
@@ -67,4 +68,13 @@ export class BlogService implements IBlogService {
     }
     return deletedBlog;
   }
+
+  async uploadImage(file: Express.Multer.File): Promise<string> {
+    console.log('in service');
+    
+    const uniqueId = uuidv4();
+    const uploadResult = await uploadToCloudinary(file, "uploads", uniqueId);
+    return generateSignedUrl(uploadResult.public_id);
+  }
+
 }
