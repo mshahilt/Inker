@@ -69,9 +69,7 @@ export class BlogService implements IBlogService {
     return deletedBlog;
   }
 
-  async uploadImage(file: Express.Multer.File): Promise<string> {
-    console.log('in service');
-    
+  async uploadImage(file: Express.Multer.File): Promise<string> {    
     const uniqueId = uuidv4();
     const uploadResult = await uploadToCloudinary(file, "uploads", uniqueId);
     return generateSignedUrl(uploadResult.public_id);

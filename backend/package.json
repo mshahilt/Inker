@@ -8,8 +8,8 @@
     "dev": "nodemon",
     "build": "tsc",
     "start": "npm run build && node dist/index.js",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix"
   },
   "keywords": [],
   "author": "",
