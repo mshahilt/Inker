@@ -1,14 +1,15 @@
-import {createClient, RedisClientType} from "redis"
-import {env} from "@/configs/env.config"
+import { createClient, RedisClientType } from "redis"
+import { env } from "@/configs/env.config"
 
 let redisClient: RedisClientType;
 
 function connectRedis() {
 
   redisClient = createClient({
+    url: env.REDIS_HOST,
     socket: {
-      host: env.REDIS_HOST,
-      port: Number(env.REDIS_PORT) || 6379,
+      // host: env.REDIS_HOST,
+      // port: Number(env.REDIS_PORT) || 6379,
       reconnectStrategy(retries) {
         if (retries > 5) {
           console.error("Max Redis reconnect attempts reached.");
@@ -17,6 +18,7 @@ function connectRedis() {
         return Math.min(retries * 100, 2000);
       },
     },
+
   });
 
   redisClient.on("connect", () => {
