@@ -1,5 +1,5 @@
 {
-//  "extends": "../shared/tsconfig.json",
+  //  "extends": "../shared/tsconfig.json",
   "compilerOptions": {
     "target": "ES6",
     "module": "CommonJS",
@@ -39,9 +39,6 @@
     "types"
   ]
 }
-
-
-
 //    "paths": {
 //      "@shared/*": ["../shared/*"],
 //      "@models/*": ["src/models/*"],
