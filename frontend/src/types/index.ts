@@ -43,3 +43,9 @@ export interface BlogEditorState {
   editingBlogId: string | null;
   tags: string[];
 }
+
+export interface DecodedToken {
+  id: string;
+  username: string;
+  role: string;
+}

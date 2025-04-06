@@ -1,16 +1,34 @@
-import { ChevronLeft, Plus } from "lucide-react";
-import { FC, useEffect } from "react";
+import { ChevronLeft } from "lucide-react";
+import { FC, useEffect, useState } from "react";
 import Button from "../../ui/button";
 import { useNavigate } from "react-router-dom";
-import { ProfileService } from "@/services/profileService";
+import { ProfileData, ProfileService } from "@/services/profileService";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { formatDateToMonthYear } from "@/utils/formateDate";
 
 const ProfileInfo: FC = () => {
   const navigate = useNavigate();
-
+  const { role, username } = useSelector((state: RootState) => state.auth.user)
+  const [userDetails, setUserDetails] = useState<ProfileData>((): ProfileData => {
+    return {
+      username: '',
+      _id: '',
+      email: '',
+      role: role === 'admin' ? 'admin' : 'user',
+      profilePicture: '',
+      dateOfBirth: '',
+      name: '',
+      bio: '',
+      resume: '',
+      createdAt: '',
+      socialLinks: []
+    };
+  });
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const result = await ProfileService.profileDetailsService();
-      console.log(result);
+      const result = await ProfileService.profileDetailsService(username);
+      setUserDetails(result.profileDetails)
     };
 
     fetchUserProfile();
@@ -37,20 +55,23 @@ const ProfileInfo: FC = () => {
         <div className="flex justify-around w-full">
           <div className="flex flex-col items-center">
             <p>followers</p>
-            <p className="font-semibold">45</p>
+            <p className="font-semibold">0</p>
           </div>
           <div className="flex flex-col items-center">
             <p>followings</p>
-            <p className="font-semibold">45</p>
+            <p className="font-semibold">0</p>
           </div>
         </div>
       </div>
 
       <div className="p-2 flex flex-col gap-3">
-        <p className="text-xl font-semibold">Full Name</p>
+        <p className="text-xl font-semibold">{userDetails?.name}</p>
+      <p className="text-sm px-1 font-medium text-neutral-500">
+        {userDetails.bio}
+      </p>
         <div className="flex gap-2 items-center mt-2">
-          <p className="text-sm text-gray-600">@username</p>
-          <p className="text-xs text-gray-400">. Joined Febraury 2025</p>
+          <p className="text-sm text-gray-600">@{userDetails?.username}</p>
+          <p className="text-xs text-gray-400">. Joined {formatDateToMonthYear(userDetails.createdAt)}</p>
         </div>
         <div className="flex gap-2 text-sm font-light text-muted-foreground">
           <p>
@@ -64,14 +85,6 @@ const ProfileInfo: FC = () => {
           </p>
         </div>
       </div>
-
-      <button
-        className="outline rounded-md px-2 py-1 w-fit h-fit flex gap-1 mt-3 items-center text-neutral-500 ml-2 active:scale-95"
-        onClick={() => navigate("/account/profile")}
-      >
-        <Plus strokeWidth={1.2} />
-        <p className="text-md ">Add bio</p>
-      </button>
     </div>
   );
 };

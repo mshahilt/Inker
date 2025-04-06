@@ -15,6 +15,7 @@ import Community from "@/pages/community/Community";
 import EditBlog from "@/components/user/blogpost/EditBlog";
 import ViewBlog from "@/components/user/blogpost/ViewBlog";
 import BlogListCards from "@/components/user/blogpost/BlogList";
+import { ProfileProvider } from "@/contexts/ProfileContext";
 export const router = createBrowserRouter([
   { path: "/", element: <LandingPage /> },
   {
@@ -25,7 +26,7 @@ export const router = createBrowserRouter([
       { path: "explore", element: <div> Explore </div> },
       { path: "activity", element: <div> Activity </div> },
       { path: "profile", element: <Profile /> },
-      { path: "account/profile", element: <EditProfile /> },
+      { path: "account/profile", element: <ProfileProvider><EditProfile /></ProfileProvider>},
       { path: "blog/create", element: <AddBlog /> },
       { path: "blog/edit/:blogId", element: <EditBlog /> },
       { path: "blog/view/:blogId", element: <ViewBlog /> },

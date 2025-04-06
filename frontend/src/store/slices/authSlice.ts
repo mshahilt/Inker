@@ -1,8 +1,14 @@
-import { TokenUtils } from '@/utils/tokenUtil';
+import { DecodedToken } from '@/types';
+import { decodeToken, TokenUtils } from '@/utils/tokenUtil';
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-    user: null,
+interface initialState {
+    user: DecodedToken ,
+    accessToken: string | null;
+}
+
+const initialState: initialState = {
+    user: decodeToken(),
     accessToken: TokenUtils.getToken() || null,
 };
 
@@ -16,7 +22,7 @@ const authSlice = createSlice({
             TokenUtils.setToken(action.payload?.accessToken)
         },
         logout: (state) => {
-            state.user = null;
+            state.user = { id: '', username: '', role: '' };
             state.accessToken = null;
             window.location.href = '/auth'; 
         },
