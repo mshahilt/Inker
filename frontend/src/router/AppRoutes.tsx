@@ -5,7 +5,6 @@ import NotFoundPage from "@/pages/notfound/NotFoundPage";
 import EditProfile from "@/pages/profile/editProfile";
 import Profile from "@/pages/profile/Profile";
 import { createBrowserRouter } from "react-router-dom";
-import BlogDetail from "@/components/user/blogDetailed";
 import AddBlog from "@/components/user/blogpost/CreateBlog";
 import OtpForm from "@/pages/auth/OtpForm";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -14,7 +13,6 @@ import Feed from "@/pages/profile/Feed";
 import Community from "@/pages/community/Community";
 import EditBlog from "@/components/user/blogpost/EditBlog";
 import ViewBlog from "@/components/user/blogpost/ViewBlog";
-import BlogListCards from "@/components/user/blogpost/BlogList";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 export const router = createBrowserRouter([
   { path: "/", element: <LandingPage /> },
@@ -29,9 +27,7 @@ export const router = createBrowserRouter([
       { path: "account/profile", element: <ProfileProvider><EditProfile /></ProfileProvider>},
       { path: "blog/create", element: <AddBlog /> },
       { path: "blog/edit/:blogId", element: <EditBlog /> },
-      { path: "blog/view/:blogId", element: <ViewBlog /> },
-      { path: "blog/", element: <BlogListCards /> },
-      { path: "blog/:id", element: <BlogDetail /> },
+      { path: "blog/:blogId", element: <ViewBlog /> },
       { path: "community", element: <Community /> },
       { path: "*", element: <NotFoundPage />},
     ],
