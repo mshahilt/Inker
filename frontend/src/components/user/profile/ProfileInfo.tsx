@@ -32,7 +32,7 @@ const ProfileInfo: FC = () => {
     };
 
     fetchUserProfile();
-  }, []);
+  }, [username]);
 
   return (
     <div className="min-w-[300px] lg:w-[400px] p-2 lg:border lg:h-full">

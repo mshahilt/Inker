@@ -1,7 +1,6 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import BlogCard from "../common/BlogCard";
 import {
-  FaRegBookmark,
   FaChevronRight,
   FaChevronLeft,
 } from "react-icons/fa";

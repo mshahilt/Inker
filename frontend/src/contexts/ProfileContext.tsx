@@ -53,30 +53,34 @@ export const useProfile = () => {
 };
 
 export const ProfileProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const user = useSelector((state: RootState) => state.auth.user);
+  const {username,id} = useSelector((state: RootState) => state.auth.user);
   const [profile, setProfile] = useState<ProfileData>(defaultProfile);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
-      if (!user?.id) return;
+      if (!id) return;
 
       setLoading(true);
       setError(null);
 
       try {
-        const response = await ProfileService.profileDetailsService(user.username);
+        const response = await ProfileService.profileDetailsService(username);
         setProfile(response.profileDetails);
-      } catch (err: any) {
-        setError(err?.message || 'Failed to load profile');
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('Failed to load profile');
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchUserDetails();
-  }, [user?.id]);
+  }, [ id, username]);
 
   return (
     <ProfileContext.Provider value={{ profile, setProfile, loading, error }}>

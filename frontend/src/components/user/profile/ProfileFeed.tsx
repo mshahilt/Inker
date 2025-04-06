@@ -19,7 +19,7 @@ const ProfileFeed: FC = () => {
 
   useEffect(() => {
     dispatch(getBlogByAuthorId(id));
-  }, [dispatch]);
+  }, [dispatch, id]);
 
   const handleDelete = (blogId: string) => {
     dispatch(deleteBlog({ blogId, authorId: id }));

@@ -13,7 +13,7 @@ const UsernameInput: FC = () => {
   },[profile])
 
   const changeUsernameHandler = async () => {
-    const response = await ProfileService.changeUsernameService({username})
+     await ProfileService.changeUsernameService({username})
 
   }
 

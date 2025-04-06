@@ -24,7 +24,8 @@ const UpdateProfile: FC = () => {
     useEffect(() => {
       setFullName(profile.name)
       setBio(profile.bio)
-      profile.socialLinks && setSocialLinks(profile.socialLinks)
+      if (profile.socialLinks)
+        setSocialLinks(profile.socialLinks)
     },[profile])
 
   const handleSocialLinkChange = (index: number, platform: string, url: string) => {
