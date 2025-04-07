@@ -11,11 +11,8 @@ export const env = {
   get JWT_REFRESH_SECRET() {
     return process.env.JWT_REFRESH_SECRET;
   },
-  get REDIS_HOST() {
-    return process.env.REDIS_HOST;
-  },
-  get REDIS_PORT() {
-    return process.env.REDIS_PORT;
+  get REDIS_URL() {
+    return process.env.REDIS_URL;
   },
   get SENDER_EMAIL() {
     return process.env.SENDER_EMAIL;
