@@ -7,23 +7,23 @@ import { toast } from "sonner";
 interface UpdateProfileData {
     name: string;
     bio: string;
-    resume: string;
-    socials: {
+    resume?: string;
+    socialLinks: {
         platform: string, 
         url: string
     }[] 
 }
 
-interface ProfileData extends UpdateProfileData {
+export interface ProfileData extends UpdateProfileData {
     _id: string; 
-    userName: string; 
+    username: string; 
     email: string; 
-    status: "Active" | "Inactive" | "Pending"; 
-    role: "User" | "Admin";
+    status?: "Active" | "Inactive" | "Pending"; 
+    role: "user" | "admin";
     profilePicture: string;
     dateOfBirth: string; 
     createdAt: string; 
-    updatedAt: string; 
+    updatedAt?: string; 
   }
 
 
@@ -31,7 +31,7 @@ interface ProfileData extends UpdateProfileData {
 export const ProfileService = {
   updateProfileService: async (data: UpdateProfileData): Promise<{ status: number; message: string, updatedFields: string[]}> => {
     try {
-      const response = await axiosInstance.put<{ status: number; message: string, updatedFields: string[]}> ("/api/profile/update", data);
+      const response = await axiosInstance.put<{ status: number; message: string, updatedFields: string[]}> ("/api/profile/update-profile", data, { withCredentials: true });
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
@@ -40,9 +40,9 @@ export const ProfileService = {
     }
   },
 
-  profileDetailsService: async (): Promise<{ status: number; data: ProfileData }> => {
+  profileDetailsService: async (username: string): Promise<{ message: string; profileDetails: ProfileData }> => {
     try {
-      const response = await axiosInstance.get<{ status: number; data: ProfileData }> ("api/profile");
+      const response = await axiosInstance.get<{ message: string; profileDetails: ProfileData }> (`api/profile/${username}`);
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
@@ -63,7 +63,7 @@ export const ProfileService = {
   },
 
   
-  changeUsernameService: async (data: {oldUserName: string; newUserName: string;}): Promise<{ status: number; message: string }> => {
+  changeUsernameService: async (data: {username: string;}): Promise<{ status: number; message: string }> => {
     try {
       const response = await axiosInstance.patch<{ status: number; message: string }> ("api/profile/change-username", data);
       return response.data;
@@ -76,7 +76,7 @@ export const ProfileService = {
 
   changePasswordService: async (data: {userId: string, oldPassword: string; newPassword: string;}): Promise<{ status: number; message: string }> => {
     try {
-      const response = await axiosInstance.patch<{ status: number; message: string }> ("api/profile/change-password", data);
+      const response = await axiosInstance.patch<{ status: number; message: string }> ("api/profile/change-password", data, { withCredentials: true });
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;

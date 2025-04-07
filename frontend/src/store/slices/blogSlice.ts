@@ -39,7 +39,7 @@ export const saveBlog = createAsyncThunk(
       const blogData = { 
         title, 
         content, 
-        tags: JSON.stringify(tags) // Convert array to string for API
+        tags
       };
       if (editingBlogId) {
         await blogService.editBlogService({ ...blogData, blogId: editingBlogId });
@@ -92,6 +92,21 @@ export const getBlogById = createAsyncThunk(
   async (blogId: string, { rejectWithValue }) => {
     try {
       const response = await blogService.getBlogByIdService(blogId);
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Failed to fetch blog");
+    }
+  }
+);
+
+export const getBlogByAuthorId = createAsyncThunk(
+  "blogEditor/getBlogById",
+  async (authorId: string, { rejectWithValue }) => {
+    try {
+      const response = await blogService.getBlogByAuthorIdService(authorId);
       return response;
     } catch (error: unknown) {
       if (error instanceof Error) {

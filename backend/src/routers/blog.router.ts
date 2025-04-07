@@ -33,6 +33,12 @@ router.get(
   blogController.getBlogById.bind(blogController)
 );
 
+router.get(
+  "/user/:id",
+  authenticate("user"),
+  blogController.getBlogByAuthorId.bind(blogController)
+);
+
 router.put(
   "/:id",
   validate(editBlogSchema),

@@ -42,6 +42,14 @@ export class BlogService implements IBlogService {
     return blog;
   }
 
+  async findBlogByAuthorId(authorId: Types.ObjectId): Promise<IBlogModel[]> {
+    const blog = await this.blogRepository.findBlogByAuthorId(authorId);
+    if (!blog) {
+      throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.BLOG_NOT_FOUND);
+    }
+    return blog;
+  }
+
   async getAllBlogs(): Promise<IBlogModel[]> {
     return this.blogRepository.findAllBlogs();
   }
