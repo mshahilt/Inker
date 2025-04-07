@@ -30,8 +30,6 @@ export class ProfileController implements IProfileController {
   ): Promise<void> {
     try {
       const { username } = req.body
-
-      console.log(username,'sdfdsfdfs');
       
       const { id } = JSON.parse(req.headers["x-user-payload"] as string)
       const updatedUsername = await this._profileService.usernameUpdate(id, username)
