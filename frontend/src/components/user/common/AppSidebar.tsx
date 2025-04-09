@@ -1,6 +1,8 @@
 import { Newspaper, Search, SquareActivity, Plus, ChevronUp, Boxes } from "lucide-react";
-import LightLogo from "../../../assets/Logo Light.svg";
-import DarkLogo from "../../../assets/Logo Dark.svg";
+import InkerLogo from "../../../assets/inker_main.svg";
+import InkerIcon from "../../../assets/inker_icon.svg";
+import InkerLogoDark from "../../../assets/inker_main_dark.svg";
+import InkerIconDark from "../../../assets/inker_icon_dark.svg";
 import {
   Sidebar,
   SidebarContent,
@@ -46,27 +48,27 @@ export function AppSidebar() {
                   {isExpanded ? (
                     <div className="w-full flex justify-center items-center">
                       <img
-                        src={LightLogo}
-                        alt="Light Logo"
-                        className="max-w-[100px] dark:hidden"
+                        src={InkerLogo}
+                        alt="Inker Logo"
+                        className="max-w-32 dark:hidden"
                       />
                       <img
-                        src={DarkLogo}
-                        alt="Dark Logo"
-                        className="max-w-[100px] dark:block hidden"
+                        src={InkerLogoDark}
+                        alt="Inker Dark Logo"
+                        className="max-w-32  dark:block hidden"
                       />
                     </div>
                   ) : (
                     <div className="w-full flex justify-center items-center">
                       <img
-                        src={LightLogo}
-                        alt="Light Logo"
-                        className="max-w-[100px] dark:hidden"
+                        src={InkerIcon}
+                        alt="Inker Icon"
+                        className="max-w-8 dark:hidden"
                       />
                       <img
-                        src={DarkLogo}
-                        alt="Dark Logo"
-                        className="max-w-[100px] dark:block hidden"
+                        src={InkerIconDark}
+                        alt="Inker Dark Icon"
+                        className="max-w-8 dark:block hidden"
                       />
                     </div>
                   )}
