@@ -128,7 +128,7 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            { !accessToken ? <DropdownMenu>
+            { accessToken ? <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton className="h-fit">
                   <Avatar className="rounded">
