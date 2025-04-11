@@ -1,4 +1,4 @@
-import { Newspaper, Search, SquareActivity, Plus, ChevronUp, Boxes } from "lucide-react";
+import { Newspaper, Search, SquareActivity, Plus, ChevronUp, Boxes, LogIn } from "lucide-react";
 import InkerLogo from "../../../assets/inker_main.svg";
 import InkerIcon from "../../../assets/inker_icon.svg";
 import InkerLogoDark from "../../../assets/inker_main_dark.svg";
@@ -24,6 +24,11 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/store/slices/authSlice";
+import { RootState } from "@/store/store";
+import { useLocation } from "react-router-dom";
+
 
 const items = [
   { title: "My feed", url: "/home", icon: Newspaper },
@@ -33,9 +38,12 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const {user, accessToken} = useSelector((state: RootState) => state.auth)
   const { state } = useSidebar();
   const isExpanded = state === "expanded";
   const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const location = useLocation();
 
   return (
     <Sidebar collapsible="icon">
@@ -92,16 +100,26 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </Link>
               </SidebarMenuItem>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.url} className="flex items-center w-full">
-                      <item.icon size={18} strokeWidth={2} />
-                      {isExpanded && <span className="ml-2">{item.title}</span>}
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {items.map((item) => {
+                const isActive = location.pathname.startsWith(item.url);
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      className={`w-full ${
+                        isActive
+                          ? "bg-muted dark:bg-neutral-800 text-black dark:text-white"
+                          : "hover:bg-muted"
+                      }`}
+                    >
+                      <Link to={item.url} className="flex items-center w-full">
+                        <item.icon size={18} strokeWidth={2} />
+                        {isExpanded && <span className="ml-2">{item.title}</span>}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -110,7 +128,7 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <DropdownMenu>
+            { !accessToken ? <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton className="h-fit">
                   <Avatar className="rounded">
@@ -118,8 +136,8 @@ export function AppSidebar() {
                     <AvatarFallback>U</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col">
-                    <span className="text-sm">User Name</span>
-                    <span className="text-xs text-neutral-500">@username</span>
+                    <span className="text-sm">Full Name</span>
+                    <span className="text-xs text-neutral-500">@{user.username}</span>
                   </div>
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
@@ -128,11 +146,19 @@ export function AppSidebar() {
                 <DropdownMenuItem onClick={() => navigate("/profile")}>
                   <span>Profile</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Sign out</span>
+                <DropdownMenuItem onClick={() => dispatch(logout())}>
+                  <span>Log out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu> : 
+            <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton className="h-fit w-full flex justify-center items-center font-medium " onClick={() => navigate("/auth")}>
+                <LogIn/>
+                {isExpanded && <span className="ml-2">Login</span>}
+              </SidebarMenuButton>
+            </DropdownMenuTrigger> 
+          </DropdownMenu>}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
