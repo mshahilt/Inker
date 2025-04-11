@@ -20,8 +20,9 @@ export interface IBlogService {
   getAllBlogs(): Promise<IBlogModel[]>;
   updateBlog(
     blogId: Types.ObjectId,
+    authorId: Types.ObjectId,
     updateData: Partial<IBlogModel>
   ): Promise<IBlogModel>;
-  deleteBlog(blogId: Types.ObjectId): Promise<IBlogModel>;
+  deleteBlog(blogId: Types.ObjectId, authorId: Types.ObjectId): Promise<IBlogModel>;
   uploadImage(file: Express.Multer.File): Promise<string>
 }

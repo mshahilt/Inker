@@ -76,7 +76,9 @@ export class BlogController implements IBlogController {
     try {
       const blogId = new Types.ObjectId(req.params.id);
       const updateData = req.body as EditBlogRequestType;
-      const updatedBlog = await this.blogService.updateBlog(blogId, updateData);
+      const { id } = JSON.parse(req.headers["x-user-payload"] as string);
+      const userId = new Types.ObjectId(String(id))
+      const updatedBlog = await this.blogService.updateBlog(blogId, userId, updateData);
 
       res.status(HttpStatus.OK).json(updatedBlog);
     } catch (error) {
@@ -91,7 +93,10 @@ export class BlogController implements IBlogController {
   ): Promise<void> {
     try {
       const blogId = new Types.ObjectId(req.params.id);
-      const deletedBlog = await this.blogService.deleteBlog(blogId);
+      const { id } = JSON.parse(req.headers["x-user-payload"] as string);
+      const userId = new Types.ObjectId(String(id))
+
+      const deletedBlog = await this.blogService.deleteBlog(blogId, userId);
 
       res.status(HttpStatus.OK).json(deletedBlog);
     } catch (error) {

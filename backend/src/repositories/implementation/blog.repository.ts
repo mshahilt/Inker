@@ -30,13 +30,17 @@ export class BlogRepository
 
   async updateBlog(
     blogId: Types.ObjectId,
+    authorId: Types.ObjectId,
     updateData: Partial<IBlogModel>
   ): Promise<IBlogModel | null> {
-    return this.update(blogId, updateData);
+    await this.updateOne({_id: blogId, authorId}, updateData);
+    return await this.findOne({_id: blogId, authorId})
   }
 
-  async deleteBlog(blogId: Types.ObjectId): Promise<IBlogModel | null> {
-    return this.delete(blogId);
+  async deleteBlog(blogId: Types.ObjectId, authorId: Types.ObjectId): Promise<IBlogModel | null> {
+    const blog = await this.findOne({_id: blogId, authorId})
+    await this.deleteOne({_id: blogId, authorId});
+    return blog
   }
 
 }

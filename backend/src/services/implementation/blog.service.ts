@@ -56,21 +56,23 @@ export class BlogService implements IBlogService {
 
   async updateBlog(
     blogId: Types.ObjectId,
+    authorId: Types.ObjectId,
     updateData: Partial<IBlogModel>
   ): Promise<IBlogModel> {
     const updatedBlog = await this.blogRepository.updateBlog(
       blogId,
+      authorId,
       updateData
     );
-    console.log("updateData", updateData);
+    
     if (!updatedBlog) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.BLOG_NOT_FOUND);
     }
     return updatedBlog;
   }
 
-  async deleteBlog(blogId: Types.ObjectId): Promise<IBlogModel> {
-    const deletedBlog = await this.blogRepository.deleteBlog(blogId);
+  async deleteBlog(blogId: Types.ObjectId, authorId: Types.ObjectId): Promise<IBlogModel> {
+    const deletedBlog = await this.blogRepository.deleteBlog(blogId, authorId);
     if (!deletedBlog) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.BLOG_NOT_FOUND);
     }
