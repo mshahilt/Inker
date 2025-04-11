@@ -31,7 +31,7 @@ const ProfileInfo: FC = () => {
       setUserDetails(result.profileDetails)
     };
 
-    fetchUserProfile();
+    if(username) fetchUserProfile();
   }, [username]);
 
   return (

@@ -9,7 +9,7 @@ import AddBlog from "@/components/user/blogpost/CreateBlog";
 import OtpForm from "@/pages/auth/OtpForm";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { env } from "@/config/env";
-import Feed from "@/pages/profile/Feed";
+import Feed from "@/pages/feed/Feed";
 import Community from "@/pages/community/Community";
 import EditBlog from "@/components/user/blogpost/EditBlog";
 import ViewBlog from "@/components/user/blogpost/ViewBlog";

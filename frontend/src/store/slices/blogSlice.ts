@@ -42,7 +42,7 @@ export const saveBlog = createAsyncThunk(
         tags
       };
       if (editingBlogId) {
-        await blogService.editBlogService({ ...blogData, blogId: editingBlogId });
+        await blogService.editBlogService( editingBlogId, blogData );
       } else {
         await blogService.createBlogService(blogData);
       }

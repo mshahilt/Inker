@@ -7,6 +7,7 @@ import Button from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { useProfile } from '@/contexts/ProfileContext'
 import { ProfileService } from '@/services/profileService'
+import { toast } from 'sonner'
 
 interface SocialLink {
   platform: string;
@@ -44,7 +45,9 @@ const UpdateProfile: FC = () => {
       bio,
       socialLinks: socialLinks.filter(link => link.platform && link.url),
     };
-     await ProfileService.updateProfileService(payload)
+    const { message } = await ProfileService.updateProfileService(payload)
+    if (message) toast.success(message)
+    
   };
 
   return (

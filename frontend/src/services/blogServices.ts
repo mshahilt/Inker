@@ -28,9 +28,9 @@ export const blogService = {
     }
   },
 
-  editBlogService: async (blogData: { title: string; content: string; tags: string[]; blogId: string }): Promise<{ status: number; message: string }> => {
+  editBlogService: async (  blogId: string , blogData: { title: string; content: string; tags: string[];}): Promise<{ status: number; message: string }> => {
     try {
-      const response = await axiosInstance.put<{ status: number; message: string }>(`/api/blog/${blogData.blogId}`, blogData);
+      const response = await axiosInstance.put<{ status: number; message: string }>(`/api/blog/${blogId}`, blogData);
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
