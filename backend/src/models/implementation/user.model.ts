@@ -51,6 +51,7 @@ const userSchema = new Schema<IUserModel>(
     },
     bio: {
       type: String,
+      default: '',
     },
     profilePicture: {
       type: String,
