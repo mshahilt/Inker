@@ -85,6 +85,26 @@ const ProfileInfo: FC = () => {
           </p>
         </div>
       </div>
+      <div className="mt-4 px-2">
+        <h2 className="text-lg font-semibold mb-2">Social Links</h2>
+        <div className="flex flex-col gap-2">
+          {userDetails.socialLinks.length > 0 ? (
+            userDetails.socialLinks.map((link, index) => (
+              <a
+                key={index}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                {link.platform}
+              </a>
+            ))
+          ) : (
+            <p className="text-gray-500 text-sm">No social links added.</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
