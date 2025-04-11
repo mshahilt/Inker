@@ -25,7 +25,7 @@ export class BlogRepository
   }
 
   async findAllBlogs(): Promise<IBlogModel[]> {
-    return await Blog.find().sort({ updatedAt: -1 })
+    return await Blog.find().sort({ createdAt: -1 })
   }
 
   async updateBlog(
