@@ -4,9 +4,9 @@ import { AxiosError } from "axios";
 import { Blog } from "@/types";
 
 export const blogService = {
-  createBlogService: async (blogData: { title: string; content: string; tags: string }): Promise<{ status: number; message: string }> => {
+  createBlogService: async (blogData: { title: string; content: string; tags: string[] }): Promise<{ status: number; message: string }> => {
     try {
-      const response = await axiosInstance.post<{ status: number; message: string }>("/api/blog", blogData);
+      const response = await axiosInstance.post<{ status: number; message: string }>("/api/blog", blogData, { withCredentials: true });
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
@@ -28,7 +28,7 @@ export const blogService = {
     }
   },
 
-  editBlogService: async (blogData: { title: string; content: string; tags: string; blogId: string }): Promise<{ status: number; message: string }> => {
+  editBlogService: async (blogData: { title: string; content: string; tags: string[]; blogId: string }): Promise<{ status: number; message: string }> => {
     try {
       const response = await axiosInstance.put<{ status: number; message: string }>(`/api/blog/${blogData.blogId}`, blogData);
       return response.data;
@@ -38,6 +38,7 @@ export const blogService = {
       throw new Error(err.response?.data?.error || "Blog update failed.");
     }
   },
+
   getAllBlogsService: async (): Promise<Blog[]> => {
     try {
       const response = await axiosInstance.get<Blog[]>("/api/blog"); 
@@ -48,8 +49,14 @@ export const blogService = {
       throw new Error(err.response?.data?.error || "Failed to fetch blogs");
     }
   },
+
   getBlogByIdService: async (blogId: string): Promise<Blog> => {
     const response = await axiosInstance.get<Blog>(`/api/blog/${blogId}`);
+    return response.data;
+  },
+
+  getBlogByAuthorIdService: async (authorId: string): Promise<Blog[]> => {
+    const response = await axiosInstance.get<Blog[]>(`/api/blog/user/${authorId}`, { withCredentials: true });
     return response.data;
   }
 };

@@ -6,10 +6,8 @@ let redisClient: RedisClientType;
 function connectRedis() {
 
   redisClient = createClient({
-    url: env.REDIS_HOST,
+    url: env.REDIS_URL,
     socket: {
-      // host: env.REDIS_HOST,
-      // port: Number(env.REDIS_PORT) || 6379,
       reconnectStrategy(retries) {
         if (retries > 5) {
           console.error("Max Redis reconnect attempts reached.");

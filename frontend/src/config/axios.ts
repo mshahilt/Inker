@@ -3,7 +3,7 @@ import { store } from '@/store/store';
 import { setAuth, logout } from "@/store/slices/authSlice"
 import { TokenUtils } from '@/utils/tokenUtil';
 
-const BASE_URL = 'https://inker-hpls.onrender.com';
+const BASE_URL = 'http://localhost:3000';
 
 export const axiosInstance = axios.create({
     baseURL: BASE_URL,
@@ -35,8 +35,6 @@ axiosInstance.interceptors.response.use(
             try {
                 const refreshResponse = await axios.post(`${BASE_URL}/api/auth/refresh-token`, {}, { withCredentials: true });
                 const accessToken = refreshResponse.data;
-
-                console.log( accessToken,'uhiu')
 
                 store.dispatch(setAuth({accessToken }));
 

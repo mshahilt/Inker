@@ -41,6 +41,20 @@ export class BlogController implements IBlogController {
     }
   }
 
+  async getBlogByAuthorId(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const userId = new Types.ObjectId(req.params.id);
+      const blog = await this.blogService.findBlogByAuthorId(userId);
+      res.status(HttpStatus.OK).json(blog);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async getAllBlogs(
     req: Request,
     res: Response,

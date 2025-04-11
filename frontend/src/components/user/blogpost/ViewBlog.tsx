@@ -35,7 +35,7 @@ export default function ViewBlog() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => navigate("/blog/")}
+              onClick={() => navigate(-1)}
               className="text-muted-foreground hover:text-foreground"
               aria-label="Back to Blogs"
             >

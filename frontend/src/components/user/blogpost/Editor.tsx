@@ -36,7 +36,7 @@ export const Editor: React.FC<EditorProps> = ({ isEditMode }) => {
 
   const handleSave = () => {
     dispatch(saveBlog({ title, content, tags, editingBlogId })).then(() => {
-      navigate("/blog/"); // Redirect to blog list
+      navigate("/profile/"); 
     });
   };
 
@@ -95,7 +95,7 @@ export const Editor: React.FC<EditorProps> = ({ isEditMode }) => {
         />
       </Card>
       <div className="flex justify-end mt-4 gap-2">
-        <Button onClick={() => navigate("/blog/")} variant="outline">
+        <Button onClick={() => navigate(-1)} variant="outline">
           Cancel
         </Button>
         <Button onClick={handleSave} disabled={loading}>

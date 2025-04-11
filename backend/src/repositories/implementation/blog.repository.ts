@@ -20,6 +20,10 @@ export class BlogRepository
     return this.findById(blogId);
   }
 
+  async findBlogByAuthorId( authorId: Types.ObjectId): Promise<IBlogModel[] | null> {
+    return this.find({authorId});
+  }
+
   async findAllBlogs(): Promise<IBlogModel[]> {
     return this.findAll();
   }

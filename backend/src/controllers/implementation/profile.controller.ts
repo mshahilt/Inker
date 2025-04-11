@@ -14,6 +14,7 @@ export class ProfileController implements IProfileController {
   ): Promise<void> {
     try {
       const { username } = req.params
+
       const profileDetails = await this._profileService.getProfile(username);
       res.status(HttpStatus.OK).json({ message: HttpResponse.RESOURCE_FOUND, profileDetails })
     } catch (err) {
@@ -29,6 +30,7 @@ export class ProfileController implements IProfileController {
   ): Promise<void> {
     try {
       const { username } = req.body
+      
       const { id } = JSON.parse(req.headers["x-user-payload"] as string)
       const updatedUsername = await this._profileService.usernameUpdate(id, username)
       res.status(HttpStatus.OK).json({ message: HttpResponse.USERNAME_CHANGED, username: updatedUsername })

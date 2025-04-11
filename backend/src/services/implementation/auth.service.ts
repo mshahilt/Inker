@@ -72,7 +72,7 @@ export class AuthService implements IAuthService {
       throw createHttpError(HttpStatus.UNAUTHORIZED, HttpResponse.PASSWORD_INCORRECT);
     }
 
-    const payload = { id: user._id, role: user.role, email: user.email };
+    const payload = { id: user._id, role: user.role, username: user.username };
 
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
@@ -178,7 +178,7 @@ export class AuthService implements IAuthService {
       throw createHttpError(HttpStatus.NO_CONTENT, HttpResponse.TOKEN_EXPIRED);
     }
 
-    const payload = { id: decoded.id, role: decoded.role, email: decoded.email };
+    const payload = { id: decoded.id, role: decoded.role, username: decoded.username };
 
     const accessToken = generateAccessToken(payload);
 
