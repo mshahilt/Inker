@@ -22,9 +22,9 @@ const authSlice = createSlice({
             TokenUtils.setToken(action.payload?.accessToken)
         },
         logout: (state) => {
-            // state.user = { id: '', username: '', role: '' };
-            // state.accessToken = null;
-            // window.location.href = '/auth'; 
+            state.user = { id: '', username: '', role: '' };
+            state.accessToken = null;
+            window.location.href = '/auth'; 
         },
     },
 });
