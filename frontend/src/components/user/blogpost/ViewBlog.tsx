@@ -20,9 +20,6 @@ export default function ViewBlog() {
     }
   }, [dispatch, blogId]);
 
-  console.log(blogId, "blogId");
-  console.log(currentBlog, "currentBlog");
-
   if (loading) return <p className="text-center">Loading...</p>;
   if (error) return <p className="text-destructive text-center">Error: {error}</p>;
   if (!currentBlog || currentBlog._id !== blogId) return <p className="text-center">Blog not found</p>;

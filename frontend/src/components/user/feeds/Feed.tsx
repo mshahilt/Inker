@@ -5,7 +5,7 @@ import {
   FaChevronLeft,
 } from "react-icons/fa";
 import char from "../../../assets/char3.jpeg";
-import { ArrowBigDown, ArrowBigUp, Clipboard, EllipsisVertical, MessageCircle, Trash2 } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, Clipboard, MessageCircle, Trash2 } from "lucide-react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteBlog, getBlogs } from "@/store/slices/blogSlice";
@@ -14,7 +14,7 @@ import { AppDispatch, RootState } from "@/store/store";
 
 const Feeds = () => {
   const { blogs } = useSelector((state: RootState) => state.blogEditor);
-  const { username, id } = useSelector((state: RootState) => state.auth.user)
+  const { id } = useSelector((state: RootState) => state.auth.user)
   const dispatch = useDispatch<AppDispatch>()
    
   useEffect(() => {
@@ -35,9 +35,7 @@ const Feeds = () => {
                 key={index}
                 className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col h-full relative p-2"
               >
-                <button>
-                  <EllipsisVertical className="rounded-xl hover:cursor-pointer absolute right-1 top-3" />
-                </button>
+                
 
                 <div className="flex w-full items-center">
                   <img
@@ -45,7 +43,7 @@ const Feeds = () => {
                     alt="Profile"
                     className="w-10 h-10 rounded-full mr-3 object-cover"
                   />
-                  <span className="font-medium">{username}</span>
+                  <span className="font-medium">{blog.authorName}</span>
                 </div>
 
                 <Link

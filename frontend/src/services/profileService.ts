@@ -29,9 +29,9 @@ export interface ProfileData extends UpdateProfileData {
 
 
 export const ProfileService = {
-  updateProfileService: async (data: UpdateProfileData): Promise<{ status: number; message: string, updatedFields: string[]}> => {
+  updateProfileService: async (data: UpdateProfileData): Promise<{ message: string, updatedFields: string[]}> => {
     try {
-      const response = await axiosInstance.put<{ status: number; message: string, updatedFields: string[]}> ("/api/profile/update-profile", data, { withCredentials: true });
+      const response = await axiosInstance.put<{ message: string, updatedFields: string[]}> ("/api/profile/update-profile", data, { withCredentials: true });
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
