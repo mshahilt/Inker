@@ -3,7 +3,7 @@ import { store } from '@/store/store';
 import { setAuth, logout } from "@/store/slices/authSlice"
 import { TokenUtils } from '@/utils/tokenUtil';
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://inker-26ad.onrender.com';
 
 export const axiosInstance = axios.create({
     baseURL: BASE_URL,
