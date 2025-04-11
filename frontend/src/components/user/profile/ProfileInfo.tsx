@@ -49,7 +49,7 @@ const ProfileInfo: FC = () => {
       <div className="w-full  p-1 rounded-3xl mb-3 flex items-center">
         <img
           className="w-26 h-26 rounded-3xl"
-          src="https://res.cloudinary.com/dwyxogyrk/image/upload/v1737433466/h0xf7zi0blmclfqrjeo7.png"
+          src={userDetails?.profilePicture || "https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg"}
           alt=""
         />
         <div className="flex justify-around w-full">
