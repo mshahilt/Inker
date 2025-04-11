@@ -8,7 +8,8 @@ export interface IBlogRepository {
   findAllBlogs(): Promise<IBlogModel[]>;
   updateBlog(
     blogId: Types.ObjectId,
+    authorId: Types.ObjectId,
     updateData: Partial<IBlogModel>
   ): Promise<IBlogModel | null>;
-  deleteBlog(blogId: Types.ObjectId): Promise<IBlogModel | null>;
+  deleteBlog(blogId: Types.ObjectId, authorId: Types.ObjectId): Promise<IBlogModel | null>;
 }
