@@ -49,7 +49,7 @@ const ProfileInfo: FC = () => {
       <div className="w-full  p-1 rounded-3xl mb-3 flex items-center">
         <img
           className="w-26 h-26 rounded-3xl"
-          src="https://res.cloudinary.com/dwyxogyrk/image/upload/v1737433466/h0xf7zi0blmclfqrjeo7.png"
+          src={userDetails?.profilePicture || "https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg"}
           alt=""
         />
         <div className="flex justify-around w-full">
@@ -83,6 +83,26 @@ const ProfileInfo: FC = () => {
           <p>
             <span className="font-semibold text-foreground">0</span> Upvotes
           </p>
+        </div>
+      </div>
+      <div className="mt-4 px-2">
+        <h2 className="text-lg font-semibold mb-2">Social Links</h2>
+        <div className="flex flex-col gap-2">
+          {userDetails.socialLinks.length > 0 ? (
+            userDetails.socialLinks.map((link, index) => (
+              <a
+                key={index}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                {link.platform}
+              </a>
+            ))
+          ) : (
+            <p className="text-gray-500 text-sm">No social links added.</p>
+          )}
         </div>
       </div>
     </div>
