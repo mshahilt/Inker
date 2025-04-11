@@ -14,6 +14,7 @@ import Community from "@/pages/community/Community";
 import EditBlog from "@/components/user/blogpost/EditBlog";
 import ViewBlog from "@/components/user/blogpost/ViewBlog";
 import { ProfileProvider } from "@/contexts/ProfileContext";
+import ProtectedRoute from "./ProtectedRoutes";
 export const router = createBrowserRouter([
   { path: "/", element: <LandingPage /> },
   {
@@ -23,10 +24,10 @@ export const router = createBrowserRouter([
       { path: "home", element: <Feed /> },
       { path: "explore", element: <div> Explore </div> },
       { path: "activity", element: <div> Activity </div> },
-      { path: "profile", element: <Profile /> },
-      { path: "account/profile", element: <ProfileProvider><EditProfile /></ProfileProvider>},
-      { path: "blog/create", element: <AddBlog /> },
-      { path: "blog/edit/:blogId", element: <EditBlog /> },
+      { path: "profile", element: <ProtectedRoute><Profile/> </ProtectedRoute> },
+      { path: "account/profile", element: <ProtectedRoute><ProfileProvider><EditProfile /></ProfileProvider></ProtectedRoute>},
+      { path: "blog/create", element: <ProtectedRoute><AddBlog /></ProtectedRoute> },
+      { path: "blog/edit/:blogId", element: <ProtectedRoute><EditBlog /></ProtectedRoute> },
       { path: "blog/:blogId", element: <ViewBlog /> },
       { path: "community", element: <Community /> },
       { path: "*", element: <NotFoundPage />},

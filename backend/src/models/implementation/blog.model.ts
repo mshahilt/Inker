@@ -39,7 +39,7 @@ const blogSchema = new Schema<IBlogModel>(
     },
   },
   {
-    timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
+    timestamps: true,
   }
 );
 
