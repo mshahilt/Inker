@@ -84,7 +84,7 @@ export class ProfileService implements IProfileService {
     
     const uniqueId = generateNanoId();
 
-    const result = await uploadToCloudinary(file, "profile-picture", uniqueId);
+    const result = await uploadToCloudinary(file, "profilePicture", uniqueId);
 
     if(isExist.profilePicture && isCloudinaryUrl(isExist.profilePicture)){
       const publicId = getPublicIdFromUrl(isExist.profilePicture);

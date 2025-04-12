@@ -41,8 +41,8 @@ router.put(
 
 router.patch(
   "/change-profile-picture",
-  uploadMiddleware("file"),
   verifyToken("user"),
+  uploadMiddleware("profilePicture"),
   profileController.changeProfilePicture.bind(profileController)
 )
 
