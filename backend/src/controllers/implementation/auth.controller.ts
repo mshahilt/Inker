@@ -3,7 +3,7 @@ import { IAuthService } from "../../services/interface/IAuthService";
 import { IAuthController } from "../interface/IAuthController";
 import { HttpStatus } from "@/constants/status.constant";
 import { HttpResponse } from "@/constants";
-import { setCookie } from "@/utils/refresh-cookie.util";
+import { deleteCookie, setCookie } from "@/utils/refresh-cookie.util";
 
 export class AuthController implements IAuthController {
   constructor(private _authService: IAuthService) { }
@@ -98,11 +98,7 @@ export class AuthController implements IAuthController {
 
   async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      res.clearCookie('refreshToken', {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict'
-      })
+      deleteCookie(res)
     } catch (error) {
       next(error)
     }

@@ -8,3 +8,11 @@ export function setCookie(res: Response, refreshToken: string) {
         sameSite: "strict",
     });
 }
+
+export function deleteCookie(res: Response) {
+    res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict'
+    })
+}
