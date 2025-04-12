@@ -31,6 +31,11 @@ authRouter.post(
 );
 
 authRouter.post(
+  "/google-auth",
+  authController.googleAuth.bind(authController)
+);
+
+authRouter.post(
   "/otp",
   validate(verifyOtpSchema),
   authController.verifyOtp.bind(authController)
@@ -57,6 +62,11 @@ authRouter.get(
   "/me",
   verifyToken('user'),
   authController.me.bind(authController)
+);
+
+authRouter.post(
+  "/logout",
+  authController.logout.bind(authController)
 );
 
 

@@ -1,19 +1,18 @@
-import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import {Navigate} from "react-router-dom";
+import useAuthStore from "@/store/authStore.ts";
 
 type UnProtectedRouteProps = {
-  children: React.ReactNode;
+    children: React.ReactNode;
 };
 
-const UnProtectedRoute = ({ children }: UnProtectedRouteProps) => {
-  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
+const UnProtectedRoute = ({children}: UnProtectedRouteProps) => {
+    const {isAuthenticated} = useAuthStore();
 
-  if (accessToken) {
-    return <Navigate to="/profile" replace />;
-  }
+    if (isAuthenticated) {
+        return <Navigate to="/profile" replace/>;
+    }
 
-  return <>{children}</>;
+    return <>{children}</>;
 };
 
 export default UnProtectedRoute;
