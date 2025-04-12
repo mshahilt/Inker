@@ -157,7 +157,7 @@ export function AppSidebar() {
                                     </SidebarMenuButton>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-]">
-                                    <DropdownMenuItem onClick={() => navigate("/profile")}>
+                                    <DropdownMenuItem onClick={() => navigate(`/profile/${user?.username}`)}>
                                         <span>Profile</span>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem

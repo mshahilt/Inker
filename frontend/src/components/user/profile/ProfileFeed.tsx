@@ -2,27 +2,29 @@ import { FC, useEffect, useState } from "react";
 import BlogCard from "../common/BlogCard";
 import { ArrowBigUp, ArrowBigDown, MessageCircle, Pencil, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/store";
-import { deleteBlog, getBlogByAuthorId } from "@/store/slices/blogSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { deleteBlog } from "@/store/slices/blogSlice";
 import { useSidebar } from "@/components/ui/sidebar";
 import { showConfirmDialog } from "@/store/slices/confirmDialogSlice";
+import useAuthStore from "@/store/authStore";
+import { blogService } from "@/services/blogServices";
+import { Blog } from "@/types";
 const TAB_OPTIONS = ["Posts", "Archieve", "Saved"] as const;
 
 const ProfileFeed: FC = () => {
   const [activeTab, setActiveTab] = useState<"Posts" | "Archieve" | "Saved">(
     "Posts"
   );
-
-  const { profileFeeds } = useSelector((state: RootState) => state.blogEditor);
-  const { id } = useSelector((state: RootState) => state.auth.user);
+  const [ profileFeeds, setProfileFeeds] = useState<{ blogs: Blog[]; totalPage: number; }>({ blogs: [], totalPage: 0 })
+  const { user } = useAuthStore();
   const dispatch = useDispatch<AppDispatch>();
   const { state } = useSidebar()
 
   useEffect(() => {    
     switch (activeTab) {
       case "Posts":
-          dispatch(getBlogByAuthorId(id));   
+        fetchProfileFeeds()
         break;
       case "Archieve":
         console.log('archieve')
@@ -32,10 +34,17 @@ const ProfileFeed: FC = () => {
         break;
     }
 
-  }, [dispatch, id, activeTab]);
+  }, [dispatch, user, activeTab]);
+
+  const fetchProfileFeeds = async () => {
+    if (user?._id) {
+      const result = await blogService.getBlogByAuthorIdService(user?._id)
+      setProfileFeeds(result)
+    }
+  }
 
   const handleDelete = (blogId: string) => {
-    dispatch(deleteBlog({ blogId, authorId: id }));
+    dispatch(deleteBlog({ blogId, authorId: user?._id as string }));
   };
 
 

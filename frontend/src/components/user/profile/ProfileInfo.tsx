@@ -2,21 +2,17 @@ import { ChevronLeft } from "lucide-react";
 import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ProfileData, ProfileService } from "@/services/profileService";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import { formatDateToMonthYear } from "@/utils/formateDate";
 import { Button } from "@/components/ui/button";
+import useAuthStore from "@/store/authStore";
 
 const ProfileInfo: FC = () => {
-  const navigate = useNavigate();
-  const { userTag }  = useParams() ;
-  const { role, username } = useSelector((state: RootState) => state.auth.user)
   const [userDetails, setUserDetails] = useState<ProfileData>((): ProfileData => {
     return {
       username: '',
       _id: '',
       email: '',
-      role: role === 'admin' ? 'admin' : 'user',
+      role: 'user',
       profilePicture: '',
       dateOfBirth: '',
       name: '',
@@ -26,25 +22,25 @@ const ProfileInfo: FC = () => {
       socialLinks: []
     };
   });
+  const navigate = useNavigate();
+  const { userTag }  = useParams() ;
+  const {user} = useAuthStore()
   useEffect(() => {
     const fetchUserProfile = async () => {
       let result: {
         message: string;
         profileDetails: ProfileData;
     } | null = null
-      if (username === userTag ) {
-        result = await ProfileService.profileDetailsService(username);
+      if (user?.username && user?.username === userTag ) {
+        result = await ProfileService.profileDetailsService(user?.username);
       } else {
         result = await ProfileService.profileDetailsService(userTag as string);
       }
-
-      if (result) {
-        setUserDetails(result.profileDetails)
-      } 
+      setUserDetails(result.profileDetails)
     };
 
-    if (username) fetchUserProfile();
-  }, [username]);
+    fetchUserProfile();
+  }, [user, userTag]);
 
   return (
     <div className="min-w-[300px]  lg:w-[400px] p-2 lg:border-l lg:h-full">

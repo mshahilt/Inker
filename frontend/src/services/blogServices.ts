@@ -57,8 +57,6 @@ export const blogService = {
 
   getBlogByAuthorIdService: async (authorId: string): Promise<{ blogs: Blog[], totalPage: number}> => {
     const response = await axiosInstance.get<{ blogs: Blog[], totalPage: number }>(`/api/blog/user/${authorId}`);
-    console.log(response.data,'sdf');
-    
     return response.data;
   }
 };

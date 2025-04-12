@@ -4,10 +4,10 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from '@/components/ui/textarea'
 import KeyValueInput from './KeyValueInput'
 import { Card } from '@/components/ui/card'
-import { useProfile } from '@/contexts/ProfileContext'
 import { ProfileService } from '@/services/profileService'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
+import useAuthStore from '@/store/authStore'
 
 interface SocialLink {
   platform: string;
@@ -15,7 +15,7 @@ interface SocialLink {
 }
 
 const UpdateProfile: FC = () => {
-  const { profile } = useProfile()
+  const {user} = useAuthStore()
   const [fullName, setFullName] = useState('');
   const [bio, setBio] = useState('');
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([
@@ -23,11 +23,10 @@ const UpdateProfile: FC = () => {
   ]);
 
     useEffect(() => {
-      setFullName(profile.name)
-      setBio(profile.bio)
-      if (profile.socialLinks)
-        setSocialLinks(profile.socialLinks)
-    },[profile])
+      if (user?.name) setFullName(user?.name)
+      if (user?.bio) setBio(user.bio)
+      if (user?.socialLinks) setSocialLinks(user?.socialLinks)
+    },[user])
 
   const handleSocialLinkChange = (index: number, platform: string, url: string) => {
     const updated = [...socialLinks];

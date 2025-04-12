@@ -2,12 +2,11 @@ import { SidebarTrigger } from "../../ui/sidebar";
 import ThemeToggle from "./ThemeToggle";
 import SearchBar from "./SearchBar";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-
+import useAuthStore from "@/store/authStore";
 
 const Navbar = () => {
-  const {username} = useSelector((state: RootState) => state.auth.user)
+  const {isAuthenticated, user} = useAuthStore()
+
 
   return (
     <header className="px-0 sm:px-6 py-4 w-full sticky top-0 border-b bg-white dark:bg-black z-20">
@@ -16,7 +15,7 @@ const Navbar = () => {
         <div className="flex items-center gap-4 mr-2">
           <SearchBar />
           <ThemeToggle />
-          <Link to={`/profile/${username}`}><img className="w-10 h-10 rounded-md border-2" src="https://res.cloudinary.com/dwyxogyrk/image/upload/v1737433466/h0xf7zi0blmclfqrjeo7.png" alt="" /></Link>
+          { isAuthenticated && <Link to={`/profile/${user?.username}`}><img className="w-10 h-10 rounded-md border-2" src={user?.profilePicture} alt="" /></Link>}
         </div>
       </div>
     </header>

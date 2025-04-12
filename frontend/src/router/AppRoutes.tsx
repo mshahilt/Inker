@@ -13,7 +13,6 @@ import Feed from "@/pages/feed/Feed";
 import Community from "@/pages/community/Community";
 import EditBlog from "@/components/user/blogpost/EditBlog";
 import ViewBlog from "@/components/user/blogpost/ViewBlog";
-import { ProfileProvider } from "@/contexts/ProfileContext";
 import ProtectedRoute from "./ProtectedRoutes";
 import UnProtectedRoute from "./UnProtectedRoutes";
 
@@ -27,7 +26,7 @@ export const router = createBrowserRouter([
       { path: "explore", element: <div> Explore </div> },
       { path: "activity", element: <div> Activity </div> },
       { path: "profile/:userTag", element: <ProtectedRoute><Profile/> </ProtectedRoute> },
-      { path: "account/profile", element: <ProtectedRoute><ProfileProvider><EditProfile /></ProfileProvider></ProtectedRoute>},
+      { path: "account/profile", element: <ProtectedRoute><EditProfile /></ProtectedRoute>},
       { path: "blog/create", element: <ProtectedRoute><AddBlog /></ProtectedRoute> },
       { path: "blog/edit/:blogId", element: <ProtectedRoute><EditBlog /></ProtectedRoute> },
       { path: "blog/:blogId", element: <ViewBlog /> },
