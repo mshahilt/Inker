@@ -1,5 +1,5 @@
 import { useTheme } from "../common/theme-provider"
-import LightLogo from '@/assets/inker_main.svg'
+// import LightLogo from '@/assets/inker_main.svg'
 import DarkLogo from '@/assets/inker_main_dark.svg'
 
 export const SideLayout = () => {
@@ -9,7 +9,7 @@ export const SideLayout = () => {
             <div className='absolute inset-0 bg-zinc-900' />
             <div className='relative z-20 flex items-center text-lg font-medium'>
                 <img
-                    src={theme == 'light' ? LightLogo : DarkLogo}
+                    src={theme == 'light' ? DarkLogo : DarkLogo}
                     className='mr-2 h-20 w-20'
                     alt='Inker'
                 />

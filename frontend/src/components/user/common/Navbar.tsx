@@ -1,6 +1,7 @@
 import { SidebarTrigger } from "../../ui/sidebar";
 import ThemeToggle from "./ThemeToggle";
 import SearchBar from "./SearchBar";
+import { Link } from "react-router-dom";
 
 
 
@@ -13,7 +14,7 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           <SearchBar />
           <ThemeToggle />
-          <img className="w-10 h-10 rounded-md border-2" src="https://res.cloudinary.com/dwyxogyrk/image/upload/v1737433466/h0xf7zi0blmclfqrjeo7.png" alt="" />
+          <Link to={'/profile'}><img className="w-10 h-10 rounded-md border-2" src="https://res.cloudinary.com/dwyxogyrk/image/upload/v1737433466/h0xf7zi0blmclfqrjeo7.png" alt="" /></Link>
         </div>
       </div>
     </header>
