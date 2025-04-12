@@ -33,11 +33,11 @@ router.put(
   profileController.updateProfile.bind(profileController)
 );
 
-router.patch(
-  '/change-email/:userId',
-  verifyToken('user'),
-  profileController.updateEmail.bind(profileController)
-)
+// router.patch(
+//   '/change-email/:userId',
+//   verifyToken('user'),
+//   profileController.updateEmail.bind(profileController)
+// )
 
 router.patch(
   "/change-profile-picture",

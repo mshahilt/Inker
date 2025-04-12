@@ -56,17 +56,17 @@ export class ProfileController implements IProfileController {
     }
   }
 
-  async updateEmail(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { userId } = req.params
-      const { email } = req.body;
-      const updatedEmail = await this._profileService.updateEmail(userId, email)
+  // async updateEmail(req: Request, res: Response, next: NextFunction) {
+  //   try {
+  //     const { userId } = req.params
+  //     const { email } = req.body;
+  //     const updatedEmail = await this._profileService.updateEmail(userId, email)
 
-      res.status(HttpStatus.OK).json({ message: HttpResponse.RESOURCE_UPDATED, updatedEmail })
-    } catch (error) {
-      next(error)
-    }
-  }
+  //     res.status(HttpStatus.OK).json({ message: HttpResponse.RESOURCE_UPDATED, updatedEmail })
+  //   } catch (error) {
+  //     next(error)
+  //   }
+  // }
 
   async changeProfilePicture(req: Request, res: Response, next: NextFunction) {
     try{

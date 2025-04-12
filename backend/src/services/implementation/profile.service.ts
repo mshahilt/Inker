@@ -1,6 +1,6 @@
 import { IUserRepository } from "@/repositories/interface/IUserRepository";
 import { IProfileService } from "../interface/IProfileService";
-import { createHttpError, checkEmailExistence, uploadToCloudinary } from "@/utils";
+import { createHttpError, uploadToCloudinary } from "@/utils";
 import { HttpStatus } from "@/constants/status.constant";
 import { HttpResponse } from "@/constants/response-message.constant";
 import { IUserModel } from "@/models/implementation/user.model";
@@ -50,29 +50,29 @@ export class ProfileService implements IProfileService {
     return updatedData
   }
 
-  async updateEmail(id: string, email: string): Promise<IUserModel> {
-    const existingEmail = await this._userRepository.findByEmail(email);
+  // async updateEmail(id: string, email: string): Promise<IUserModel> {
+  //   const existingEmail = await this._userRepository.findByEmail(email);
 
 
-    if (existingEmail) {
-      throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_EXIST)
-    }
+  //   if (existingEmail) {
+  //     throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_EXIST)
+  //   }
 
-    const isEmailReal = await checkEmailExistence(email)
+  //   const isEmailReal = await checkEmailExistence(email)
 
-    if (!isEmailReal) {
-      throw createHttpError(HttpStatus.BAD_REQUEST, HttpResponse.INVALID_EMAIL)
-    }
+  //   if (!isEmailReal) {
+  //     throw createHttpError(HttpStatus.BAD_REQUEST, HttpResponse.INVALID_EMAIL)
+  //   }
 
-    // need otp verification before updating email
-    const updateEmail = await this._userRepository.updateEmail(id, email)
+  //   // need otp verification before updating email
+  //   const updateEmail = await this._userRepository.updateEmail(id, email)
 
-    if (!updateEmail) {
-      throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND)
-    }
+  //   if (!updateEmail) {
+  //     throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND)
+  //   }
 
-    return updateEmail;
-  }
+  //   return updateEmail;
+  // }
 
   async updateProfilePicture(userId: string, file: Express.Multer.File): Promise<void> {
 

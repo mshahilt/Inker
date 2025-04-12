@@ -25,5 +25,14 @@ export const env = {
   },
   get RESET_PASS_URL() {
     return process.env.RESET_PASS_URL;
+  },
+  get CLOUDINARY_CLOUD_NAME() {
+    return process.env.CLOUDINARY_CLOUD_NAME;
+  },
+  get CLOUDINARY_API_KEY() {
+    return process.env.CLOUDINARY_API_KEY;
+  },
+  get CLOUDINARY_API_SECRET() {
+    return process.env.CLOUDINARY_API_SECRET;
   }
 };

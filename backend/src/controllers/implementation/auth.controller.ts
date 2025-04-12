@@ -36,7 +36,7 @@ export class AuthController implements IAuthController {
 
       res.cookie("refreshToken", tokens.refreshToken, {
         httpOnly: true,
-        secure: false,
+        secure: process.env.NODE_ENV === 'production',
         maxAge: 7 * 24 * 60 * 60 * 1000,
         sameSite: "strict",
       });
@@ -93,6 +93,18 @@ export class AuthController implements IAuthController {
       const updateUserPassword = await this._authService.getResetPassword(token, password);
       res.status(HttpStatus.OK).json(updateUserPassword)
 
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict'
+      })
     } catch (error) {
       next(error)
     }

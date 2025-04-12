@@ -8,7 +8,7 @@ export interface IProfileService {
 
     updateProfile(id: string, updateData: Partial<IUserModel>): Promise<IUserModel>;
 
-    updateEmail(id: string, email: string): Promise<IUserModel>;
+    // updateEmail(id: string, email: string): Promise<IUserModel>;
 
     updateProfilePicture(userId: string, file: Express.Multer.File): Promise<void>;
 
