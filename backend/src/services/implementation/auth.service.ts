@@ -84,7 +84,7 @@ export class AuthService implements IAuthService {
   async verifyOtp(
     otp: string,
     email: string
-  ): Promise<{ status: number; message: string }> {
+  ) {
     const storedDataString = await redisClient.get(email);
     if (!storedDataString) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.OTP_NOT_FOUND);
@@ -109,10 +109,12 @@ export class AuthService implements IAuthService {
 
     await redisClient.del(email);
 
-    return {
-      status: HttpStatus.OK,
-      message: HttpResponse.USER_CREATION_SUCCESS,
-    };
+    const payload = { id: createdUser._id, role: createdUser.role, username: createdUser.username };
+
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload)
+
+    return {user: createdUser, accessToken, refreshToken}
   }
 
 

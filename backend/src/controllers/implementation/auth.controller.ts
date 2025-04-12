@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { IAuthService } from "../../services/interface/IAuthService";
 import { IAuthController } from "../interface/IAuthController";
 import { HttpStatus } from "@/constants/status.constant";
+import { HttpResponse } from "@/constants";
+import { setCookie } from "@/utils/refresh-cookie.util";
 
 export class AuthController implements IAuthController {
   constructor(private _authService: IAuthService) { }
@@ -34,12 +36,7 @@ export class AuthController implements IAuthController {
 
       const tokens = await this._authService.signin(email || username, password);
 
-      res.cookie("refreshToken", tokens.refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        sameSite: "strict",
-      });
+      setCookie(res, tokens.refreshToken)
 
       res.status(HttpStatus.OK).json({ accessToken: tokens.accessToken });
     } catch (err) {
@@ -55,12 +52,13 @@ export class AuthController implements IAuthController {
   ): Promise<void> {
     try {
       const { otp, email } = req.body;
-      const verificationResponse = await this._authService.verifyOtp(
+      const {user, accessToken, refreshToken} = await this._authService.verifyOtp(
         otp,
         email
       );
+      setCookie(res, refreshToken)
 
-      res.status(HttpStatus.CREATED).json(verificationResponse);
+      res.status(HttpStatus.CREATED).json({message: HttpResponse.USER_CREATION_SUCCESS, user, accessToken});
     } catch (err) {
       next(err);
     }
@@ -121,12 +119,7 @@ export class AuthController implements IAuthController {
 
       const {accessToken, refreshToken: newRefreshToken} = await this._authService.refreshAccessToken(refreshToken);
 
-      res.cookie("refreshToken", newRefreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        sameSite: "strict",
-      });
+      setCookie(res, newRefreshToken)
 
       res.status(HttpStatus.OK).json(accessToken);
     } catch (error) {

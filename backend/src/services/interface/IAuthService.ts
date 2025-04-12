@@ -1,3 +1,4 @@
+import { IUserModel } from "@/models/implementation/user.model";
 import { IUser } from "shared/types";
 export interface IAuthService {
 
@@ -5,7 +6,7 @@ export interface IAuthService {
 
   signin(identifier: string, password: string): Promise<{ accessToken: string; refreshToken: string }>;
 
-  verifyOtp(otp: string, email: string): Promise<{ status: number; message: string }>;
+  verifyOtp(otp: string, email: string): Promise<{user: IUserModel, accessToken: string, refreshToken: string}>;
 
   verifyForgotPassword(email: string): Promise<{ status: number; message: string }>;
 
