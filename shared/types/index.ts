@@ -23,7 +23,7 @@ export interface IBlog {
   thumbnail: string;
   content: string;
   tags: string[];
-  likes: number;
+  votes: number;
   comments: number;
   createdAt: Date;
   updatedAt: Date;

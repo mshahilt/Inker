@@ -29,7 +29,7 @@ const blogSchema = new Schema<IBlogModel>(
     tags: {
       type: [String],
     },
-    likes: {
+    votes: {
       type: Number,
       default: 0,
     },
