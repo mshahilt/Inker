@@ -188,5 +188,13 @@ export class AuthService implements IAuthService {
     return {accessToken, refreshToken};
   }
 
+  async getUser(userId: string): Promise<IUserModel> {
+    const user = await this._userRepository.findUserById(userId)
 
+    if(!user) {
+      throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND)
+    }
+
+    return user
+  }
 }
