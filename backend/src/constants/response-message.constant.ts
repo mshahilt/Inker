@@ -10,7 +10,7 @@ export const HttpResponse = {
     INVALID_CREDENTIALS: "Invalid credentials",
     USER_CREATION_FAILED: "User creation failed",
     USER_CREATION_SUCCESS: "User created successfully",
-    GOOGLE_LOGIN_SUCCESS: "Google login successfully",
+    GOOGLE_LOGIN_SUCCESS: "Logged in with Google successfully",
     EMAIL_EXIST: "Email already exist",
     INVALID_EMAIL: "Invalid email address",
     UNEXPECTED_KEY_FOUND: "Unexpected key found",
