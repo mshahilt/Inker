@@ -1,48 +1,28 @@
 import React from "react";
-import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
-import { AuthService } from "@/services/authServices";
-import { toast } from "sonner";
-import { TokenUtils } from "@/utils/tokenUtil";
-
-interface DecodedUser {
-  name: string;
-  email: string;
-  picture: string;
-}
+import {useGoogleLogin} from "@react-oauth/google";
+import {toast} from "sonner";
+import {Button} from "@/components/ui/button.tsx";
+import useAuthStore from "@/store/authStore.ts";
 
 const GoogleAuth: React.FC = () => {
-  const navigate = useNavigate();
 
-  const handleSubmit = async (response: CredentialResponse) => {
-    if (!response.credential) {
-      toast.error("Google login failed. No credential received.");
-      return;
-    }
+    const {googleAuthLogin} = useAuthStore();
 
-    const decodedUser: DecodedUser = jwtDecode<DecodedUser>(response.credential);
+    const googleLogin = useGoogleLogin({
+        onSuccess: async (res) => {
+            await googleAuthLogin(res.access_token)
+        },
+        onError: error => console.log('Login Failed:', error),
+    });
 
-    try {
-      const { accessToken } = await AuthService.googleAuth({ email: decodedUser.email, name: decodedUser.name });
-      TokenUtils.setToken(accessToken)
-      toast.success("Logged in successfully");
-      navigate("/home");
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("An unexpected error occurred.");
-      }
-    }
-  };
-
-  return (
-    <GoogleLogin
-      onSuccess={handleSubmit}
-      onError={() => toast.error("Google login failed")}
-    />
-  );
+    return (
+        <Button
+            onClick={() => googleLogin()}
+            onError={() => toast.error("Google login failed")}
+        >
+            google
+        </Button>
+    );
 };
 
 export default GoogleAuth;

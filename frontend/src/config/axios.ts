@@ -2,8 +2,9 @@ import axios from 'axios';
 import { store } from '@/store/store';
 import { setAuth, logout } from "@/store/slices/authSlice"
 import { TokenUtils } from '@/utils/tokenUtil';
+import {env} from "@/config/env.ts";
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = env.API_URL;
 
 export const axiosInstance = axios.create({
     baseURL: BASE_URL,

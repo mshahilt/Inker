@@ -31,6 +31,11 @@ authRouter.post(
 );
 
 authRouter.post(
+  "/google-auth",
+  authController.googleAuth.bind(authController)
+);
+
+authRouter.post(
   "/otp",
   validate(verifyOtpSchema),
   authController.verifyOtp.bind(authController)
