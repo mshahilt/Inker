@@ -11,6 +11,6 @@ export interface IAuthService {
 
   getResetPassword(token: string, password: string): Promise<{ status: number; message: string }>;
 
-  refreshAccessToken(token: string): Promise<string>;
+  refreshAccessToken(token: string): Promise<{accessToken: string, refreshToken: string}>;
 
 }

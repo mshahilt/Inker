@@ -167,7 +167,7 @@ export class AuthService implements IAuthService {
 
   async refreshAccessToken(
     token: string
-  ): Promise<string> {
+  ) {
 
     if (!token) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.NO_TOKEN);
@@ -181,8 +181,9 @@ export class AuthService implements IAuthService {
     const payload = { id: decoded.id, role: decoded.role, username: decoded.username };
 
     const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload)
 
-    return accessToken;
+    return {accessToken, refreshToken};
   }
 
 

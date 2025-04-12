@@ -119,7 +119,14 @@ export class AuthController implements IAuthController {
     try {
       const { refreshToken } = req.cookies;
 
-      const accessToken = await this._authService.refreshAccessToken(refreshToken);
+      const {accessToken, refreshToken: newRefreshToken} = await this._authService.refreshAccessToken(refreshToken);
+
+      res.cookie("refreshToken", newRefreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: "strict",
+      });
 
       res.status(HttpStatus.OK).json(accessToken);
     } catch (error) {
