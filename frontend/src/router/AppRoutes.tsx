@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: <AppLayout />,
     children: [
-      { path: "home", element: <Feed /> },
+      { path: "home", element: <ProtectedRoute><Feed /></ProtectedRoute> },
       { path: "explore", element: <div> Explore </div> },
       { path: "activity", element: <div> Activity </div> },
       { path: "profile", element: <ProtectedRoute><Profile/> </ProtectedRoute> },

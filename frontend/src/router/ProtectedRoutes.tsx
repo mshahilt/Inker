@@ -8,7 +8,6 @@ type ProtectedRouteProps = {
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
-  console.log(accessToken);
 
   if (!accessToken) {
     return <Navigate to="/auth" replace />;

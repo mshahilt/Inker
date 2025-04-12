@@ -1,6 +1,6 @@
 import { useTheme } from "../common/theme-provider"
-import LightLogo from '@/assets/Logo Light.svg'
-import DarkLogo from '@/assets/Logo Dark.svg'
+import LightLogo from '@/assets/inker_main.svg'
+import DarkLogo from '@/assets/inker_main_dark.svg'
 
 export const SideLayout = () => {
     const { theme } = useTheme()
