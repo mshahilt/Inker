@@ -7,7 +7,7 @@ import SearchBar from "./SearchBar";
 const Navbar = () => {
 
   return (
-    <header className="px-6 py-4 w-full sticky top-0 border-b bg-white dark:bg-black z-20">
+    <header className="px-0 sm:px-6 py-4 w-full sticky top-0 border-b bg-white dark:bg-black z-20">
       <div className=" flex justify-end md:justify-between items-center">
         <SidebarTrigger className="-translate-x-4 hidden md:block" />
         <div className="flex items-center gap-4">

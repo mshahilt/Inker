@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: <AppLayout />,
     children: [
-      { path: "home", element: <Feed /> },
+      { path: "feed", element: <Feed /> },
       { path: "explore", element: <div> Explore </div> },
       { path: "activity", element: <div> Activity </div> },
       { path: "profile", element: <ProtectedRoute><Profile/> </ProtectedRoute> },
@@ -30,9 +30,9 @@ export const router = createBrowserRouter([
       { path: "blog/edit/:blogId", element: <ProtectedRoute><EditBlog /></ProtectedRoute> },
       { path: "blog/:blogId", element: <ViewBlog /> },
       { path: "community", element: <Community /> },
-      { path: "*", element: <NotFoundPage />},
     ],
   },
+  { path: "*", element: <NotFoundPage />},
   {
     path: "auth",
     element: (

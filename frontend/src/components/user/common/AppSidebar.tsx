@@ -28,17 +28,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/store/slices/authSlice";
 import { RootState } from "@/store/store";
 import { useLocation } from "react-router-dom";
+import { showConfirmDialog } from "@/store/slices/confirmDialogSlice";
 
 
 const items = [
-  { title: "My feed", url: "/home", icon: Newspaper },
+  { title: "My feed", url: "/feed", icon: Newspaper },
   { title: "Explore", url: "/explore", icon: Search },
   { title: "Activity", url: "/activity", icon: SquareActivity },
   { title: "Community", url: "/community", icon: Boxes },
 ];
 
 export function AppSidebar() {
-  const {user, accessToken} = useSelector((state: RootState) => state.auth)
+  const { user, accessToken } = useSelector((state: RootState) => state.auth)
   const { state } = useSidebar();
   const isExpanded = state === "expanded";
   const navigate = useNavigate();
@@ -59,12 +60,12 @@ export function AppSidebar() {
                         src={InkerLogo}
                         alt="Inker Logo"
                         className="max-w-32 dark:hidden"
-                      />
+                        />
                       <img
                         src={InkerLogoDark}
                         alt="Inker Dark Logo"
                         className="max-w-32  dark:block hidden"
-                      />
+                        />
                     </div>
                   ) : (
                     <div className="w-full flex justify-center items-center">
@@ -72,12 +73,12 @@ export function AppSidebar() {
                         src={InkerIcon}
                         alt="Inker Icon"
                         className="max-w-8 dark:hidden"
-                      />
+                        />
                       <img
                         src={InkerIconDark}
                         alt="Inker Dark Icon"
                         className="max-w-8 dark:block hidden"
-                      />
+                        />
                     </div>
                   )}
                 </SidebarMenuButton>
@@ -108,10 +109,10 @@ export function AppSidebar() {
                       asChild
                       className={`w-full ${
                         isActive
-                          ? "bg-muted dark:bg-neutral-800 text-black dark:text-white"
-                          : "hover:bg-muted"
+                        ? "bg-muted dark:bg-neutral-800 text-black dark:text-white"
+                        : "hover:bg-muted"
                       }`}
-                    >
+                      >
                       <Link to={item.url} className="flex items-center w-full">
                         <item.icon size={18} strokeWidth={2} />
                         {isExpanded && <span className="ml-2">{item.title}</span>}
@@ -124,7 +125,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
+      
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -146,7 +147,19 @@ export function AppSidebar() {
                 <DropdownMenuItem onClick={() => navigate("/profile")}>
                   <span>Profile</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => dispatch(logout())}>
+                <DropdownMenuItem
+                  onClick={() =>
+                    dispatch(
+                      showConfirmDialog({
+                        title: "Are you sure you want to log out?",
+                        description: "You will be signed out from your account.",
+                        confirmText: "Log out",
+                        cancelText: "Cancel",
+                        onConfirm: () => dispatch(logout()),
+                      })
+                    )
+                  }
+                >
                   <span>Log out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>

@@ -4,21 +4,23 @@ import { Outlet } from "react-router-dom";
 import Navbar from "@/components/user/common/Navbar";
 import { ThemeProvider } from "@/components/user/common/theme-provider";
 import BottomNavigation from "@/components/user/common/BottomNavbar";
+import { GlobalConfirmDialog } from "@/components/user/common/GlobalConfirmDialog";
 
 export default function AppLayout() {
   return (
     <>
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset >
-          <Navbar />
-          <main className="w-full flex flex-col h-full">
-            <Outlet />
-          </main>
-        </SidebarInset>
-        <BottomNavigation />
-      </SidebarProvider>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset >
+            <Navbar />
+            <main className="w-full flex flex-col h-full mb-24 sm:mb-0">
+              <Outlet />
+            </main>
+          </SidebarInset>
+          <BottomNavigation />
+        </SidebarProvider>
+        <GlobalConfirmDialog />
       </ThemeProvider>
     </>
   );

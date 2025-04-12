@@ -12,7 +12,7 @@ const BottomNavigation = () => {
 	return (
 		<div className="md:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200">
 			<div className="grid h-full max-w-lg grid-cols-5 mx-auto">
-				<Link to="/home" className="inline-flex flex-col items-center justify-center px-5" onClick={() => handleTabChange("feeds")}>
+				<Link to="/feed" className="inline-flex flex-col items-center justify-center px-5" onClick={() => handleTabChange("feeds")}>
 					<Newspaper className={`w-6 h-6 mb-1 ${activeTab === "feeds" ? "text-black" : "text-gray-500"}`} />
 					<span className="text-xs text-gray-500">Feeds</span>
 				</Link>
