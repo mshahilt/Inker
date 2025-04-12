@@ -1,4 +1,4 @@
-import Button from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Users } from "lucide-react";
 import CoreValues from "./CoreValues";
 import GuidelinesAccordion from "./GuidelinesAccordion";

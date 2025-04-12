@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import LightLogo from "../../../assets/inker_main.svg"
 import DarkLogo from "../../../assets/inker_main_dark.svg"
-import Button from "../../ui/button"
+import { Button } from "../../ui/button"
 import { useTheme } from "../common/theme-provider"
 import { LogIn } from "lucide-react"
 import { Link } from "react-router-dom"
