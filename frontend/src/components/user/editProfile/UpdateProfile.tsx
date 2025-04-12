@@ -3,11 +3,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from '@/components/ui/textarea'
 import KeyValueInput from './KeyValueInput'
-import Button from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { useProfile } from '@/contexts/ProfileContext'
 import { ProfileService } from '@/services/profileService'
 import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
 
 interface SocialLink {
   platform: string;

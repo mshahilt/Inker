@@ -103,7 +103,7 @@ export const getBlogById = createAsyncThunk(
 );
 
 export const getBlogByAuthorId = createAsyncThunk(
-  "blogEditor/getBlogById",
+  "blogEditor/getBlogByAuthorId",
   async (authorId: string, { rejectWithValue }) => {
     try {
       const response = await blogService.getBlogByAuthorIdService(authorId);
@@ -269,6 +269,18 @@ export const blogSlice = createSlice({
         state.currentBlog = action.payload; 
       })
       .addCase(getBlogById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(getBlogByAuthorId.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getBlogByAuthorId.fulfilled, (state, action: PayloadAction<Blog[]>) => {
+        state.loading = false;
+        state.blogs = action.payload;
+      })
+      .addCase(getBlogByAuthorId.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

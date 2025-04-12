@@ -43,7 +43,7 @@ export const UserAuthForm: FC<UserAuthFormProps> = ({ authState, onStateChange }
                 const { accessToken } = await AuthService.loginService(data);
                 TokenUtils.setToken(accessToken)
                 toast.success("Logged in successfully");
-                navigate('/home');
+                navigate('/feed');
             } else {
                 const { accessToken } = await AuthService.registerService(data as { email: string; password: string; name: string; });
                 TokenUtils.setToken(accessToken)

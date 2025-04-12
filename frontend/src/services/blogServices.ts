@@ -6,7 +6,7 @@ import { Blog } from "@/types";
 export const blogService = {
   createBlogService: async (blogData: { title: string; content: string; tags: string[] }): Promise<{ status: number; message: string }> => {
     try {
-      const response = await axiosInstance.post<{ status: number; message: string }>("/api/blog", blogData, { withCredentials: true });
+      const response = await axiosInstance.post<{ status: number; message: string }>("/api/blog", blogData);
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
@@ -56,7 +56,7 @@ export const blogService = {
   },
 
   getBlogByAuthorIdService: async (authorId: string): Promise<Blog[]> => {
-    const response = await axiosInstance.get<Blog[]>(`/api/blog/user/${authorId}`, { withCredentials: true });
+    const response = await axiosInstance.get<Blog[]>(`/api/blog/user/${authorId}`);
     return response.data;
   }
 };

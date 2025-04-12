@@ -1,10 +1,10 @@
-import Button from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Users } from "lucide-react";
 import CoreValues from "./CoreValues";
 import GuidelinesAccordion from "./GuidelinesAccordion";
 import TeamMember from "./TeamMember";
 import { useEffect, useState } from "react";
-import { FaGithub, FaTelegram } from "react-icons/fa";
+import { FaGithub, FaTelegram, FaWhatsapp } from "react-icons/fa";
 
 interface GitHubMember {
   login: string;
@@ -74,10 +74,15 @@ const Community = () => {
             A community built on collaboration, growth, and learning. Our goal is to push
             each other, share knowledge, and grow together.
           </p>
-          <div className="flex flex-wrap justify-center ">
-            <a href="https://t.me/+iKqAnpXnVkdiZmI1">
+          <div className="flex flex-wrap justify-center gap-4">
+            <a href="https://chat.whatsapp.com/DHVXMvx8nWi9SA9XBfziab" target="_blank" rel="noopener noreferrer">
               <Button size="lg">
-                <FaTelegram /> Join Our Community
+                <FaWhatsapp /> Join Our WhatsApp
+              </Button>
+            </a>
+            <a href="https://t.me/+iKqAnpXnVkdiZmI1" target="_blank" rel="noopener noreferrer">
+              <Button size="lg">
+                <FaTelegram /> Join Our Telegram
               </Button>
             </a>
           </div>
@@ -123,7 +128,7 @@ const Community = () => {
         <div className="container px-4 mx-auto">
           <div className="max-w-3xl mx-auto mb-12 text-center">
             <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl">
-              Meet Our Core Team
+              Meet Our Dev Team
             </h2>
             <p>The dedicated individuals who help make our community thrive</p>
           </div>
@@ -160,7 +165,7 @@ const Community = () => {
             </p>
             <Button variant="secondary" size="lg">
               <a
-                href="https://www.notion.so/1967f101833b80bab729f4d72a75d418?pvs=21"
+                href="https://brogrammers.notion.site/1cf7f101833b80658380f3d215c5c257?pvs=105"
                 target="_blank"
                 rel="noopener noreferrer"
               >
