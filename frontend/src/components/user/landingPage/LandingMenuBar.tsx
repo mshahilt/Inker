@@ -6,14 +6,13 @@ import { useTheme } from "../common/theme-provider"
 import { LogIn } from "lucide-react"
 import { Link } from "react-router-dom"
 import ThemeToggle from "../common/ThemeToggle";
-import { useSelector } from "react-redux"
-import { RootState } from "@/store/store"
 import { useState, useEffect } from "react";
+import useAuthStore from "@/store/authStore.ts";
 
 const LandingMenuBar = () => {
     const navigate = useNavigate()
     const { theme } = useTheme()
-    const { accessToken } = useSelector((state: RootState) => state.auth);
+    const {isAuthenticated} = useAuthStore();
 
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -39,7 +38,7 @@ const LandingMenuBar = () => {
             </Link>
             <div className="flex items-center gap-4">
                 <ThemeToggle/>
-                {accessToken ? (
+                {isAuthenticated ? (
                     <Link to="/profile">
                         <img
                             src={`https://res.cloudinary.com/dwyxogyrk/image/upload/v1737433466/h0xf7zi0blmclfqrjeo7.png`} 

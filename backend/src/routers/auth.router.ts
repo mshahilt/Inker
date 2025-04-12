@@ -64,5 +64,10 @@ authRouter.get(
   authController.me.bind(authController)
 );
 
+authRouter.post(
+  "/logout",
+  authController.logout.bind(authController)
+);
+
 
 export default authRouter;

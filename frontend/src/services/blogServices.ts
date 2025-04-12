@@ -41,7 +41,7 @@ export const blogService = {
 
   getAllBlogsService: async (): Promise<Blog[]> => {
     try {
-      const response = await axiosInstance.get<Blog[]>("/api/blog"); 
+      const response = await axiosInstance.get<Blog[]>("/api/blog");
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;

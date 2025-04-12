@@ -25,7 +25,7 @@ export const HttpResponse = {
     RESOURCE_FOUND: "Resource found.",
     RESOURCE_UPDATED: "Resource updated.",
     PROFILE_PICTURE_CHANGED: "Profile picture changed successfully",
-
+    LOGOUT_SUCCESS: "User Logout successfully",
     BLOG_NOT_FOUND: "Blog not found",
     INVALID_ID: "Invalid ID format",
     REQUIRED_AUTHOR_ID: "Author ID is required",

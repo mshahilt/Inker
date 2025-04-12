@@ -1,6 +1,7 @@
 import {axiosInstance} from "@/config/axios";
 import {toast} from "sonner";
 import axios, {AxiosError} from "axios";
+import {env} from "@/config/env.ts";
 
 interface LoginData {
     email: string;
@@ -98,9 +99,9 @@ export const AuthService = {
         }
     },
 
-    getUser: async () => {
+    fetchUser: async () => {
         try {
-            const response = await axiosInstance.get("/user/me");
+            const response = await axiosInstance.get("/api/auth/me");
             return {data: response.data, error: null};
         } catch (error) {
             return {data: null, error: (error as Error).message};
@@ -108,20 +109,22 @@ export const AuthService = {
     },
 
     logout: async () => {
+        console.log("Logout called");
         try {
-            await axiosInstance.post("/auth/logout", {},
+            await axiosInstance.post("/api/auth/logout", {},
                 {withCredentials: true}
             );
             return {error: null};
         } catch (error) {
+            console.log("Logout error: ", error);
             return {error: (error as Error).message};
         }
     },
 
     refreshToken: async () => {
-        const baseURL = process.env.VUE_APP_AUTH_SERVER_URL || "http://localhost:4000/api/v1";
+        const baseURL = env.API_URL;
         try {
-            const response = await axios.post(`${baseURL}/auth/refresh-token`, {}, {
+            const response = await axios.post(`${baseURL}/api/auth/refresh-token`, {}, {
                 withCredentials: true
             });
             return {data: response.data, error: null};

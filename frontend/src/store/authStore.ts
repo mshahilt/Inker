@@ -16,9 +16,11 @@ interface AuthStore extends AuthState {
     login: (email: string, password: string) => Promise<void>;
     googleAuthLogin: (token: string) => Promise<void>;
     register: (name: string, email: string, password: string) => Promise<void>;
-    logout: () => Promise<void>;
+    refreshUser: () => Promise<void>;
+    fetchUser: () => Promise<void>;
+    logout: () => Promise<{ error: string | null, status: boolean }>;
     clearState: () => Promise<void>;
-    // refreshToken: () => Promise<string>;
+    refreshToken: () => Promise<string>;
     setState: (state: Partial<AuthState>) => void;
 }
 
@@ -32,7 +34,7 @@ export const useAuthStore = AuthStore(
                     user: null,
                     accessToken: null,
                     isAuthenticated: true,
-                    isLoading: false,
+                    isLoading: true,
                     error: null,
                     signUpError: null,
 
@@ -99,51 +101,86 @@ export const useAuthStore = AuthStore(
                     },
 
                     logout: async () => {
+                        set({isLoading: true, error: null});
                         const {error} = await AuthService.logout();
+                        if (error) {
+                            set({error: error, isLoading: false});
+                            return {error: error, status: false};
+                        }
+                        await getState().clearState();
+                        console.log('Logged out');
+                        return {error: null, status: true};
+                    },
+
+                    refreshToken: async () => {
+                        set({error: null});
+
+                        if (!getState().isAuthenticated) {
+                            return;
+                        }
+
+                        const {data, error} = await AuthService.refreshToken();
+
+                        if (error) {
+                            set({error: error, isLoading: false});
+                            await getState().logout();
+                            return error;
+                        }
+
+                        const {token} = data;
+
+                        set({accessToken: token, isLoading: false});
+                        return token;
+                    },
+
+                    fetchUser: async () => {
+                        set({isLoading: true, error: null});
+
+                        const {data: user, error} = await AuthService.fetchUser();
+
+
                         if (error) {
                             set({error: error, isLoading: false});
                             return;
                         }
-                        await getState().clearState();
-                        console.log('Logged out');
+
+
+                        set({
+                            user,
+                            isAuthenticated: true,
+                            isLoading: false,
+                        });
                     },
 
-                    // refreshToken: async () => {
-                    //     set({error: null});
-                    //
-                    //     if (!getState().isAuthenticated) {
-                    //         return;
-                    //     }
-                    //
-                    //     const {data, error} = await AuthService.refreshToken();
-                    //
-                    //     if (error) {
-                    //         set({error: error, isLoading: false});
-                    //         await getState().logout();
-                    //         return error;
-                    //     }
-                    //
-                    //     const {token} = data;
-                    //
-                    //     set({accessToken: token, isLoading: false});
-                    //     return token;
-                    // },
+                    refreshUser: async () => {
+                        set({error: null, isLoading: true});
+
+                        const token = await getState().refreshToken();
+                        if (!token) {
+                            set({isLoading: false});
+                            return;
+                        }
+
+                        await getState().fetchUser();
+                    },
 
                     setState: ({isLoading, isAuthenticated, user, accessToken}) => {
                         set({isLoading, isAuthenticated, user, accessToken});
                     },
 
-                    clearState: async () => {
-                        set({
-                            user: null,
-                            accessToken: null,
-                            isAuthenticated: false,
-                            isLoading: false,
-                            error: null,
-                            signUpError: null,
-                        });
-                    },
-                };
+                    clearState:
+                        async () => {
+                            set({
+                                user: null,
+                                accessToken: null,
+                                isAuthenticated: false,
+                                isLoading: false,
+                                error: null,
+                                signUpError: null,
+                            });
+                        },
+                }
+                    ;
             },
             {
                 name: 'auth-storage',
