@@ -2,18 +2,18 @@ import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
-type ProtectedRouteProps = {
+type UnProtectedRouteProps = {
   children: React.ReactNode;
 };
 
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+const UnProtectedRoute = ({ children }: UnProtectedRouteProps) => {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
 
-  if (!accessToken) {
-    return <Navigate to="/auth" replace />;
+  if (accessToken) {
+    return <Navigate to="/profile" replace />;
   }
 
   return <>{children}</>;
 };
 
-export default ProtectedRoute;
+export default UnProtectedRoute;

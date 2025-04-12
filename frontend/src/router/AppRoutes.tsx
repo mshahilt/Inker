@@ -15,13 +15,15 @@ import EditBlog from "@/components/user/blogpost/EditBlog";
 import ViewBlog from "@/components/user/blogpost/ViewBlog";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 import ProtectedRoute from "./ProtectedRoutes";
+import UnProtectedRoute from "./UnProtectedRoutes";
+
 export const router = createBrowserRouter([
   { path: "/", element: <LandingPage /> },
   {
     path: "/",
     element: <AppLayout />,
     children: [
-      { path: "home", element: <Feed /> },
+      { path: "home", element: <ProtectedRoute><Feed /></ProtectedRoute> },
       { path: "explore", element: <div> Explore </div> },
       { path: "activity", element: <div> Activity </div> },
       { path: "profile", element: <ProtectedRoute><Profile/> </ProtectedRoute> },
@@ -36,9 +38,11 @@ export const router = createBrowserRouter([
   {
     path: "auth",
     element: (
-      <GoogleOAuthProvider clientId={env.GOOGLE_CLIENT_ID}>
-        <LoginPage />
-      </GoogleOAuthProvider>
+      <UnProtectedRoute>
+        <GoogleOAuthProvider clientId={env.GOOGLE_CLIENT_ID}>
+          <LoginPage />
+        </GoogleOAuthProvider>
+      </UnProtectedRoute>
     ),
   },
   { path: "otp-verification", element: <OtpForm /> },
