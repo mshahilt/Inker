@@ -16,8 +16,8 @@ import { IBlogModel } from "@/models/implementation/blog.model";
 export interface IBlogService {
   createBlog(blogData: Partial<IBlogModel>): Promise<IBlogModel>;
   getBlogById(blogId: Types.ObjectId): Promise<IBlogModel>;
-  findBlogByAuthorId(authorId: Types.ObjectId): Promise<IBlogModel[]>;
-  getAllBlogs(): Promise<IBlogModel[]>;
+  findBlogByAuthorId(authorId: Types.ObjectId, page: number): Promise<{blogs: IBlogModel[], totalPages: number}>;
+  getAllBlogs(page: number): Promise<{blogs: IBlogModel[], totalPages: number}>;
   updateBlog(
     blogId: Types.ObjectId,
     authorId: Types.ObjectId,
