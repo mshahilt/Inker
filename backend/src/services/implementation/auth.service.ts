@@ -69,7 +69,7 @@ export class AuthService implements IAuthService {
     const isMatch = await comparePassword(password, user.password as string);
 
     if (!isMatch) {
-      throw createHttpError(HttpStatus.UNAUTHORIZED, HttpResponse.PASSWORD_INCORRECT);
+      throw createHttpError(HttpStatus.BAD_REQUEST, HttpResponse.PASSWORD_INCORRECT);
     }
 
     const payload = { id: user._id, role: user.role, username: user.username };
