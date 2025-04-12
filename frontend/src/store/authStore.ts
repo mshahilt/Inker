@@ -64,7 +64,7 @@ export const useAuthStore = AuthStore(
                         set({isLoading: true, error: null});
                         const {data, error} = await AuthService.googleAuthLogin(token);
 
-                        if (error) {
+                        if (!data || error) {
                             set({error: error, isLoading: false});
                             return;
                         }
