@@ -38,7 +38,7 @@ export class AuthController implements IAuthController {
 
       setCookie(res, tokens.refreshToken)
 
-      res.status(HttpStatus.OK).json({ accessToken: tokens.accessToken });
+      res.status(HttpStatus.OK).json({ token: tokens.accessToken });
     } catch (err) {
       next(err);
     }
@@ -58,7 +58,7 @@ export class AuthController implements IAuthController {
       );
       setCookie(res, refreshToken)
 
-      res.status(HttpStatus.CREATED).json({message: HttpResponse.USER_CREATION_SUCCESS, user, accessToken});
+      res.status(HttpStatus.CREATED).json({message: HttpResponse.USER_CREATION_SUCCESS, user, token: accessToken});
     } catch (err) {
       next(err);
     }
@@ -121,7 +121,7 @@ export class AuthController implements IAuthController {
 
       setCookie(res, newRefreshToken)
 
-      res.status(HttpStatus.OK).json(accessToken);
+      res.status(HttpStatus.OK).json({token: accessToken});
     } catch (error) {
       next(error)
     }
