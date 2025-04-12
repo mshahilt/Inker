@@ -6,6 +6,7 @@ import { BlogController } from "@/controllers/implementation/blog.controller";
 import { UserRepository } from "@/repositories/implementation/user.repository";
 import { createBlogSchema, editBlogSchema } from "@/schema";
 import authenticate from "@/middlewares/verify-token.middleware";
+import { uploadMiddleware } from "@/middlewares";
 
 const router = Router();
 
@@ -53,7 +54,8 @@ router.delete(
 );
 
 router.post(
-  '/uploadImage',
+  '/upload-image',
+  uploadMiddleware('image'),
   blogController.uploadImage.bind(blogController)
 )
 
