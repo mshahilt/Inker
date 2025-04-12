@@ -7,10 +7,10 @@ type UnProtectedRouteProps = {
 };
 
 const UnProtectedRoute = ({ children }: UnProtectedRouteProps) => {
-  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
+  const {accessToken, user} = useSelector((state: RootState) => state.auth);
 
   if (accessToken) {
-    return <Navigate to="/profile" replace />;
+    return <Navigate to={`/profile/${user?.username}`} replace />;
   }
 
   return <>{children}</>;

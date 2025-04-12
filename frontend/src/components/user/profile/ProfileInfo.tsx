@@ -1,6 +1,6 @@
 import { ChevronLeft } from "lucide-react";
 import { FC, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ProfileData, ProfileService } from "@/services/profileService";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 
 const ProfileInfo: FC = () => {
   const navigate = useNavigate();
+  const { userTag }  = useParams() ;
   const { role, username } = useSelector((state: RootState) => state.auth.user)
   const [userDetails, setUserDetails] = useState<ProfileData>((): ProfileData => {
     return {
@@ -27,8 +28,19 @@ const ProfileInfo: FC = () => {
   });
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const result = await ProfileService.profileDetailsService(username);
-      setUserDetails(result.profileDetails)
+      let result: {
+        message: string;
+        profileDetails: ProfileData;
+    } | null = null
+      if (username === userTag ) {
+        result = await ProfileService.profileDetailsService(username);
+      } else {
+        result = await ProfileService.profileDetailsService(userTag as string);
+      }
+
+      if (result) {
+        setUserDetails(result.profileDetails)
+      } 
     };
 
     if (username) fetchUserProfile();
@@ -37,8 +49,8 @@ const ProfileInfo: FC = () => {
   return (
     <div className="min-w-[300px]  lg:w-[400px] p-2 lg:border-l lg:h-full">
       <div className="flex justify-between items-center mb-5 px-2">
-        <div className="flex">
-          <ChevronLeft strokeWidth={1.8} className="md:hidden" onClick={() => navigate(-1)} />
+        <div className="flex cursor-pointer" onClick={() => navigate(-1)}>
+          <ChevronLeft strokeWidth={1.8} className="md:hidden"  />
           <p> Profile</p>
         </div>
         <Button className="active:scale-95" onClick={() => navigate("/account/profile")}>

@@ -132,19 +132,19 @@ export function AppSidebar() {
             { accessToken ? <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton className="h-fit">
-                  <Avatar className="rounded">
+                  <Avatar className={`rounded ${isExpanded ? '' : '-translate-x-2' } `}>
                     <AvatarImage src="https://github.com/shadcn.png" />
                     <AvatarFallback>U</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col">
                     <span className="text-sm">Full Name</span>
-                    <span className="text-xs text-neutral-500">@{user.username}</span>
+                    <span className="text-xs text-neutral-500">@{user?.username}</span>
                   </div>
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-]">
-                <DropdownMenuItem onClick={() => navigate("/profile")}>
+                <DropdownMenuItem onClick={() => navigate(`/profile/${user?.username}`)}>
                   <span>Profile</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem

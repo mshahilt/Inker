@@ -26,7 +26,7 @@ export const router = createBrowserRouter([
       { path: "feed", element: <Feed /> },
       { path: "explore", element: <div> Explore </div> },
       { path: "activity", element: <div> Activity </div> },
-      { path: "profile", element: <ProtectedRoute><Profile/> </ProtectedRoute> },
+      { path: "profile/:userTag", element: <ProtectedRoute><Profile/> </ProtectedRoute> },
       { path: "account/profile", element: <ProtectedRoute><ProfileProvider><EditProfile /></ProfileProvider></ProtectedRoute>},
       { path: "blog/create", element: <ProtectedRoute><AddBlog /></ProtectedRoute> },
       { path: "blog/edit/:blogId", element: <ProtectedRoute><EditBlog /></ProtectedRoute> },

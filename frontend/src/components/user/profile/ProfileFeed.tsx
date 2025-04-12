@@ -14,18 +14,15 @@ const ProfileFeed: FC = () => {
     "Posts"
   );
 
-  const { blogs } = useSelector((state: RootState) => state.blogEditor);
+  const { profileFeeds } = useSelector((state: RootState) => state.blogEditor);
   const { id } = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch<AppDispatch>();
   const { state } = useSidebar()
 
-  useEffect(() => {
-
+  useEffect(() => {    
     switch (activeTab) {
       case "Posts":
-        if (!blogs.length) {
-          dispatch(getBlogByAuthorId(id));
-        }
+          dispatch(getBlogByAuthorId(id));   
         break;
       case "Archieve":
         console.log('archieve')
@@ -33,11 +30,9 @@ const ProfileFeed: FC = () => {
       case "Saved":
         console.log('Saved');
         break;
-
-
     }
 
-  }, [dispatch, id, activeTab, blogs]);
+  }, [dispatch, id, activeTab]);
 
   const handleDelete = (blogId: string) => {
     dispatch(deleteBlog({ blogId, authorId: id }));
@@ -69,8 +64,8 @@ const ProfileFeed: FC = () => {
       </div>
       <div className="flex justify-center lg:overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <div className={`grid ${state === 'expanded' ? "xl:grid-cols-2 " : "xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2"} grid-cols-1 gap-4 h-fit justify-center mt-5 px-4 pb-4`}>
-          {activeTab === 'Posts' && blogs.length > 0 ? (
-            blogs.map((blog, index) => (
+          {activeTab === 'Posts' && profileFeeds.blogs.length > 0 ? (
+            profileFeeds.blogs.map((blog, index) => (
               <div
                 key={index}
                 className="p-2 border-2 rounded-lg max-w-[400px] flex flex-col justify-between relative">

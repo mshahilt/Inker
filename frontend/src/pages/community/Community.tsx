@@ -138,7 +138,7 @@ const Community = () => {
           ) : error ? (
             <div className="text-center text-red-500">Error: {error}</div>
           ) : (
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid gap-8 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:px-16 p-2">
               {teamMembers.map((member) => (
                 <TeamMember
                   key={member.id}

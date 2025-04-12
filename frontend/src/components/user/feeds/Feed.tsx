@@ -14,7 +14,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 
 
 const Feeds = () => {
-  const { blogs } = useSelector((state: RootState) => state.blogEditor);
+  const { feeds } = useSelector((state: RootState) => state.blogEditor);
   const dispatch = useDispatch<AppDispatch>()
   const { state } = useSidebar()
 
@@ -25,10 +25,10 @@ const Feeds = () => {
   return (
     <section className="w-full mx-auto">
       <h1 className="text-2xl font-bold mt-6">Filter box</h1>
-      {blogs.length > 0 ? (
+      {feeds.blogs.length > 0 ? (
         <>
           <div className={`grid ${state === 'expanded' ? "xl:grid-cols-3  md:grid-cols-2 " : "xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2"} grid-cols-1 gap-4 h-fit justify-center  mt-5 p-2`}>
-            {blogs.map((blog, index) => (
+            {feeds.blogs.map((blog, index) => (
               <article
                 key={index}
                 className="bg-white dark:bg-gray-800 border border-muted rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 mx-auto flex flex-col h-full relative p-2 max-w-[400px]"
