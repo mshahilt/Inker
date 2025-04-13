@@ -10,6 +10,6 @@ export interface IProfileService {
 
     // updateEmail(id: string, email: string): Promise<IUserModel>;
 
-    updateProfilePicture(userId: string, file: Express.Multer.File): Promise<void>;
+    updateProfilePicture(userId: string, file: Express.Multer.File): Promise<string>;
 
 }

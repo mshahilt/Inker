@@ -74,7 +74,7 @@ export class ProfileService implements IProfileService {
   //   return updateEmail;
   // }
 
-  async updateProfilePicture(userId: string, file: Express.Multer.File): Promise<void> {
+  async updateProfilePicture(userId: string, file: Express.Multer.File): Promise<string> {
 
     const isExist = await this._userRepository.findUserById(userId);
 
@@ -94,6 +94,7 @@ export class ProfileService implements IProfileService {
     }
 
     await this._userRepository.updateProfilePicture(userId, result.secure_url);
+    return result.secure_url
   }
 
 }
