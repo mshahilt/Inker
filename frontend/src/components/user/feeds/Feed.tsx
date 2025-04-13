@@ -1,36 +1,37 @@
 import { Link } from "react-router-dom";
 import BlogCard from "../common/BlogCard";
 import {
-  FaChevronRight,
-  FaChevronLeft,
 } from "react-icons/fa";
 import char from "../../../assets/char3.jpeg";
 import { ArrowBigDown, ArrowBigUp, Clipboard, MessageCircle } from "lucide-react";
-import { useEffect, useState } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
-import { blogService } from "@/services/blogServices";
-import { Blog } from "@/types";
+import { useBlogStore } from "@/store/blogStore";
+import { useEffect, useState } from "react";
+import Pagination from "@/components/common/Pagination";
+import useAuthStore from "@/store/authStore";
 
 
 const Feeds = () => {
-  const [feeds, setFeeds] = useState<{ blogs: Blog[]; totalPage: number; }>({ blogs: [], totalPage: 0 })
+  const { blogs, totalPages, fetchAllBlogs } = useBlogStore()
+  const {isAuthenticated} = useAuthStore()
   const { state } = useSidebar()
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
-    const fetchFeeds = async () => {
-      const result = await blogService.getAllBlogsService()
-      setFeeds(result)
-    }
-    fetchFeeds()
-  }, []);
+    if(isAuthenticated) fetchAllBlogs()
+  }, [fetchAllBlogs, isAuthenticated])
+
+  const onPageChange = (page: number) => {
+    setCurrentPage(page)
+  }
 
   return (
     <section className="w-full mx-auto">
       <h1 className="text-2xl font-bold mt-6">Filter box</h1>
-      {feeds.blogs.length > 0 ? (
+      {blogs.length > 0 ? (
         <>
           <div className={`grid ${state === 'expanded' ? "xl:grid-cols-3  md:grid-cols-2 " : "xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2"} grid-cols-1 gap-4 h-fit justify-center  mt-5 p-2`}>
-            {feeds.blogs.map((blog, index) => (
+            {blogs.map((blog, index) => (
               <article
                 key={index}
                 className="bg-white dark:bg-gray-800 border border-muted rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 mx-auto flex flex-col h-full relative p-2 max-w-[400px]"
@@ -87,54 +88,7 @@ const Feeds = () => {
             ))}
           </div>
 
-          {/* Pagination UI */}
-          <nav className="flex justify-center mt-10 " aria-label="Pagination">
-            <ul className="flex items-center space-x-1">
-              {/* Previous Button */}
-              <li>
-                <button
-                  className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400">
-                  <FaChevronLeft className="mr-2 h-4 w-4" />
-                  Previous
-                </button>
-              </li>
-
-              {/* Page Numbers */}
-              <li>
-                <button className="px-4 py-2 rounded-md text-sm font-medium border">
-                  1
-                </button>
-              </li>
-              <li>
-                <button
-                  className="px-4 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
-                  2
-                </button>
-              </li>
-              <li>
-                <button
-                  className="px-4 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
-                  3
-                </button>
-              </li>
-
-              {/* Ellipsis */}
-              <li>
-                <span className="px-2 py-2 text-gray-500 dark:text-gray-400">
-                  ...
-                </span>
-              </li>
-
-              {/* Next Button */}
-              <li>
-                <button
-                  className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300">
-                  Next
-                  <FaChevronRight className="ml-2 h-4 w-4" />
-                </button>
-              </li>
-            </ul>
-          </nav>
+          <Pagination  onPageChange={onPageChange} currentPage={currentPage} totalPages={totalPages} />
         </>
       ) : (
         <div

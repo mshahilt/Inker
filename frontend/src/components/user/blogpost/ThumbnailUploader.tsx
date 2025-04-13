@@ -1,18 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setThumbnail } from "@/store/slices/blogSlice";
-import type { RootState } from "@/store/store";
 import { Camera, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Input } from "@/components/ui/input";
+import { useBlogEditorStore } from "@/store/useBlogEditorStore";
 
 export const ThumbnailUploader: React.FC = () => {
-  const dispatch = useDispatch();
-  const thumbnail = useSelector((state: RootState) => state.blogEditor.thumbnail);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+  const {thumbnail, setThumbnail} = useBlogEditorStore()
 
   useEffect(() => {
     if (thumbnail) {
@@ -26,14 +23,14 @@ export const ThumbnailUploader: React.FC = () => {
     const file = e.target.files?.[0];
     if (file) {
       const url = URL.createObjectURL(file);
-      dispatch(setThumbnail({ name: file.name, url }));
+      setThumbnail({ name: file.name, url })
     }
-  }, [dispatch]);
+  }, [setThumbnail]);
 
   const handleRemove = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
-    dispatch(setThumbnail(null));
-  }, [dispatch]);
+    setThumbnail(null)
+  }, [setThumbnail]);
 
   return (
     <Card

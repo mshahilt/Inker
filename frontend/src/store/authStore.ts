@@ -30,7 +30,7 @@ export const useAuthStore = AuthStore(
     devtools(
         persist(
             function authStore(set, getState) {
-                return {
+                return {    
                     user: null,
                     accessToken: null,
                     isAuthenticated: true,
@@ -49,8 +49,6 @@ export const useAuthStore = AuthStore(
                         }
 
                         const {user, accessToken} = data;
-
-                        console.log("user login", accessToken);
 
                         set({
                             user,

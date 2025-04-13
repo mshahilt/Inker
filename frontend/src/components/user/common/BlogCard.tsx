@@ -1,29 +1,18 @@
 
 import { CardHeader, CardTitle } from "@/components/ui/card";
-import { getBlogs } from "@/store/slices/blogSlice";
-import { AppDispatch, RootState } from "@/store/store";
 import { Blog } from "@/types";
-import { FC, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { FC } from "react";
+
 
 interface BlogCardProps {
   blog: Blog;
 }
 
 const BlogCard: FC<BlogCardProps> = ({ blog }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { loading, error } = useSelector((state: RootState) => state.blogEditor);
-
-  useEffect(() => {
-    dispatch(getBlogs());
-  }, [dispatch]);
+  
 
 
   const fallbackThumbnail = "https://tse1.mm.bing.net/th?id=OIP.kkJ4tBMv2tT9OqxmUWlQFgHaEK&pid=Api&P=0&h=180";
-
-  if (loading) return <p className="text-center text-muted-foreground">Loading blogs...</p>;
-  if (error) return <p className="text-destructive text-center">Error: {error}</p>;
-
 
 
   return (

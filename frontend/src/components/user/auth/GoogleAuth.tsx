@@ -20,10 +20,12 @@ const GoogleAuth: React.FC = () => {
 
     return (
         <Button
+        className="bg-white dark:bg-gray-300/5 text-black dark:text-white border hover:bg-muted-foreground/10 hover:dark:bg-muted-foreground/15"
             onClick={() => googleLogin()}
             onError={() => toast.error("Google login failed")}
         >
-            google
+            <p className="text-lg font-light mr-2 w-4">G</p>
+            Google
         </Button>
     );
 };

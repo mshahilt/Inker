@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import MDEditor, { commands } from "@uiw/react-md-editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,37 +6,44 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { X } from "lucide-react";
 import { ThumbnailUploader } from "./ThumbnailUploader";
-import { setTitle, setContent, addTag, removeTag, saveBlog } from "@/store/slices/blogSlice";
-import type { RootState, AppDispatch } from "@/store/store";
+
 import { useNavigate } from "react-router-dom";
+import { useBlogEditorStore } from "@/store/useBlogEditorStore";
 
 interface EditorProps {
   isEditMode: boolean;
 }
 
 export const Editor: React.FC<EditorProps> = ({ isEditMode }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { title, content, editingBlogId, tags, loading } = useSelector(
-    (state: RootState) => state.blogEditor
-  );
-  const [newTag, setNewTag] = useState("");
   const navigate = useNavigate();
+  const [newTag, setNewTag] = useState("");
+
+  const {
+    title,
+    content,
+    tags,
+    loading,
+    setTitle,
+    setContent,
+    addTag,
+    removeTag,
+    saveBlog,
+  } = useBlogEditorStore();
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setTitle(e.target.value));
+    setTitle(e.target.value);
   };
 
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && newTag.trim()) {
-      dispatch(addTag(newTag.trim()));
+      addTag(newTag.trim());
       setNewTag("");
     }
   };
 
-  const handleSave = () => {
-    dispatch(saveBlog({ title, content, tags, editingBlogId })).then(() => {
-      navigate("/feed"); 
-    });
+  const handleSave = async () => {
+      await saveBlog();
+    navigate("/feed");
   };
 
   return (
@@ -54,6 +60,7 @@ export const Editor: React.FC<EditorProps> = ({ isEditMode }) => {
           {250 - title.length}
         </span>
       </div>
+
       <div className="mt-4">
         <Input
           value={newTag}
@@ -66,17 +73,22 @@ export const Editor: React.FC<EditorProps> = ({ isEditMode }) => {
           {tags.map((tag) => (
             <Badge key={tag} variant="secondary" className="flex items-center gap-1">
               {tag}
-              <button title="Remove tag" onClick={() => dispatch(removeTag(tag))} className="ml-1 hover:text-destructive">
+              <button
+                title="Remove tag"
+                onClick={() => removeTag(tag)}
+                className="ml-1 hover:text-destructive"
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
           ))}
         </div>
       </div>
+
       <Card className="border rounded-lg overflow-hidden mt-6">
         <MDEditor
           value={content}
-          onChange={(value) => dispatch(setContent(value || ""))}
+          onChange={(value) => setContent(value || "")}
           preview="edit"
           height={300}
           commands={[
@@ -94,12 +106,13 @@ export const Editor: React.FC<EditorProps> = ({ isEditMode }) => {
           ]}
         />
       </Card>
+
       <div className="flex justify-end mt-4 gap-2">
         <Button onClick={() => navigate(-1)} variant="outline">
           Cancel
         </Button>
         <Button onClick={handleSave} disabled={loading}>
-          {loading ? "Saving..." : (isEditMode ? "Update" : "Save")}
+          {loading ? "Saving..." : isEditMode ? "Update" : "Save"}
         </Button>
       </div>
     </div>
