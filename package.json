@@ -6,7 +6,11 @@
   "scripts": {
     "build": "tsc"
   },
-  "workspaces": ["frontend", "backend"],
+  "workspaces": [
+    "frontend",
+    "backend",
+    "shared"
+  ],
   "dependencies": {},
   "devDependencies": {
     "typescript": "^5.5.3"
