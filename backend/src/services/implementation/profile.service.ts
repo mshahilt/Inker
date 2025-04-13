@@ -1,6 +1,6 @@
 import { IUserRepository } from "@/repositories/interface/IUserRepository";
 import { IProfileService } from "../interface/IProfileService";
-import { createHttpError, checkEmailExistence, uploadToCloudinary } from "@/utils";
+import { createHttpError, uploadToCloudinary } from "@/utils";
 import { HttpStatus } from "@/constants/status.constant";
 import { HttpResponse } from "@/constants/response-message.constant";
 import { IUserModel } from "@/models/implementation/user.model";
@@ -50,31 +50,31 @@ export class ProfileService implements IProfileService {
     return updatedData
   }
 
-  async updateEmail(id: string, email: string): Promise<IUserModel> {
-    const existingEmail = await this._userRepository.findByEmail(email);
+  // async updateEmail(id: string, email: string): Promise<IUserModel> {
+  //   const existingEmail = await this._userRepository.findByEmail(email);
 
 
-    if (existingEmail) {
-      throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_EXIST)
-    }
+  //   if (existingEmail) {
+  //     throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_EXIST)
+  //   }
 
-    const isEmailReal = await checkEmailExistence(email)
+  //   const isEmailReal = await checkEmailExistence(email)
 
-    if (!isEmailReal) {
-      throw createHttpError(HttpStatus.BAD_REQUEST, HttpResponse.INVALID_EMAIL)
-    }
+  //   if (!isEmailReal) {
+  //     throw createHttpError(HttpStatus.BAD_REQUEST, HttpResponse.INVALID_EMAIL)
+  //   }
 
-    // need otp verification before updating email
-    const updateEmail = await this._userRepository.updateEmail(id, email)
+  //   // need otp verification before updating email
+  //   const updateEmail = await this._userRepository.updateEmail(id, email)
 
-    if (!updateEmail) {
-      throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND)
-    }
+  //   if (!updateEmail) {
+  //     throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND)
+  //   }
 
-    return updateEmail;
-  }
+  //   return updateEmail;
+  // }
 
-  async updateProfilePicture(userId: string, file: Express.Multer.File): Promise<void> {
+  async updateProfilePicture(userId: string, file: Express.Multer.File): Promise<string> {
 
     const isExist = await this._userRepository.findUserById(userId);
 
@@ -84,7 +84,7 @@ export class ProfileService implements IProfileService {
     
     const uniqueId = generateNanoId();
 
-    const result = await uploadToCloudinary(file, "profile-picture", uniqueId);
+    const result = await uploadToCloudinary(file, "profilePicture", uniqueId);
 
     if(isExist.profilePicture && isCloudinaryUrl(isExist.profilePicture)){
       const publicId = getPublicIdFromUrl(isExist.profilePicture);
@@ -94,6 +94,7 @@ export class ProfileService implements IProfileService {
     }
 
     await this._userRepository.updateProfilePicture(userId, result.secure_url);
+    return result.secure_url
   }
 
 }

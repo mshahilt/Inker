@@ -1,20 +1,18 @@
-import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import {Navigate} from "react-router-dom";
+import useAuthStore from "@/store/authStore.ts";
 
 type ProtectedRouteProps = {
-  children: React.ReactNode;
+    children: React.ReactNode;
 };
 
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
-  console.log(accessToken);
+const ProtectedRoute = ({children}: ProtectedRouteProps) => {
+    const {isAuthenticated} = useAuthStore();
 
-  if (!accessToken) {
-    return <Navigate to="/auth" replace />;
-  }
+    if (!isAuthenticated) {
+        return <Navigate to="/auth" replace/>;
+    }
 
-  return <>{children}</>;
+    return <>{children}</>;
 };
 
 export default ProtectedRoute;

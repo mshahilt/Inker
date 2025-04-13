@@ -48,8 +48,13 @@ export class BlogController implements IBlogController {
   ): Promise<void> {
     try {
       const userId = new Types.ObjectId(req.params.id);
-      const blog = await this.blogService.findBlogByAuthorId(userId);
-      res.status(HttpStatus.OK).json(blog);
+      const { page } = req.query
+      let pageNo = 1
+      if(!isNaN(Number(page))) {
+        pageNo = Number(page)
+      }
+      const data = await this.blogService.findBlogByAuthorId(userId, pageNo);
+      res.status(HttpStatus.OK).json(data);
     } catch (error) {
       next(error);
     }
@@ -61,8 +66,13 @@ export class BlogController implements IBlogController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const blogs = await this.blogService.getAllBlogs();
-      res.status(HttpStatus.OK).json(blogs);
+      const { page } = req.query
+      let pageNo = 1
+      if (!isNaN(Number(page))) {
+        pageNo = Number(page)
+      }
+      const data = await this.blogService.getAllBlogs(pageNo);
+      res.status(HttpStatus.OK).json(data);
     } catch (error) {
       next(error);
     }

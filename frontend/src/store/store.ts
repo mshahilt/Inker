@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import blogEditorReducer from "./slices/blogSlice";
 import authReducer from './slices/authSlice'
+import confirmDialogReducer from './slices/confirmDialogSlice'
 
 
 export const store = configureStore({
   reducer: {
-    blogEditor: blogEditorReducer,
-    auth: authReducer
+    auth: authReducer,
+    confirmDialog: confirmDialogReducer,
   },
 
 });

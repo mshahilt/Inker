@@ -42,16 +42,18 @@ export class BlogService implements IBlogService {
     return blog;
   }
 
-  async findBlogByAuthorId(authorId: Types.ObjectId): Promise<IBlogModel[]> {
-    const blog = await this.blogRepository.findBlogByAuthorId(authorId);
-    if (!blog) {
-      throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.BLOG_NOT_FOUND);
-    }
-    return blog;
+  async findBlogByAuthorId(authorId: Types.ObjectId, page: number): Promise<{blogs: IBlogModel[], totalPages: number}> {
+    const docsPerPage = 12
+    const skip = (page - 1) * docsPerPage
+    const { blogs, totalCount } = await this.blogRepository.findBlogByAuthorId(authorId, skip, docsPerPage);
+    return { blogs, totalPages: Math.ceil(totalCount / docsPerPage) }
   }
 
-  async getAllBlogs(): Promise<IBlogModel[]> {
-    return this.blogRepository.findAllBlogs();
+  async getAllBlogs(page: number): Promise<{blogs: IBlogModel[], totalPages: number}> {
+    const docsPerPage = 12
+    const skip = (page - 1) * docsPerPage
+    const { blogs, totalCount } = await this.blogRepository.findAllBlogs(skip, docsPerPage);
+    return { blogs, totalPages: Math.ceil(totalCount / docsPerPage) }
   }
 
   async updateBlog(

@@ -1,21 +1,20 @@
 import { ChevronLeft } from "lucide-react";
 import { FC, useEffect, useState } from "react";
-import Button from "../../ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ProfileData, ProfileService } from "@/services/profileService";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import { formatDateToMonthYear } from "@/utils/formateDate";
+import { Button } from "@/components/ui/button";
+import useAuthStore from "@/store/authStore";
+import { useBlogStore } from "@/store/blogStore";
 
 const ProfileInfo: FC = () => {
-  const navigate = useNavigate();
-  const { role, username } = useSelector((state: RootState) => state.auth.user)
+  const {setAuthorId} = useBlogStore()
   const [userDetails, setUserDetails] = useState<ProfileData>((): ProfileData => {
     return {
       username: '',
       _id: '',
       email: '',
-      role: role === 'admin' ? 'admin' : 'user',
+      role: 'user',
       profilePicture: '',
       dateOfBirth: '',
       name: '',
@@ -25,20 +24,33 @@ const ProfileInfo: FC = () => {
       socialLinks: []
     };
   });
+  const navigate = useNavigate();
+  const { userTag }  = useParams() ;
+  const {user} = useAuthStore()
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const result = await ProfileService.profileDetailsService(username);
+
+      let result: {
+        message: string;
+        profileDetails: ProfileData;
+      } | null = null
+
+      
+        result = await ProfileService.profileDetailsService(userTag as string);
+
+
+      if (result.profileDetails?._id) setAuthorId(result.profileDetails?._id)
       setUserDetails(result.profileDetails)
     };
 
-    if(username) fetchUserProfile();
-  }, [username]);
+    fetchUserProfile();
+  }, [user, userTag, setAuthorId]);
 
   return (
-    <div className="min-w-[300px] lg:w-[400px] p-2 lg:border lg:h-full">
+    <div className="min-w-[300px]  lg:w-[400px] p-2 lg:border-l lg:h-full">
       <div className="flex justify-between items-center mb-5 px-2">
-        <div className="flex">
-          <ChevronLeft strokeWidth={1.8} className="md:hidden" />
+        <div className="flex cursor-pointer" onClick={() => navigate(-1)}>
+          <ChevronLeft strokeWidth={1.8} className="md:hidden"  />
           <p> Profile</p>
         </div>
         <Button className="active:scale-95" onClick={() => navigate("/account/profile")}>
@@ -66,9 +78,9 @@ const ProfileInfo: FC = () => {
 
       <div className="p-2 flex flex-col gap-3">
         <p className="text-xl font-semibold">{userDetails?.name}</p>
-      <p className="text-sm px-1 font-medium text-neutral-500">
-        {userDetails.bio}
-      </p>
+        <p className="text-sm px-1 font-light text-muted-foreground">
+          {userDetails.bio}
+        </p>
         <div className="flex gap-2 items-center mt-2">
           <p className="text-sm text-gray-600">@{userDetails?.username}</p>
           <p className="text-xs text-gray-400">. Joined {formatDateToMonthYear(userDetails.createdAt)}</p>
@@ -87,18 +99,19 @@ const ProfileInfo: FC = () => {
       </div>
       <div className="mt-4 px-2">
         <h2 className="text-lg font-semibold mb-2">Social Links</h2>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-wrap gap-2">
           {userDetails.socialLinks.length > 0 ? (
             userDetails.socialLinks.map((link, index) => (
-              <a
-                key={index}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                {link.platform}
-              </a>
+              <div className="hover:bg-muted px-4 py-1 rounded-full border transition-all text-sm duration-300 hover:scale-105">
+                <a
+                  key={index}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {link.platform}
+                </a>
+              </div>
             ))
           ) : (
             <p className="text-gray-500 text-sm">No social links added.</p>

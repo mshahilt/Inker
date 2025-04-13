@@ -56,26 +56,26 @@ export class ProfileController implements IProfileController {
     }
   }
 
-  async updateEmail(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { userId } = req.params
-      const { email } = req.body;
-      const updatedEmail = await this._profileService.updateEmail(userId, email)
+  // async updateEmail(req: Request, res: Response, next: NextFunction) {
+  //   try {
+  //     const { userId } = req.params
+  //     const { email } = req.body;
+  //     const updatedEmail = await this._profileService.updateEmail(userId, email)
 
-      res.status(HttpStatus.OK).json({ message: HttpResponse.RESOURCE_UPDATED, updatedEmail })
-    } catch (error) {
-      next(error)
-    }
-  }
+  //     res.status(HttpStatus.OK).json({ message: HttpResponse.RESOURCE_UPDATED, updatedEmail })
+  //   } catch (error) {
+  //     next(error)
+  //   }
+  // }
 
   async changeProfilePicture(req: Request, res: Response, next: NextFunction) {
     try{
-      const { userId } = req.body;
+      const { id } = JSON.parse(req.headers["x-user-payload"] as string)
       const file = req.file as Express.Multer.File;
 
-      await this._profileService.updateProfilePicture(userId, file);
+      const profileUrl = await this._profileService.updateProfilePicture(id, file);
 
-      res.status(HttpStatus.OK).json({ message: HttpResponse.PROFILE_PICTURE_CHANGED});
+      res.status(HttpStatus.OK).json({ message: HttpResponse.PROFILE_PICTURE_CHANGED, profileUrl });
     }catch(error) {
       next(error)
     }

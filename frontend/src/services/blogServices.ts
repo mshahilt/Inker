@@ -1,62 +1,36 @@
 import { axiosInstance } from "@/config/axios";
-import { toast } from "sonner";
-import { AxiosError } from "axios";
 import { Blog } from "@/types";
 
 export const blogService = {
-  createBlogService: async (blogData: { title: string; content: string; tags: string[] }): Promise<{ status: number; message: string }> => {
-    try {
-      const response = await axiosInstance.post<{ status: number; message: string }>("/api/blog", blogData, { withCredentials: true });
-      return response.data;
-    } catch (error: unknown) {
-      const err = error as AxiosError<{ error: string }>;
-      toast.error(err.response?.data?.error || "Blog creation failed. Please try again.");
-      throw new Error(err.response?.data?.error || "Blog creation failed.");
-    }
+  createBlog: async (blogData: { title: string; content: string; tags: string[] }) => {
+    const response = await axiosInstance.post<{ status: number; message: string }>("/api/blog", blogData);
+    return response.data;
   },
 
-  deleteBlogService: async ({ blogId, authorId }: { blogId: string; authorId: string }): Promise<{ status: number; message: string }> => {
-    try {
-      const response = await axiosInstance.delete<{ status: number; message: string }>(`/api/blog/${blogId}`, {
-        params: { authorId },
-      });
-      return response.data;
-    } catch (error: unknown) {
-      const err = error as AxiosError<{ error: string }>;
-      toast.error(err.response?.data?.error || "Blog deletion failed. Please try again.");
-      throw new Error(err.response?.data?.error || "Blog deletion failed.");
-    }
+  deleteBlog: async ({ blogId, authorId }: { blogId: string; authorId: string }) => {
+    const response = await axiosInstance.delete<{ status: number; message: string }>(`/api/blog/${blogId}`, {
+      params: { authorId },
+    });
+    return response.data;
   },
 
-  editBlogService: async (  blogId: string , blogData: { title: string; content: string; tags: string[];}): Promise<{ status: number; message: string }> => {
-    try {
-      const response = await axiosInstance.put<{ status: number; message: string }>(`/api/blog/${blogId}`, blogData);
-      return response.data;
-    } catch (error: unknown) {
-      const err = error as AxiosError<{ error: string }>;
-      toast.error(err.response?.data?.error || "Blog update failed. Please try again.");
-      throw new Error(err.response?.data?.error || "Blog update failed.");
-    }
+  editBlog: async (blogId: string, blogData: { title: string; content: string; tags: string[] }) => {
+    const response = await axiosInstance.put<{ status: number; message: string }>(`/api/blog/${blogId}`, blogData);
+    return response.data;
   },
 
-  getAllBlogsService: async (): Promise<Blog[]> => {
-    try {
-      const response = await axiosInstance.get<Blog[]>("/api/blog"); 
-      return response.data;
-    } catch (error: unknown) {
-      const err = error as AxiosError<{ error: string }>;
-      toast.error(err.response?.data?.error || "Failed to fetch blogs");
-      throw new Error(err.response?.data?.error || "Failed to fetch blogs");
-    }
+  getAllBlogs: async () => {
+    const response = await axiosInstance.get<{ blogs: Blog[]; totalPages: number }>("/api/blog");
+    return response.data;
   },
 
-  getBlogByIdService: async (blogId: string): Promise<Blog> => {
+  getBlogById: async (blogId: string) => {
     const response = await axiosInstance.get<Blog>(`/api/blog/${blogId}`);
     return response.data;
   },
 
-  getBlogByAuthorIdService: async (authorId: string): Promise<Blog[]> => {
-    const response = await axiosInstance.get<Blog[]>(`/api/blog/user/${authorId}`, { withCredentials: true });
+  getBlogsByAuthor: async (authorId: string): Promise<{ blogs: Blog[]; totalPages: number }> => {
+    const response = await axiosInstance.get<{ blogs: Blog[]; totalPages: number }>(`/api/blog/user/${authorId}`);
     return response.data;
-  }
+  },
 };

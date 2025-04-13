@@ -85,13 +85,21 @@ export const ProfileService = {
     }
   },
 
-  changeProfilePictureService: async (data: {userId: string, file: File}): Promise<{ status: number; message: string }> => {
+  changeProfilePictureService: async (file: File): Promise<{ status: number; message: string }> => {
     try {
-      const response = await axiosInstance.patch<{ status: number; message: string }> ("api/profile/change-profile-picture", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      const formData = new FormData();
+      formData.append('profilePicture', file);        
+  
+      const response = await axiosInstance.patch<{ status: number; message: string }>(
+        'api/profile/change-profile-picture',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         }
-      });
+      );
+  
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
@@ -99,4 +107,5 @@ export const ProfileService = {
       throw new Error(err.response?.data?.error || "Attempt to change profile picture failed.");
     }
   }
+  
 }

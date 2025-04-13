@@ -1,4 +1,4 @@
-import Button from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { CredenzaBody, CredenzaClose, CredenzaContent, CredenzaDescription, CredenzaFooter, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -24,7 +24,9 @@ const ForgetPassword = () => {
         try {
             setIsLoading(true)
             const response = await AuthService.forgetPasswordService(data)
-            toast.success(response.message)
+            if (response.data?.message) {
+                toast.success(response.data?.message)
+            }
         } catch (error) {
             if (error instanceof Error) {
                 toast.error(error.message);

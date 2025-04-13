@@ -1,19 +1,20 @@
 import axios from 'axios';
-import { store } from '@/store/store';
-import { setAuth, logout } from "@/store/slices/authSlice"
-import { TokenUtils } from '@/utils/tokenUtil';
+import {store} from '@/store/store';
+import {setAuth, logout} from "@/store/slices/authSlice"
+import {env} from "@/config/env.ts";
+import useAuthStore from "@/store/authStore.ts";
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = env.API_URL;
 
 export const axiosInstance = axios.create({
     baseURL: BASE_URL,
-    headers: { 'Content-Type': 'application/json' }
+    headers: {'Content-Type': 'application/json'}
 });
 
 // Request Interceptor: Attach Access Token
 axiosInstance.interceptors.request.use(
     (config) => {
-        const accessToken = TokenUtils.getToken()
+        const {accessToken} = useAuthStore.getState()
 
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`;
@@ -25,18 +26,19 @@ axiosInstance.interceptors.request.use(
 
 // Response Interceptor: Handle Token Refresh
 axiosInstance.interceptors.response.use(
-    (response) => { 
-        return response },
+    (response) => {
+        return response
+    },
     async (error) => {
         const originalRequest = error.config;
 
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
             try {
-                const refreshResponse = await axios.post(`${BASE_URL}/api/auth/refresh-token`, {}, { withCredentials: true });
+                const refreshResponse = await axios.post(`${BASE_URL}/api/auth/refresh-token`, {}, {withCredentials: true});
                 const accessToken = refreshResponse.data;
 
-                store.dispatch(setAuth({accessToken }));
+                store.dispatch(setAuth({accessToken}));
 
                 originalRequest.headers.Authorization = `Bearer ${accessToken}`;
                 return axiosInstance(originalRequest);

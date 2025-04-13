@@ -16,7 +16,6 @@ services:
       - redis
     environment:
       - NODE_ENV=development
-      - MONGO_URI=mongodb://admin:password@mongo:27017/INKER?authSource=admin
     command: sh -c "npm install && npm run dev"
     networks:
       - app-network

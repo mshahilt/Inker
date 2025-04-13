@@ -8,7 +8,7 @@ export interface IUser {
   role: "user" | "moderator";
   bio: string;
   profilePicture?: string;
-  socialLinks: { type: string; url: string }[];
+  socialLinks: { platform: string; url: string }[];
   resume?: string;
   dateOfBirth?: Date;
   createdAt: Date;
@@ -23,7 +23,7 @@ export interface IBlog {
   thumbnail: string;
   content: string;
   tags: string[];
-  likes: number;
+  votes: number;
   comments: number;
   createdAt: Date;
   updatedAt: Date;
