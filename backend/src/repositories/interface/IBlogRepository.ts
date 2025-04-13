@@ -12,4 +12,6 @@ export interface IBlogRepository {
     updateData: Partial<IBlogModel>
   ): Promise<IBlogModel | null>;
   deleteBlog(blogId: Types.ObjectId, authorId: Types.ObjectId): Promise<IBlogModel | null>;
+  updateUsername(authorId: string, username: string): Promise<void>;
+  updateProfilePicture(authorId: string, profileUrl: string): Promise<void>;
 }
