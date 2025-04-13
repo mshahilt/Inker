@@ -7,19 +7,19 @@ import cookieParser from "cookie-parser";
 dotenv.config();
 
 //* validating all the env
-import { validateEnv } from "./utils/validate-env.util";
+import { validateEnv } from "@/utils";
 
 validateEnv();
 
 //* configs
-import { connectDb } from "./configs/mongo.config";
-import { connectRedis } from "./configs/redis.config";
+import { connectDb } from "@/configs";
+import { connectRedis } from "@/configs";
 
 //* routers
 import authRouter from "@/routers/auth.router";
-import { notFoundHandler } from "./middlewares/not-found.middleware";
-import { errorHandler } from "./middlewares/error.middlware";
-import { env } from "./configs/env.config";
+import { notFoundHandler } from "@/middlewares";
+import { errorHandler } from "@/middlewares";
+import { env } from "@/configs";
 import profileRouter from "./routers/profile.router";
 import blogRouter from "./routers/blog.router";
 
