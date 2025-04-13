@@ -2,7 +2,7 @@ import { HttpResponse, HttpStatus } from "@/constants";
 import { IBlogService } from "../interface/IBlogService";
 import { IBlogModel } from "@/models/implementation/blog.model";
 import { BlogRepository } from "@/repositories/implementation/blog.repository";
-import { createHttpError, uploadToCloudinary, generateSignedUrl } from "@/utils";
+import { createHttpError, uploadToCloudinary } from "@/utils";
 import { Types } from "mongoose";
 import { IUserRepository } from "@/repositories/interface/IUserRepository";
 import { IBlogRepository } from "@/repositories/interface/IBlogRepository";
@@ -31,7 +31,8 @@ export class BlogService implements IBlogService {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND);
     }
     const authorName = author.username;
-    return this.blogRepository.createBlog({ ...blogData, authorName });
+    const authorProfilePicture = author.profilePicture
+    return this.blogRepository.createBlog({ ...blogData, authorName, authorProfilePicture });
   }
 
   async getBlogById(blogId: Types.ObjectId): Promise<IBlogModel> {
@@ -84,7 +85,7 @@ export class BlogService implements IBlogService {
   async uploadImage(file: Express.Multer.File): Promise<string> {    
     const uniqueId = uuidv4();
     const uploadResult = await uploadToCloudinary(file, "uploads", uniqueId);
-    return generateSignedUrl(uploadResult.public_id);
+    return uploadResult.secure_url
   }
 
 }

@@ -13,13 +13,13 @@ import useAuthStore from "@/store/authStore";
 
 const Feeds = () => {
   const { blogs, totalPages, fetchAllBlogs } = useBlogStore()
-  const {isAuthenticated} = useAuthStore()
+  const {isAuthenticated, accessToken} = useAuthStore()
   const { state } = useSidebar()
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
-    if(isAuthenticated) fetchAllBlogs()
-  }, [fetchAllBlogs, isAuthenticated])
+    if(isAuthenticated && accessToken) fetchAllBlogs()
+  }, [fetchAllBlogs, isAuthenticated, accessToken])
 
   const onPageChange = (page: number) => {
     setCurrentPage(page)

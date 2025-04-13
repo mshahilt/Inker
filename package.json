@@ -1,18 +1,15 @@
 {
-  "name": "inker",
+  "name": "Inker",
   "version": "1.0.0",
-  "description": "<div align=\"center\">",
-  "private": true,
-  "workspaces": [
-    "frontend",
-    "backend",
-    "shared"
-  ],
-  "main": "index.js",
+  "description": "",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "workspaces": ["frontend", "backend"],
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.5.3"
+  },
+  "private": true
 }

@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { AuthController } from "../controllers/implementation/auth.controller";
-import { AuthService } from "../services/implementation/auth.service";
-import { UserRepository } from "../repositories/implementation/user.repository";
+import { AuthController } from "@/controllers/implementation/auth.controller";
+import { AuthService } from "@/services/implementation/auth.service";
+import { UserRepository } from "@/repositories/implementation/user.repository";
 import { validate } from "@/middlewares/validate.middleware";
 import {
   signupSchema,

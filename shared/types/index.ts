@@ -19,6 +19,7 @@ export interface IBlog {
   _id: string;
   authorId: string;
   authorName: string;
+  authorProfilePicture: string;
   title: string;
   thumbnail: string;
   content: string;
