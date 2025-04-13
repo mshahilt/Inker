@@ -39,9 +39,9 @@ export const blogService = {
     }
   },
 
-  getAllBlogsService: async (): Promise<Blog[]> => {
+  getAllBlogsService: async (): Promise<{ blogs: Blog[], totalPage: number}> => {
     try {
-      const response = await axiosInstance.get<Blog[]>("/api/blog");
+      const response = await axiosInstance.get<{ blogs: Blog[], totalPage: number}>("/api/blog"); 
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
@@ -55,8 +55,8 @@ export const blogService = {
     return response.data;
   },
 
-  getBlogByAuthorIdService: async (authorId: string): Promise<Blog[]> => {
-    const response = await axiosInstance.get<Blog[]>(`/api/blog/user/${authorId}`);
+  getBlogByAuthorIdService: async (authorId: string): Promise<{ blogs: Blog[], totalPage: number}> => {
+    const response = await axiosInstance.get<{ blogs: Blog[], totalPage: number }>(`/api/blog/user/${authorId}`);
     return response.data;
   }
 };

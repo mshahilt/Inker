@@ -32,7 +32,7 @@ const LandingMenuBar = () => {
             backdrop-blur-2xl rounded-xl transition-all duration-300 ease-in-out
             ${isScrolled ? "py-2 px-6 shadow-lg bg-white/80 dark:bg-gray-800/80" : "py-3 px-10 shadow-md bg-white/70 dark:bg-gray-800/70"}
           `}>
-            <Link to={'/home'}>
+            <Link to={'/feed'}>
               <img src={theme == 'light' ? LightLogo : DarkLogo}
                 className={`rounded-md transition-all duration-300 ${isScrolled ? "max-w-[80px]" : "max-w-[100px]"}`} alt="Inker Logo"/>
             </Link>

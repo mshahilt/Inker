@@ -36,7 +36,7 @@ export const Editor: React.FC<EditorProps> = ({ isEditMode }) => {
 
   const handleSave = () => {
     dispatch(saveBlog({ title, content, tags, editingBlogId })).then(() => {
-      navigate("/profile/"); 
+      navigate("/feed"); 
     });
   };
 

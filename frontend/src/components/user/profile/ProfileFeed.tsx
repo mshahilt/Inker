@@ -2,30 +2,29 @@ import { FC, useEffect, useState } from "react";
 import BlogCard from "../common/BlogCard";
 import { ArrowBigUp, ArrowBigDown, MessageCircle, Pencil, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/store";
-import { deleteBlog, getBlogByAuthorId } from "@/store/slices/blogSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { deleteBlog } from "@/store/slices/blogSlice";
 import { useSidebar } from "@/components/ui/sidebar";
 import { showConfirmDialog } from "@/store/slices/confirmDialogSlice";
+import useAuthStore from "@/store/authStore";
+import { blogService } from "@/services/blogServices";
+import { Blog } from "@/types";
 const TAB_OPTIONS = ["Posts", "Archieve", "Saved"] as const;
 
 const ProfileFeed: FC = () => {
   const [activeTab, setActiveTab] = useState<"Posts" | "Archieve" | "Saved">(
     "Posts"
   );
-
-  const { blogs } = useSelector((state: RootState) => state.blogEditor);
-  const { id } = useSelector((state: RootState) => state.auth.user);
+  const [ profileFeeds, setProfileFeeds] = useState<{ blogs: Blog[]; totalPage: number; }>({ blogs: [], totalPage: 0 })
+  const { user } = useAuthStore();
   const dispatch = useDispatch<AppDispatch>();
   const { state } = useSidebar()
 
-  useEffect(() => {
-
+  useEffect(() => {    
     switch (activeTab) {
       case "Posts":
-        if (!blogs.length) {
-          dispatch(getBlogByAuthorId(id));
-        }
+        fetchProfileFeeds()
         break;
       case "Archieve":
         console.log('archieve')
@@ -33,14 +32,19 @@ const ProfileFeed: FC = () => {
       case "Saved":
         console.log('Saved');
         break;
-
-
     }
 
-  }, [dispatch, id, activeTab, blogs]);
+  }, [dispatch, user, activeTab]);
+
+  const fetchProfileFeeds = async () => {
+    if (user?._id) {
+      const result = await blogService.getBlogByAuthorIdService(user?._id)
+      setProfileFeeds(result)
+    }
+  }
 
   const handleDelete = (blogId: string) => {
-    dispatch(deleteBlog({ blogId, authorId: id }));
+    dispatch(deleteBlog({ blogId, authorId: user?._id as string }));
   };
 
 
@@ -69,8 +73,8 @@ const ProfileFeed: FC = () => {
       </div>
       <div className="flex justify-center lg:overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <div className={`grid ${state === 'expanded' ? "xl:grid-cols-2 " : "xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2"} grid-cols-1 gap-4 h-fit justify-center mt-5 px-4 pb-4`}>
-          {activeTab === 'Posts' && blogs.length > 0 ? (
-            blogs.map((blog, index) => (
+          {activeTab === 'Posts' && profileFeeds.blogs.length > 0 ? (
+            profileFeeds.blogs.map((blog, index) => (
               <div
                 key={index}
                 className="p-2 border-2 rounded-lg max-w-[400px] flex flex-col justify-between relative">

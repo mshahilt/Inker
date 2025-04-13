@@ -1,16 +1,18 @@
 import { FC, useEffect, useState } from 'react'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useProfile } from '@/contexts/ProfileContext'
-// import { ProfileService } from '@/services/profileService'
+import useAuthStore from '@/store/authStore'
+
 
 const UsernameInput: FC = () => {
-  const { profile } = useProfile()
+  const { user } = useAuthStore()
   const [ username, setUsername] = useState('')
 
   useEffect(() => {
-    setUsername(profile.username)
-  },[profile])
+    if(user?.username) {
+      setUsername(user?.username)
+    } 
+  },[user])
 
   // const changeUsernameHandler = async () => {
   //    await ProfileService.changeUsernameService({username})

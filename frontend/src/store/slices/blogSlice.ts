@@ -10,7 +10,14 @@ const initialState: BlogEditorState = {
   thumbnail: null,
   attachments: [],
   attachmentUrls: [],
-  blogs: [],
+  feeds: {
+    blogs: [],
+    totalPage: 0
+  },
+  profileFeeds: {
+    blogs: [],
+    totalPage: 0
+  },
   viewMode: "editor",
   loading: false,
   error: null,
@@ -107,6 +114,7 @@ export const getBlogByAuthorId = createAsyncThunk(
   async (authorId: string, { rejectWithValue }) => {
     try {
       const response = await blogService.getBlogByAuthorIdService(authorId);
+      console.log(response,'sdfdsfdfsfdfds');
       return response;
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -136,14 +144,14 @@ export const blogSlice = createSlice({
       state.viewMode = action.payload;
     },
     addBlog: (state, action: PayloadAction<Blog>) => {
-      state.blogs.push(action.payload);
+      state.feeds.blogs.push(action.payload);
       state.saved = true;
       state.viewMode = "blogs";
     },
     updateBlog: (state, action: PayloadAction<Blog>) => {
-      const index = state.blogs.findIndex(b => b._id === action.payload._id);
+      const index = state.feeds.blogs.findIndex(b => b._id === action.payload._id);
       if (index !== -1) {
-        state.blogs[index] = action.payload;
+        state.feeds.blogs[index] = action.payload;
         state.saved = true;
         state.viewMode = "blogs";
       }
@@ -223,12 +231,12 @@ export const blogSlice = createSlice({
           comments: 0
         };
         if (action.payload.editingBlogId) {
-          const index = state.blogs.findIndex(b => b._id === action.payload.editingBlogId);
+          const index = state.feeds.blogs.findIndex(b => b._id === action.payload.editingBlogId);
           if (index !== -1) {
-            state.blogs[index] = newBlog;
+            state.feeds.blogs[index] = newBlog;
           }
         } else {
-          state.blogs.push(newBlog);
+          state.feeds.blogs.push(newBlog);
         }
         state.viewMode = "blogs";
       })
@@ -240,9 +248,9 @@ export const blogSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(getBlogs.fulfilled, (state, action: PayloadAction<Blog[]>) => {
+      .addCase(getBlogs.fulfilled, (state, action: PayloadAction<{ blogs: Blog[], totalPage: number}>) => {
         state.loading = false;
-        state.blogs = action.payload; 
+        state.feeds = action.payload; 
       })
       .addCase(getBlogs.rejected, (state, action) => {
         state.loading = false;
@@ -254,7 +262,7 @@ export const blogSlice = createSlice({
       })
       .addCase(deleteBlog.fulfilled, (state, action: PayloadAction<string>) => {
         state.loading = false;
-        state.blogs = state.blogs.filter((blog) => blog._id !== action.payload);
+        state.feeds.blogs = state.feeds.blogs.filter((blog) => blog._id !== action.payload);
       })
       .addCase(deleteBlog.rejected, (state, action) => {
         state.loading = false;
@@ -276,9 +284,12 @@ export const blogSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(getBlogByAuthorId.fulfilled, (state, action: PayloadAction<Blog[]>) => {
-        state.loading = false;
-        state.blogs = action.payload;
+      .addCase(getBlogByAuthorId.fulfilled, (state, action: PayloadAction<{
+        blogs: Blog[];
+        totalPage: number;
+    }>) => {
+        state.loading = false;        
+        state.profileFeeds = action.payload;
       })
       .addCase(getBlogByAuthorId.rejected, (state, action) => {
         state.loading = false;

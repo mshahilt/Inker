@@ -36,7 +36,14 @@ export interface BlogEditorState {
     url: string;
   }>;
   attachmentUrls: string[];
-  blogs: Blog[];
+  feeds: {
+    blogs: Blog[];
+    totalPage: number;
+  };
+  profileFeeds: {
+    blogs: Blog[];
+    totalPage: number;
+  };
   viewMode: ViewMode;
   loading: boolean;
   error: string | null;

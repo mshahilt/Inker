@@ -8,7 +8,7 @@ export interface IUser {
   role: "user" | "moderator";
   bio: string;
   profilePicture?: string;
-  socialLinks: { type: string; url: string }[];
+  socialLinks: { platform: string; url: string }[];
   resume?: string;
   dateOfBirth?: Date;
   createdAt: Date;
