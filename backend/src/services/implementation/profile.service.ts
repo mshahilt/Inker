@@ -6,10 +6,11 @@ import { HttpResponse } from "@/constants/response-message.constant";
 import { IUserModel } from "@/models/implementation/user.model";
 import { generateNanoId } from "@/utils/generate-nanoid";
 import { deleteFromCloudinary, getPublicIdFromUrl, isCloudinaryUrl } from "@/utils/cloudinary.util";
+import { IBlogRepository } from "@/repositories/interface/IBlogRepository";
 
 //!   Implementation for Profile Service
 export class ProfileService implements IProfileService {
-  constructor(private _userRepository: IUserRepository) { }
+  constructor(private _userRepository: IUserRepository, private _blogRepository: IBlogRepository) { }
 
   async getProfile(username: string): Promise<IUserModel> {
     const userDetails = await this._userRepository.findByUsername(username);
@@ -32,6 +33,7 @@ export class ProfileService implements IProfileService {
     }
 
     const user = await this._userRepository.updateUsername(id, username);
+    await this._blogRepository.updateUsername(id, username)
     return user ? user.username : undefined;
   }
 
@@ -94,6 +96,7 @@ export class ProfileService implements IProfileService {
     }
 
     await this._userRepository.updateProfilePicture(userId, result.secure_url);
+    await this._blogRepository.updateProfilePicture(userId, result.secure_url);
     return result.secure_url
   }
 

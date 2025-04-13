@@ -15,6 +15,9 @@ const blogSchema = new Schema<IBlogModel>(
       type: String,
       required: true,
     },
+    authorProfilePicture: {
+      type: String,
+    },
     title: {
       type: String,
       required: true,

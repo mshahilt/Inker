@@ -6,12 +6,14 @@ import { ProfileController } from "@/controllers/implementation/profile.controll
 import { validate } from "@/middlewares/validate.middleware";
 import { editUsernameSchema, updateProfileSchema } from "@/schema";
 import { uploadMiddleware } from "@/middlewares";
+import { BlogRepository } from "@/repositories/implementation/blog.repository";
 
 
 const router = Router();
 
 const userRepository = new UserRepository();
-const profileService = new ProfileService(userRepository);
+const blogRepository = new BlogRepository();
+const profileService = new ProfileService(userRepository, blogRepository);
 const profileController = new ProfileController(profileService);
 
 router.get(
