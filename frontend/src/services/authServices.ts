@@ -2,6 +2,7 @@ import {axiosInstance} from "@/config/axios";
 import {toast} from "sonner";
 import axios, {AxiosError} from "axios";
 import {env} from "@/config/env.ts";
+import { IUser } from "shared/types";
 
 interface LoginData {
     email: string;
@@ -45,9 +46,17 @@ export const AuthService = {
         }
     },
 
-    googleAuthLogin: async (id_token: string) => {
+    googleAuthLogin: async (id_token: string): Promise<{ data: {
+      user: Partial<IUser>;
+      message: string;
+      token: string;
+  } | null, error: string | null}> => {
         try {
-            const response = await axiosInstance.post("/api/auth/google-auth", {id_token}, {withCredentials: true});
+            const response = await axiosInstance.post<{
+              user: Partial<IUser>;
+              message: string;
+              token: string;
+          }>("/api/auth/google-auth", {id_token}, {withCredentials: true});
             return {data: response.data, error: null};
         } catch (error: unknown) {
             const err = error as AxiosError<{ error: string }>;
@@ -66,7 +75,10 @@ export const AuthService = {
             return {data: null, error: errorMessage};
         }
     },
-    forgetPasswordService: async (data: forgetPasswordData) => {
+    forgetPasswordService: async (data: forgetPasswordData): Promise<{ data: {
+      status: number;
+      message: string
+  } | null, error: string | null}> => {
         try {
             const response = await axiosInstance.post<{
                 status: number;

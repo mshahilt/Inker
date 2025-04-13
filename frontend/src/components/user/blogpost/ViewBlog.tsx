@@ -1,30 +1,49 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import type { RootState, AppDispatch } from "@/store/store";
 import MDEditor from "@uiw/react-md-editor";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { getBlogById } from "@/store/slices/blogSlice"; 
 import { Pencil, ArrowLeft } from "lucide-react";
+import { useBlogStore } from "@/store/blogStore";
+import { Blog } from "@/types";
+import { toast } from "sonner";
+import useAuthStore from "@/store/authStore";
+import { useBlogEditorStore } from "@/store/useBlogEditorStore";
 
 export default function ViewBlog() {
-  const dispatch = useDispatch<AppDispatch>();
   const { blogId } = useParams<{ blogId: string }>();
   const navigate = useNavigate();
-  const { currentBlog, loading, error } = useSelector((state: RootState) => state.blogEditor);
+  const {getBlogById} = useBlogStore()
+  const [ currentBlog, setCurrentBlog] = useState<Blog | null>(null)
+  const { user } = useAuthStore()
+  const {setEditingBlog} = useBlogEditorStore()
 
   useEffect(() => {
-    if (blogId) {
-      dispatch(getBlogById(blogId));
-    }
-  }, [dispatch, blogId]);
 
-  if (loading) return <p className="text-center">Loading...</p>;
-  if (error) return <p className="text-destructive text-center">Error: {error}</p>;
-  if (!currentBlog || currentBlog._id !== blogId) return <p className="text-center">Blog not found</p>;
+    if(blogId) {
+      const fetchBlogDetails = async (blogId: string) => {
+        const res = await getBlogById(blogId)
+        if (res) {
+          setCurrentBlog(res)
+        } else {
+          toast.error('Blog not found')
+        }
+      }
+    
+      fetchBlogDetails(blogId)
+    } else {
+      toast.error('blog id is not provided')
+    }
+  }, [ blogId, getBlogById]);
+  
+  
+  const handleEditNavigator = (id: string) => {
+    setEditingBlog(id)
+    navigate(`/blog/edit`)
+  }
 
   return (
+    currentBlog ? 
     <div className="flex justify-center p-8 min-h-screen">
       <Card className="w-full max-w-3xl border rounded-xl bg-background">
         <CardHeader className="flex flex-row items-center justify-between border-b">
@@ -40,15 +59,15 @@ export default function ViewBlog() {
             </Button>
             <CardTitle className="text-3xl font-bold text-foreground">{currentBlog.title}</CardTitle>
           </div>
-          <Button
+          { user?._id === currentBlog.authorId  && <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate(`/blog/edit/${currentBlog._id}`)}
+            onClick={() => handleEditNavigator(currentBlog._id)}
             className="text-muted-foreground hover:text-primary"
             aria-label="Edit Blog"
           >
             <Pencil className="h-5 w-5" />
-          </Button>
+          </Button>}
         </CardHeader>
         <CardContent className="pt-6">
           <div className="prose prose-invert max-w-none text-foreground">
@@ -63,6 +82,6 @@ export default function ViewBlog() {
           </p>
         </CardContent>
       </Card>
-    </div>
+    </div> : <div>no blog</div>
   );
 }

@@ -5,8 +5,10 @@ import { ProfileData, ProfileService } from "@/services/profileService";
 import { formatDateToMonthYear } from "@/utils/formateDate";
 import { Button } from "@/components/ui/button";
 import useAuthStore from "@/store/authStore";
+import { useBlogStore } from "@/store/blogStore";
 
 const ProfileInfo: FC = () => {
+  const {setAuthorId} = useBlogStore()
   const [userDetails, setUserDetails] = useState<ProfileData>((): ProfileData => {
     return {
       username: '',
@@ -27,20 +29,22 @@ const ProfileInfo: FC = () => {
   const {user} = useAuthStore()
   useEffect(() => {
     const fetchUserProfile = async () => {
+
       let result: {
         message: string;
         profileDetails: ProfileData;
-    } | null = null
-      if (user?.username && user?.username === userTag ) {
-        result = await ProfileService.profileDetailsService(user?.username);
-      } else {
+      } | null = null
+
+      
         result = await ProfileService.profileDetailsService(userTag as string);
-      }
+
+
+      if (result.profileDetails?._id) setAuthorId(result.profileDetails?._id)
       setUserDetails(result.profileDetails)
     };
 
     fetchUserProfile();
-  }, [user, userTag]);
+  }, [user, userTag, setAuthorId]);
 
   return (
     <div className="min-w-[300px]  lg:w-[400px] p-2 lg:border-l lg:h-full">

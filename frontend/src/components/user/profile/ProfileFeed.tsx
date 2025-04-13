@@ -4,19 +4,18 @@ import { ArrowBigUp, ArrowBigDown, MessageCircle, Pencil, Trash2 } from "lucide-
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
-import { deleteBlog } from "@/store/slices/blogSlice";
 import { useSidebar } from "@/components/ui/sidebar";
 import { showConfirmDialog } from "@/store/slices/confirmDialogSlice";
 import useAuthStore from "@/store/authStore";
-import { blogService } from "@/services/blogServices";
-import { Blog } from "@/types";
+import { useBlogStore } from "@/store/blogStore";
+import Pagination from "@/components/common/Pagination";
 const TAB_OPTIONS = ["Posts", "Archieve", "Saved"] as const;
 
 const ProfileFeed: FC = () => {
   const [activeTab, setActiveTab] = useState<"Posts" | "Archieve" | "Saved">(
     "Posts"
   );
-  const [ profileFeeds, setProfileFeeds] = useState<{ blogs: Blog[]; totalPage: number; }>({ blogs: [], totalPage: 0 })
+  const { getBlogsByAuthor, deleteBlog, authorId, blogs, totalPages } = useBlogStore()
   const { user } = useAuthStore();
   const dispatch = useDispatch<AppDispatch>();
   const { state } = useSidebar()
@@ -24,7 +23,9 @@ const ProfileFeed: FC = () => {
   useEffect(() => {    
     switch (activeTab) {
       case "Posts":
-        fetchProfileFeeds()
+        if (authorId) {
+          getBlogsByAuthor(authorId)
+        } 
         break;
       case "Archieve":
         console.log('archieve')
@@ -34,20 +35,18 @@ const ProfileFeed: FC = () => {
         break;
     }
 
-  }, [dispatch, user, activeTab]);
+  }, [ getBlogsByAuthor, activeTab, authorId]);
 
-  const fetchProfileFeeds = async () => {
-    if (user?._id) {
-      const result = await blogService.getBlogByAuthorIdService(user?._id)
-      setProfileFeeds(result)
-    }
-  }
 
   const handleDelete = (blogId: string) => {
-    dispatch(deleteBlog({ blogId, authorId: user?._id as string }));
+    deleteBlog( blogId, user?._id as string )
   };
 
+  const [currentPage, setCurrentPage] = useState(1)
 
+  const onPageChange = (page: number) => {
+    setCurrentPage(page)
+  }
 
 
   return (
@@ -71,10 +70,10 @@ const ProfileFeed: FC = () => {
           </div>
         ))}
       </div>
-      <div className="flex justify-center lg:overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <div className="flex justify-center  lg:overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <div className={`grid ${state === 'expanded' ? "xl:grid-cols-2 " : "xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2"} grid-cols-1 gap-4 h-fit justify-center mt-5 px-4 pb-4`}>
-          {activeTab === 'Posts' && profileFeeds.blogs.length > 0 ? (
-            profileFeeds.blogs.map((blog, index) => (
+          {activeTab === 'Posts' && blogs.length > 0 ? (
+            blogs.map((blog, index) => (
               <div
                 key={index}
                 className="p-2 border-2 rounded-lg max-w-[400px] flex flex-col justify-between relative">
@@ -130,6 +129,7 @@ const ProfileFeed: FC = () => {
           )}
         </div>
       </div>
+        <Pagination  onPageChange={onPageChange} currentPage={currentPage} totalPages={totalPages} />
     </div>
   );
 };

@@ -30,7 +30,7 @@ export const useAuthStore = AuthStore(
     devtools(
         persist(
             function authStore(set, getState) {
-                return {
+                return {    
                     user: null,
                     accessToken: null,
                     isAuthenticated: true,
@@ -50,8 +50,6 @@ export const useAuthStore = AuthStore(
 
                         const {user, accessToken} = data;
 
-                        console.log("user login", accessToken);
-
                         set({
                             user,
                             accessToken,
@@ -64,7 +62,7 @@ export const useAuthStore = AuthStore(
                         set({isLoading: true, error: null});
                         const {data, error} = await AuthService.googleAuthLogin(token);
 
-                        if (error) {
+                        if (!data || error) {
                             set({error: error, isLoading: false});
                             return;
                         }

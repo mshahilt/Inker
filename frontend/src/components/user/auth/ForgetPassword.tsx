@@ -24,7 +24,9 @@ const ForgetPassword = () => {
         try {
             setIsLoading(true)
             const response = await AuthService.forgetPasswordService(data)
-            toast.success(response.message)
+            if (response.data?.message) {
+                toast.success(response.data?.message)
+            }
         } catch (error) {
             if (error instanceof Error) {
                 toast.error(error.message);

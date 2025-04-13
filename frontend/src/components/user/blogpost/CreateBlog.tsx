@@ -1,8 +1,14 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Editor } from "./Editor";
+import { useEffect } from "react";
+import { useBlogEditorStore } from "@/store/useBlogEditorStore";
 
 export default function BlogPostEditor() {
+  const {setEditingBlog} = useBlogEditorStore()
+  useEffect(() => {
+    setEditingBlog(undefined)
+  },[setEditingBlog])
   return (
     <div className="flex justify-center p-8 md:p-8 min-h-screen w-full md:w-auto">
       <Card className="w-full md:w-full md:max-w-3xl border-0 md:border rounded-none md:rounded-xl bg-background">

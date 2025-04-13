@@ -15,9 +15,8 @@ const UsernameInput: FC = () => {
   },[user])
 
   // const changeUsernameHandler = async () => {
-  //    await ProfileService.changeUsernameService({username})
-
-  // }
+  //   await ProfileService.changeUsernameService({ username: username.toLowerCase() });
+  // };
 
   return (
     <div className="grid w-full  items-center gap-1.5 my-10 relative">
