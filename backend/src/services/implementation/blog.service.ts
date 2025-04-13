@@ -31,7 +31,8 @@ export class BlogService implements IBlogService {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND);
     }
     const authorName = author.username;
-    return this.blogRepository.createBlog({ ...blogData, authorName });
+    const authorProfilePicture = author.profilePicture
+    return this.blogRepository.createBlog({ ...blogData, authorName, authorProfilePicture });
   }
 
   async getBlogById(blogId: Types.ObjectId): Promise<IBlogModel> {

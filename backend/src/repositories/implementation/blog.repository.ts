@@ -57,4 +57,12 @@ export class BlogRepository
     return blog
   }
 
+  async updateUsername(authorId: string, username: string): Promise<void> {
+    await Blog.updateMany({ authorId }, { authorName: username })
+  }
+
+  async updateProfilePicture(authorId: string, profileUrl: string): Promise<void> {
+    await Blog.updateMany({ authorId }, { authorProfilePicture: profileUrl })
+  }
+
 }
