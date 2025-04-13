@@ -47,7 +47,9 @@ export function InputOTPForm() {
         try {
             const response = await AuthService.otpVerificationService({ ...data, email })
             navigate('/home')
-            toast.success(response.message)
+            if (response.data?.message) {
+                toast.success(response.data?.message)
+            }
         } catch (error: unknown) {
             if (error instanceof Error) {
                 toast.error(error.message);

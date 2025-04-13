@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator"
 import { UserAuthForm } from "@/components/user/auth/user-auth-form"
-import Button from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Github } from "lucide-react"
 import { useState } from "react"
 import GoogleAuth from "./GoogleAuth"
@@ -34,9 +34,9 @@ export const FormLayout = () => {
                     </div>
                 </div>
 
-                <div className="flex gap-2 ">
+                <div className="flex gap-2 flex-col">
                     <GoogleAuth />
-                    <Button variant="outline" className="w-full">
+                    <Button variant="outline">
                         <Github className="mr-2 h-4 w-4" />
                         Github
                     </Button>

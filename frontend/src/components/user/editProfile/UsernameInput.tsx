@@ -1,26 +1,27 @@
 import { FC, useEffect, useState } from 'react'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useProfile } from '@/contexts/ProfileContext'
-import { ProfileService } from '@/services/profileService'
+import useAuthStore from '@/store/authStore'
+
 
 const UsernameInput: FC = () => {
-  const { profile } = useProfile()
+  const { user } = useAuthStore()
   const [ username, setUsername] = useState('')
 
   useEffect(() => {
-    setUsername(profile.username)
-  },[profile])
+    if(user?.username) {
+      setUsername(user?.username)
+    } 
+  },[user])
 
-  const changeUsernameHandler = async () => {
-     await ProfileService.changeUsernameService({username})
-
-  }
+  // const changeUsernameHandler = async () => {
+  //   await ProfileService.changeUsernameService({ username: username.toLowerCase() });
+  // };
 
   return (
     <div className="grid w-full  items-center gap-1.5 my-10 relative">
-      <Label className='absolute right-3 top-0 font-medium active:scale-95 cursor-pointer'
-      onClick={changeUsernameHandler}>change</Label>
+      {/* <Label className='absolute right-3 top-0 font-medium active:scale-95 cursor-pointer'
+      onClick={changeUsernameHandler}>change</Label> */}
       <Label htmlFor="username" >Username</Label>
       <Input type="username" id="username" placeholder="Username" value={username} 
       onChange={(e) => setUsername(e.target.value)}/>

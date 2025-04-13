@@ -36,9 +36,9 @@ export default function (
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err.name === "TokenExpiredError") {
-        throw createHttpError(HttpStatus.FORBIDDEN, HttpResponse.TOKEN_EXPIRED)
-      } else {
         throw createHttpError(HttpStatus.UNAUTHORIZED, HttpResponse.TOKEN_EXPIRED)
+      } else {
+        throw createHttpError(HttpStatus.FORBIDDEN, HttpResponse.TOKEN_EXPIRED)
       }
     }
   };

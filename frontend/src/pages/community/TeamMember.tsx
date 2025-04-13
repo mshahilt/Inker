@@ -1,4 +1,4 @@
-import Button from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
 
 interface TeamMemberProps {

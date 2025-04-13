@@ -20,12 +20,26 @@ export class BlogRepository
     return this.findById(blogId);
   }
 
-  async findBlogByAuthorId( authorId: Types.ObjectId): Promise<IBlogModel[] | null> {
-    return this.find({authorId});
+  async findBlogByAuthorId( authorId: Types.ObjectId, skip: number, limit: number): Promise<{blogs: IBlogModel[], totalCount: number}> {
+    const [data, totalCount] = await Promise.all([
+      Blog.find({ authorId })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      Blog.countDocuments()
+    ])
+    return {blogs: data, totalCount}
   }
 
-  async findAllBlogs(): Promise<IBlogModel[]> {
-    return await Blog.find().sort({ createdAt: -1 })
+  async findAllBlogs(skip: number, limit: number): Promise<{blogs: IBlogModel[], totalCount: number}> {
+    const [data, totalCount] = await Promise.all([
+      Blog.find()
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      Blog.countDocuments()
+    ])
+    return {blogs: data, totalCount}
   }
 
   async updateBlog(
@@ -41,6 +55,14 @@ export class BlogRepository
     const blog = await this.findOne({_id: blogId, authorId})
     await this.deleteOne({_id: blogId, authorId});
     return blog
+  }
+
+  async updateUsername(authorId: string, username: string): Promise<void> {
+    await Blog.updateMany({ authorId }, { authorName: username })
+  }
+
+  async updateProfilePicture(authorId: string, profileUrl: string): Promise<void> {
+    await Blog.updateMany({ authorId }, { authorProfilePicture: profileUrl })
   }
 
 }

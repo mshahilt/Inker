@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { AuthController } from "../controllers/implementation/auth.controller";
-import { AuthService } from "../services/implementation/auth.service";
-import { UserRepository } from "../repositories/implementation/user.repository";
+import { AuthController } from "@/controllers/implementation/auth.controller";
+import { AuthService } from "@/services/implementation/auth.service";
+import { UserRepository } from "@/repositories/implementation/user.repository";
 import { validate } from "@/middlewares/validate.middleware";
 import {
   signupSchema,
@@ -10,6 +10,7 @@ import {
   verifyOtpSchema,
   resetPasswordSchema
 } from "@/schema";
+import verifyToken from "@/middlewares/verify-token.middleware";
 
 
 const authRouter = Router();
@@ -27,6 +28,11 @@ authRouter.post(
   "/login",
   validate(signinSchema),
   authController.signin.bind(authController)
+);
+
+authRouter.post(
+  "/google-auth",
+  authController.googleAuth.bind(authController)
 );
 
 authRouter.post(
@@ -50,6 +56,17 @@ authRouter.post(
 authRouter.post(
   "/refresh-token",
   authController.refreshAccessToken.bind(authController)
+);
+
+authRouter.get(
+  "/me",
+  verifyToken('user'),
+  authController.me.bind(authController)
+);
+
+authRouter.post(
+  "/logout",
+  authController.logout.bind(authController)
 );
 
 

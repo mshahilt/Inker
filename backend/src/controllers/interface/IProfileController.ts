@@ -11,7 +11,7 @@ export interface IProfileController {
 
     updateProfile(req: Request, res: Response, next: NextFunction): Promise<void>
 
-    updateEmail(req: Request, res: Response, next: NextFunction): Promise<void>
+    // updateEmail(req: Request, res: Response, next: NextFunction): Promise<void>
 
     changeProfilePicture(req: Request, res: Response, next: NextFunction): Promise<void>
 }

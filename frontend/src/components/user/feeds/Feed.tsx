@@ -1,41 +1,42 @@
 import { Link } from "react-router-dom";
 import BlogCard from "../common/BlogCard";
 import {
-  FaChevronRight,
-  FaChevronLeft,
 } from "react-icons/fa";
 import char from "../../../assets/char3.jpeg";
-import { ArrowBigDown, ArrowBigUp, Clipboard, MessageCircle, Trash2 } from "lucide-react";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { deleteBlog, getBlogs } from "@/store/slices/blogSlice";
-import { AppDispatch, RootState } from "@/store/store";
+import { ArrowBigDown, ArrowBigUp, Clipboard, MessageCircle } from "lucide-react";
+import { useSidebar } from "@/components/ui/sidebar";
+import { useBlogStore } from "@/store/blogStore";
+import { useEffect, useState } from "react";
+import Pagination from "@/components/common/Pagination";
+import useAuthStore from "@/store/authStore";
 
 
 const Feeds = () => {
-  const { blogs } = useSelector((state: RootState) => state.blogEditor);
-  const { id } = useSelector((state: RootState) => state.auth.user)
-  const dispatch = useDispatch<AppDispatch>()
-   
-  useEffect(() => {
-      dispatch(getBlogs());
-    }, [dispatch]);
+  const { blogs, totalPages, fetchAllBlogs } = useBlogStore()
+  const {isAuthenticated, accessToken} = useAuthStore()
+  const { state } = useSidebar()
+  const [currentPage, setCurrentPage] = useState(1)
 
-    const handleDelete = (blogId: string) => {
-      dispatch(deleteBlog({ blogId, authorId: id }));
-    };
+  useEffect(() => {
+    if(isAuthenticated && accessToken) fetchAllBlogs()
+  }, [fetchAllBlogs, isAuthenticated, accessToken])
+
+  const onPageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 py-6">
-      <h1 className="text-2xl font-bold mb-6">Filter box</h1>
+    <section className="w-full mx-auto">
+      <h1 className="text-2xl font-bold mt-6">Filter box</h1>
       {blogs.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className={`grid ${state === 'expanded' ? "xl:grid-cols-3  md:grid-cols-2 " : "xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2"} grid-cols-1 gap-4 h-fit justify-center  mt-5 p-2`}>
             {blogs.map((blog, index) => (
               <article
                 key={index}
-                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col h-full relative p-2"
+                className="bg-white dark:bg-gray-800 border border-muted rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 mx-auto flex flex-col h-full relative p-2 max-w-[400px]"
               >
-                
+
 
                 <div className="flex w-full items-center">
                   <img
@@ -55,29 +56,31 @@ const Feeds = () => {
                     <BlogCard blog={blog} />
                   </div>
                 </Link>
-                <div className="flex gap-2 justify-around mt-5  text-gray-600 dark:text-gray-400 ">
+                <div
+                  className="flex gap-2 justify-around mt-5 max-h-12 text-muted-foreground border-t py-2">
                   <div
-                    className="flex items-center justify-center px-2 bg-gray-100 dark:bg-gray-800 w-fit rounded-md "
-                    onClick={() => handleDelete(blog._id)}
+                    className="flex items-center justify-center p-2 w-fit rounded hover:bg-muted cursor-pointer"
                   >
-                    <Trash2 size={17} strokeWidth={1} />
+                    <Clipboard size={17} strokeWidth={1} />
                   </div>
                   <div
-                      className="flex items-center justify-center px-2 bg-gray-100 dark:bg-gray-800 w-fit rounded-md"
-                    >
-                      <Clipboard size={17} strokeWidth={1}/>
-                    </div>
-                  <div className="flex items-center justify-center px-2 bg-gray-100 dark:bg-gray-800 w-fit rounded-md ">
+                    className="flex items-center justify-center gap-2 p-2 w-fit rounded hover:bg-muted cursor-pointer text-sm">
                     {blog.comments}
                     <MessageCircle size={19} strokeWidth={1} />
                   </div>
-                  <div className="flex items-center justify-center px-2 bg-gray-100 dark:bg-gray-800 w-fit rounded-md ">
-                    <button className="flex items-center gap-1 text-sm  hover:cursor-pointer">
-                      <ArrowBigUp strokeWidth={1} />
-                    </button>
-                    {blog?.likes}
-                    <button className="flex items-center gap-1 text-sm  hover:cursor-pointer">
-                      <ArrowBigDown strokeWidth={1} />
+                  <div
+                    className="flex items-center gap-2 justify-center  w-fit rounded border border-muted">
+                    <div className="flex gap-2 justify-center items-center text-sm">
+                      <button
+                        className="flex items-center justify-center p-2 w-fit rounded hover:bg-muted cursor-pointer">
+                        <ArrowBigUp size={17} strokeWidth={1} />
+                      </button>
+                      {blog?.likes}
+                      <div className="h-[25px] bg-muted-foreground/30 w-[1.5px]"></div>
+                    </div>
+                    <button
+                      className="flex items-center justify-center p-2 w-fit rounded hover:bg-muted cursor-pointer">
+                      <ArrowBigDown size={17} strokeWidth={1} />
                     </button>
                   </div>
                 </div>
@@ -85,53 +88,11 @@ const Feeds = () => {
             ))}
           </div>
 
-          {/* Pagination UI */}
-          <nav className="flex justify-center mt-10" aria-label="Pagination">
-            <ul className="flex items-center space-x-1">
-              {/* Previous Button */}
-              <li>
-                <button className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400">
-                  <FaChevronLeft className="mr-2 h-4 w-4" />
-                  Previous
-                </button>
-              </li>
-
-              {/* Page Numbers */}
-              <li>
-                <button className="px-4 py-2 rounded-md text-sm font-medium border">
-                  1
-                </button>
-              </li>
-              <li>
-                <button className="px-4 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
-                  2
-                </button>
-              </li>
-              <li>
-                <button className="px-4 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
-                  3
-                </button>
-              </li>
-
-              {/* Ellipsis */}
-              <li>
-                <span className="px-2 py-2 text-gray-500 dark:text-gray-400">
-                  ...
-                </span>
-              </li>
-
-              {/* Next Button */}
-              <li>
-                <button className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-300">
-                  Next
-                  <FaChevronRight className="ml-2 h-4 w-4" />
-                </button>
-              </li>
-            </ul>
-          </nav>
+          <Pagination  onPageChange={onPageChange} currentPage={currentPage} totalPages={totalPages} />
         </>
       ) : (
-        <div className="flex flex-col items-center justify-center py-16 px-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+        <div
+          className="flex flex-col items-center justify-center py-16 px-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
           <svg
             className="w-16 h-16 text-gray-400 mb-4"
             fill="none"

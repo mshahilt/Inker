@@ -5,7 +5,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "tsx watch src/index.ts",
     "build": "tsc && tsc-alias",
     "start": "node ./dist/app/src/index.js",
     "lint": "eslint src --ext .ts,.tsx",
@@ -30,6 +30,7 @@
     "nodemailer": "^6.10.0",
     "redis": "^4.7.0",
     "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.19.3",
     "zod": "^3.24.2"
   },
   "devDependencies": {

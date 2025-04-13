@@ -1,25 +1,41 @@
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/user/common/AppSidebar";
-import { Outlet } from "react-router-dom";
+import {SidebarInset, SidebarProvider} from "@/components/ui/sidebar";
+import {AppSidebar} from "@/components/user/common/AppSidebar";
+import {Outlet} from "react-router-dom";
 import Navbar from "@/components/user/common/Navbar";
-import { ThemeProvider } from "@/components/user/common/theme-provider";
 import BottomNavigation from "@/components/user/common/BottomNavbar";
+import {GlobalConfirmDialog} from "@/components/user/common/GlobalConfirmDialog";
+import useAuthStore from "@/store/authStore.ts";
+import {useEffect} from "react";
 
 export default function AppLayout() {
-  return (
-    <>
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset >
-          <Navbar />
-          <main className="w-full flex flex-col h-full">
-            <Outlet />
-          </main>
-        </SidebarInset>
-        <BottomNavigation />
-      </SidebarProvider>
-      </ThemeProvider>
-    </>
-  );
+
+    const {refreshUser, isLoading, isAuthenticated} = useAuthStore();
+
+    useEffect(() => {
+        refreshUser();
+    }, [refreshUser, isAuthenticated]);
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <div className="loader">Loading...</div>
+            </div>
+        );
+    }
+
+    return (
+        <>
+            <SidebarProvider>
+                <AppSidebar/>
+                <SidebarInset>
+                    <Navbar/>
+                    <main className="w-full flex flex-col h-full mb-24 sm:mb-0">
+                        <Outlet/>
+                    </main>
+                </SidebarInset>
+                <BottomNavigation/>
+            </SidebarProvider>
+            <GlobalConfirmDialog/>
+        </>
+    );
 }

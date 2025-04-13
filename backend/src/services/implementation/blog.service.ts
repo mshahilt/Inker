@@ -2,7 +2,7 @@ import { HttpResponse, HttpStatus } from "@/constants";
 import { IBlogService } from "../interface/IBlogService";
 import { IBlogModel } from "@/models/implementation/blog.model";
 import { BlogRepository } from "@/repositories/implementation/blog.repository";
-import { createHttpError, uploadToCloudinary, generateSignedUrl } from "@/utils";
+import { createHttpError, uploadToCloudinary } from "@/utils";
 import { Types } from "mongoose";
 import { IUserRepository } from "@/repositories/interface/IUserRepository";
 import { IBlogRepository } from "@/repositories/interface/IBlogRepository";
@@ -31,7 +31,8 @@ export class BlogService implements IBlogService {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND);
     }
     const authorName = author.username;
-    return this.blogRepository.createBlog({ ...blogData, authorName });
+    const authorProfilePicture = author.profilePicture
+    return this.blogRepository.createBlog({ ...blogData, authorName, authorProfilePicture });
   }
 
   async getBlogById(blogId: Types.ObjectId): Promise<IBlogModel> {
@@ -42,16 +43,18 @@ export class BlogService implements IBlogService {
     return blog;
   }
 
-  async findBlogByAuthorId(authorId: Types.ObjectId): Promise<IBlogModel[]> {
-    const blog = await this.blogRepository.findBlogByAuthorId(authorId);
-    if (!blog) {
-      throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.BLOG_NOT_FOUND);
-    }
-    return blog;
+  async findBlogByAuthorId(authorId: Types.ObjectId, page: number): Promise<{blogs: IBlogModel[], totalPages: number}> {
+    const docsPerPage = 12
+    const skip = (page - 1) * docsPerPage
+    const { blogs, totalCount } = await this.blogRepository.findBlogByAuthorId(authorId, skip, docsPerPage);
+    return { blogs, totalPages: Math.ceil(totalCount / docsPerPage) }
   }
 
-  async getAllBlogs(): Promise<IBlogModel[]> {
-    return this.blogRepository.findAllBlogs();
+  async getAllBlogs(page: number): Promise<{blogs: IBlogModel[], totalPages: number}> {
+    const docsPerPage = 12
+    const skip = (page - 1) * docsPerPage
+    const { blogs, totalCount } = await this.blogRepository.findAllBlogs(skip, docsPerPage);
+    return { blogs, totalPages: Math.ceil(totalCount / docsPerPage) }
   }
 
   async updateBlog(
@@ -82,7 +85,7 @@ export class BlogService implements IBlogService {
   async uploadImage(file: Express.Multer.File): Promise<string> {    
     const uniqueId = uuidv4();
     const uploadResult = await uploadToCloudinary(file, "uploads", uniqueId);
-    return generateSignedUrl(uploadResult.public_id);
+    return uploadResult.secure_url
   }
 
 }
