@@ -21,7 +21,7 @@ const ProfileInfo: FC = () => {
       name: '',
       bio: '',
       resume: '',
-      createdAt: '',
+      created_at: '',
       socialLinks: []
     };
   });
@@ -87,7 +87,7 @@ const ProfileInfo: FC = () => {
         </p>
         <div className="flex gap-2 items-center mt-2">
           <p className="text-sm text-gray-600">@{userDetails?.username}</p>
-          <p className="text-xs text-gray-400">. Joined {formatDateToMonthYear(userDetails.createdAt)}</p>
+          <p className="text-xs text-gray-400">. Joined {formatDateToMonthYear(userDetails?.created_at)}</p>
         </div>
         <div className="flex gap-2 text-sm font-light text-muted-foreground">
           <p>

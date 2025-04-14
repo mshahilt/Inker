@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import BlogCard from "../common/BlogCard";
-import { ArrowBigUp, ArrowBigDown, MessageCircle, Pencil, Trash2 } from "lucide-react";
+import { ArrowBigUp, ArrowBigDown, MessageCircle, Pencil, Trash2, Clipboard } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
@@ -11,6 +11,7 @@ import { useBlogStore } from "@/store/blogStore";
 import Pagination from "@/components/user/common/Pagination";
 import Loader from "../common/Loader";
 import { useBlogEditorStore } from "@/store/useBlogEditorStore";
+import { toast } from "sonner";
 const TAB_OPTIONS = ["Posts", "Archieve", "Saved"] as const;
 
 const ProfileFeed: FC = () => {
@@ -102,27 +103,43 @@ const ProfileFeed: FC = () => {
                       </Link>
 
                       <div className="flex gap-2 justify-around mt-5 max-h-12 text-muted-foreground border-t py-2">
-                      {user?._id === blog?.authorId && <div
+                        {user?._id === blog?.authorId && <div className="flex items-center gap-2 justify-center  w-fit rounded border border-muted">
+                          <div
+                            className="flex items-center justify-center p-2 w-fit rounded hover:bg-muted cursor-pointer"
+                            onClick={() =>
+                              dispatch(
+                                showConfirmDialog({
+                                  title: "Are you sure you want to delete?",
+                                  description: "You will not be able to recover it.",
+                                  confirmText: "Delete",
+                                  cancelText: "Cancel",
+                                  onConfirm: () => handleDelete(blog._id),
+                                })
+                              )}
+                          >
+                            <Trash2 size={17} strokeWidth={1} />
+                          </div>
+                          <div className="h-[25px] bg-muted-foreground/30 w-[1.5px]"></div>
+
+                          <div
+                            onClick={() => handleEditNavigator(blog?._id)}
+                            className="flex items-center justify-center gap-2 p-2 w-fit rounded hover:bg-muted cursor-pointer text-sm"
+                          >
+                            <Pencil size={17} strokeWidth={1} />
+                          </div>
+                        </div>}
+
+                        <div
                           className="flex items-center justify-center p-2 w-fit rounded hover:bg-muted cursor-pointer"
-                          onClick={() =>
-                            dispatch(
-                              showConfirmDialog({
-                                title: "Are you sure you want to delete?",
-                                description: "You will not be able to recover it.",
-                                confirmText: "Delete",
-                                cancelText: "Cancel",
-                                onConfirm: () => handleDelete(blog._id),
-                              })
-                            )}
+                          onClick={() => {
+                            navigator.clipboard.writeText(`http://inker-dev.vercel.app/blog/${blog?._id}`);
+                            toast.success("Blog link copied!");
+                          }}
+                          title="Copy blog link"
                         >
-                          <Trash2 size={17} strokeWidth={1} />
-                        </div>}
-                        {user?._id === blog?.authorId && <div
-                          onClick={() => handleEditNavigator(blog?._id)}
-                          className="flex items-center justify-center gap-2 p-2 w-fit rounded hover:bg-muted cursor-pointer text-sm"
-                        >
-                          <Pencil size={17} strokeWidth={1} />
-                        </div>}
+                          <Clipboard size={17} strokeWidth={1} />
+                        </div>
+
                         <div className="flex items-center justify-center gap-2 p-2 w-fit rounded hover:bg-muted cursor-pointer text-sm">
                           {blog.comments}
                           <MessageCircle size={19} strokeWidth={1} />
