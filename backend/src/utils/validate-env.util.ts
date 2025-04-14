@@ -37,4 +37,7 @@ export function validateEnv() {
   if (!env.CLOUDINARY_API_SECRET) {
     throw new Error("CLOUDINARY_API_SECRET is not found in the env");
   }
+  if (!env.NODE_ENV) {
+    throw new Error("NODE_ENV is not found in the env");
+  }
 }
