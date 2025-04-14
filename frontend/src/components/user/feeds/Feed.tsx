@@ -1,28 +1,38 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BlogCard from "../common/BlogCard";
 import {
 } from "react-icons/fa";
-import char from "../../../assets/char3.jpeg";
 import { ArrowBigDown, ArrowBigUp, Clipboard, MessageCircle } from "lucide-react";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useBlogStore } from "@/store/blogStore";
 import { useEffect, useState } from "react";
-import Pagination from "@/components/common/Pagination";
+import Pagination from "@/components/user/common/Pagination";
 import useAuthStore from "@/store/authStore";
+import { DEFAULT_IMG } from "@/utils/constents";
+import Loader from "../common/Loader";
 
 
 const Feeds = () => {
   const { blogs, totalPages, fetchAllBlogs } = useBlogStore()
-  const {isAuthenticated, accessToken} = useAuthStore()
+  const { isAuthenticated, accessToken, isLoading } = useAuthStore()
+  const navigate = useNavigate()
   const { state } = useSidebar()
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
-    if(isAuthenticated && accessToken) fetchAllBlogs()
+    if (isAuthenticated && accessToken) fetchAllBlogs()
   }, [fetchAllBlogs, isAuthenticated, accessToken])
 
   const onPageChange = (page: number) => {
     setCurrentPage(page)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader className="max-w-[200px]" />
+      </div>
+    );
   }
 
   return (
@@ -40,11 +50,19 @@ const Feeds = () => {
 
                 <div className="flex w-full items-center">
                   <img
-                    src={char}
+                    src={blog.authorProfilePicture || DEFAULT_IMG}
                     alt="Profile"
                     className="w-10 h-10 rounded-full mr-3 object-cover"
                   />
-                  <span className="font-medium">{blog.authorName}</span>
+                  <div className="relative group inline-block">
+                    <span className="font-medium cursor-pointer"
+                      onClick={() => navigate(`/profile/${blog.authorName}`)}>
+                      {blog.authorName}
+                    </span>
+                    <div className="absolute bottom-full mb-2 hidden group-hover:block bg-black dark:bg-white dark:text-black text-white text-xs rounded py-1 px-2 z-10 whitespace-nowrap">
+                      View Profile
+                    </div>
+                  </div>
                 </div>
 
                 <Link
@@ -88,7 +106,7 @@ const Feeds = () => {
             ))}
           </div>
 
-          <Pagination  onPageChange={onPageChange} currentPage={currentPage} totalPages={totalPages} />
+          <Pagination onPageChange={onPageChange} currentPage={currentPage} totalPages={totalPages} />
         </>
       ) : (
         <div

@@ -1,11 +1,14 @@
+import { useTheme } from "next-themes";
 import React from "react";
 
 interface LogoProps {
   className?: string;
   style?: React.CSSProperties;
+  dark?: boolean
 }
 
-const Loader: React.FC<LogoProps> = ({ className, style }) => {
+const Loader: React.FC<LogoProps> = ({ className, style, dark }) => {
+  
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +28,7 @@ const Loader: React.FC<LogoProps> = ({ className, style }) => {
           animation-delay: 0.5s;
         }
         .i-shape {
-          fill: #292929;
+          fill: ${dark ? 'white' : '#292929' };
           animation: fadeInOut 3s ease-in-out infinite;
           animation-delay: 0.7s;
         }
@@ -62,7 +65,6 @@ const Loader: React.FC<LogoProps> = ({ className, style }) => {
         `}
       </style>
 
-      {/* SVG Paths */}
       <path
         className="triangle"
         d="M14 41.5473L25.8718 33.0775C27.5706 31.4786 27.3022 28.0115 25.3944 26.9109L13.7142 18.295C11.9583 17.2821 10 19.002 10 21.557V38.5918C10 41.4713 12 42.7549 14 41.5473Z"

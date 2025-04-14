@@ -9,14 +9,14 @@ interface BlogEditorState {
     content: string;
     tags: string[];
     editingBlogId: string | undefined;
-    loading: boolean;
+    isLoading: boolean;
     setThumbnail: (thumbnail: { name: string; url: string } | null) => void
     setTitle: (title: string) => void;
     setContent: (content: string) => void;
     addTag: (tag: string) => void;
     removeTag: (tag: string) => void;
     saveBlog: () => Promise<void>;
-    setEditingBlog: (editingBlogId: string | undefined) => Promise<void>
+    setEditingBlog: (editingBlogId: string | undefined) => Promise<boolean>
 }
 
 export const useBlogEditorStore = create<BlogEditorState>((set, get) => ({
@@ -25,7 +25,7 @@ export const useBlogEditorStore = create<BlogEditorState>((set, get) => ({
     content: "",
     tags: [],
     editingBlogId: undefined,
-    loading: false,
+    isLoading: false,
 
     setThumbnail: (thumbnail) => set({ thumbnail }),
     setTitle: (title) => set({ title }),
@@ -35,27 +35,27 @@ export const useBlogEditorStore = create<BlogEditorState>((set, get) => ({
 
     saveBlog: async () => {
         const { title, content, tags, editingBlogId } = get();
-        set({ loading: true });
+        set({ isLoading: true });
 
         try {
             if (editingBlogId) {
                 const res = await blogService.editBlog(editingBlogId, { title, content, tags });
-                toast.success(res.message);
+                toast.success(res.message || 'Updated edited blog.');
             } else {
                 const res = await blogService.createBlog({ title, content, tags });
-                toast.success(res.message);
+                toast.success(res.message || 'Saved new blog');
             }
         } catch (error: unknown) {
             const err = error as AxiosError<{ error: string }>;
             const message = err.response?.data?.error || "Failed to fetch blogs";
             toast.error(message);
         } finally {
-            set({ loading: false });
+            set({ isLoading: false });
         }
     },
 
-    setEditingBlog: async (editingBlogId: string | undefined) => {
-        set({ loading: true });
+    setEditingBlog: async (editingBlogId: string | undefined): Promise<boolean> => {
+        set({ isLoading: true });
 
         try {
             if (editingBlogId) {
@@ -65,12 +65,14 @@ export const useBlogEditorStore = create<BlogEditorState>((set, get) => ({
             } else {
                 set({ title: '', content: '', tags: [] })
             }
+            return true
         } catch (error: unknown) {
             const err = error as AxiosError<{ error: string }>;
             const message = err.response?.data?.error || "Failed to fetch blogs";
             toast.error(message);
+            return false
         } finally {
-            set({ loading: false });
+            set({ isLoading: false });
         }
     }
 }));

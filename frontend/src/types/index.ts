@@ -8,6 +8,7 @@ export interface Blog {
   author: string;
   authorId: string;
   authorName: string;
+  authorProfilePicture: string;
   tags: string[];
   thumbnail: { type: string; url: string } | null;
   attachments: Array<{

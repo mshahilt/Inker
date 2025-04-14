@@ -132,7 +132,7 @@ export const useAuthStore = AuthStore(
                     },
 
                     fetchUser: async () => {
-                        set({isLoading: true, error: null});
+                        set({ isLoading: true, error: null});
 
                         const {data: user, error} = await AuthService.fetchUser();
 

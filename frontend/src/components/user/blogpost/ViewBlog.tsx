@@ -9,11 +9,12 @@ import { Blog } from "@/types";
 import { toast } from "sonner";
 import useAuthStore from "@/store/authStore";
 import { useBlogEditorStore } from "@/store/useBlogEditorStore";
+import Loader from "../common/Loader";
 
 export default function ViewBlog() {
   const { blogId } = useParams<{ blogId: string }>();
   const navigate = useNavigate();
-  const {getBlogById} = useBlogStore()
+  const {getBlogById, isLoading} = useBlogStore()
   const [ currentBlog, setCurrentBlog] = useState<Blog | null>(null)
   const { user } = useAuthStore()
   const {setEditingBlog} = useBlogEditorStore()
@@ -37,14 +38,22 @@ export default function ViewBlog() {
   }, [ blogId, getBlogById]);
   
   
-  const handleEditNavigator = (id: string) => {
-    setEditingBlog(id)
-    navigate(`/blog/edit`)
+  const handleEditNavigator = async (id: string) => {
+    const val = await setEditingBlog(id)
+    if (val) {
+      navigate(`/blog/edit`)
+    }
+  }
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center h-screen">
+    <Loader className="max-w-[200px]" />
+  </div>
   }
 
   return (
-    currentBlog ? 
     <div className="flex justify-center p-8 min-h-screen">
+      {currentBlog ? 
       <Card className="w-full max-w-3xl border rounded-xl bg-background">
         <CardHeader className="flex flex-row items-center justify-between border-b">
           <div className="flex items-center gap-4">
@@ -57,12 +66,12 @@ export default function ViewBlog() {
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <CardTitle className="text-3xl font-bold text-foreground">{currentBlog.title}</CardTitle>
+            <CardTitle className="text-3xl font-bold text-foreground">{currentBlog?.title}</CardTitle>
           </div>
-          { user?._id === currentBlog.authorId  && <Button
+          { user?._id === currentBlog?.authorId  && <Button
             variant="ghost"
             size="icon"
-            onClick={() => handleEditNavigator(currentBlog._id)}
+            onClick={() => handleEditNavigator(currentBlog?._id)}
             className="text-muted-foreground hover:text-primary"
             aria-label="Edit Blog"
           >
@@ -72,16 +81,17 @@ export default function ViewBlog() {
         <CardContent className="pt-6">
           <div className="prose prose-invert max-w-none text-foreground">
             <MDEditor.Markdown
-              source={currentBlog.content}
+              source={currentBlog?.content}
               className="bg-transparent text-foreground"
               style={{ background: "transparent", color: "inherit" }}
             />
           </div>
           <p className="text-muted-foreground mt-4 text-sm">
-            By {currentBlog.authorName} on {new Date(currentBlog.createdAt).toLocaleDateString()}
+            By {currentBlog?.authorName} on {new Date(currentBlog?.createdAt).toLocaleDateString()}
           </p>
         </CardContent>
       </Card>
-    </div> : <div>no blog</div>
+      : <div className="text-2xl">Blog not found !</div>}
+    </div> 
   );
 }

@@ -1,0 +1,1 @@
+export const DEFAULT_IMG = "https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg"

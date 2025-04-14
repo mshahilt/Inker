@@ -6,6 +6,7 @@ import { formatDateToMonthYear } from "@/utils/formateDate";
 import { Button } from "@/components/ui/button";
 import useAuthStore from "@/store/authStore";
 import { useBlogStore } from "@/store/blogStore";
+import { DEFAULT_IMG } from "@/utils/constents";
 
 const ProfileInfo: FC = () => {
   const {setAuthorId} = useBlogStore()
@@ -53,7 +54,8 @@ const ProfileInfo: FC = () => {
           <ChevronLeft strokeWidth={1.8} className="md:hidden"  />
           <p> Profile</p>
         </div>
-        <Button className="active:scale-95" onClick={() => navigate("/account/profile")}>
+
+       {userTag === user?.username} <Button className="active:scale-95" onClick={() => navigate("/account/profile")}>
           Edit Profile
         </Button>
       </div>
@@ -61,7 +63,7 @@ const ProfileInfo: FC = () => {
       <div className="w-full  p-1 rounded-3xl mb-3 flex items-center">
         <img
           className="w-26 h-26 rounded-3xl"
-          src={userDetails?.profilePicture || "https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg"}
+          src={userDetails?.profilePicture || DEFAULT_IMG}
           alt=""
         />
         <div className="flex justify-around w-full">
@@ -79,7 +81,7 @@ const ProfileInfo: FC = () => {
       <div className="p-2 flex flex-col gap-3">
         <p className="text-xl font-semibold">{userDetails?.name}</p>
         <p className="text-sm px-1 font-light text-muted-foreground">
-          {userDetails.bio}
+          {userDetails?.bio}
         </p>
         <div className="flex gap-2 items-center mt-2">
           <p className="text-sm text-gray-600">@{userDetails?.username}</p>

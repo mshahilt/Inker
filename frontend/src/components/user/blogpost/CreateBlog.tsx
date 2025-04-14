@@ -3,12 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Editor } from "./Editor";
 import { useEffect } from "react";
 import { useBlogEditorStore } from "@/store/useBlogEditorStore";
+import Loader from "../common/Loader";
 
 export default function BlogPostEditor() {
-  const {setEditingBlog} = useBlogEditorStore()
+  const {setEditingBlog, isLoading} = useBlogEditorStore()
   useEffect(() => {
     setEditingBlog(undefined)
   },[setEditingBlog])
+
+  if (isLoading) {
+      return <div className="flex items-center justify-center h-screen">
+        <Loader className="max-w-[200px]" />
+      </div>
+    }
+  
   return (
     <div className="flex justify-center p-8 md:p-8 min-h-screen w-full md:w-auto">
       <Card className="w-full md:w-full md:max-w-3xl border-0 md:border rounded-none md:rounded-xl bg-background">
