@@ -9,7 +9,7 @@ import { useBlogStore } from "@/store/blogStore";
 import { DEFAULT_IMG } from "@/utils/constents";
 
 const ProfileInfo: FC = () => {
-  const {setAuthorId} = useBlogStore()
+  const {setAuthorId,setLoading} = useBlogStore()
   const [userDetails, setUserDetails] = useState<ProfileData>((): ProfileData => {
     return {
       username: '',
@@ -29,6 +29,8 @@ const ProfileInfo: FC = () => {
   const { userTag }  = useParams() ;
   const {user} = useAuthStore()
   useEffect(() => {
+    setLoading(true)
+    setAuthorId('')
     const fetchUserProfile = async () => {
 
       let result: {

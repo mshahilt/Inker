@@ -15,6 +15,7 @@ interface BlogState {
 }
 
 interface BlogStore extends BlogState {
+    setLoading: (isLoading: boolean) => void;
   setAuthorId: (authorId: string) => void;
   fetchAllBlogs: (page: number) => Promise<void>;
   getBlogById: (blogId: string) => Promise<Blog | null>;
@@ -43,6 +44,8 @@ export const useBlogStore = create<BlogStore>()(
           totalPages: 0,
           isLoading: false,
           error: null,
+
+          setLoading: (isLoading: boolean) => set({isLoading}),
   
           setAuthorId: (authorId: string) => {
             set({ authorId });
