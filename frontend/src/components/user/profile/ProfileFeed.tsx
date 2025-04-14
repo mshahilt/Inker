@@ -19,6 +19,7 @@ const ProfileFeed: FC = () => {
   );
   const { getBlogsByAuthor, deleteBlog, authorId, profileFeeds, isLoading } = useBlogStore()
   const { setEditingBlog } = useBlogEditorStore()
+  const [currentPage, setCurrentPage] = useState(1)
   const { user } = useAuthStore();
   const dispatch = useDispatch<AppDispatch>();
   const { state } = useSidebar()
@@ -28,7 +29,7 @@ const ProfileFeed: FC = () => {
     switch (activeTab) {
       case "Posts":
         if (authorId) {
-          getBlogsByAuthor(authorId)
+          getBlogsByAuthor(authorId, currentPage)
         }
         break;
       case "Archieve":
@@ -46,7 +47,6 @@ const ProfileFeed: FC = () => {
     deleteBlog(blogId, user?._id as string)
   };
 
-  const [currentPage, setCurrentPage] = useState(1)
 
   const onPageChange = (page: number) => {
     setCurrentPage(page)

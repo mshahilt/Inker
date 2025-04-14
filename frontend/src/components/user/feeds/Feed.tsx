@@ -21,7 +21,7 @@ const Feeds = () => {
   const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
-    if (isAuthenticated && accessToken) fetchAllBlogs()
+    if (isAuthenticated && accessToken) fetchAllBlogs(currentPage)
   }, [fetchAllBlogs, isAuthenticated, accessToken])
 
   const onPageChange = (page: number) => {

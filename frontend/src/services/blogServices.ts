@@ -19,8 +19,12 @@ export const blogService = {
     return response.data;
   },
 
-  getAllBlogs: async () => {
-    const response = await axiosInstance.get<{ blogs: Blog[]; totalPages: number }>("/api/blog");
+  getAllBlogs: async (page: number) => {
+    const response = await axiosInstance.get<{ blogs: Blog[]; totalPages: number }>("/api/blog", {
+      params: {
+        page
+      }
+    });
     return response.data;
   },
 
@@ -29,8 +33,12 @@ export const blogService = {
     return response.data;
   },
 
-  getBlogsByAuthor: async (authorId: string): Promise<{ blogs: Blog[]; totalPages: number }> => {
-    const response = await axiosInstance.get<{ blogs: Blog[]; totalPages: number }>(`/api/blog/user/${authorId}`);
+  getBlogsByAuthor: async (authorId: string, page: number): Promise<{ blogs: Blog[]; totalPages: number }> => {
+    const response = await axiosInstance.get<{ blogs: Blog[]; totalPages: number }>(`/api/blog/user/${authorId}`, {
+      params: {
+        page
+      }
+    });
     return response.data;
   },
 };

@@ -16,9 +16,9 @@ interface BlogState {
 
 interface BlogStore extends BlogState {
   setAuthorId: (authorId: string) => void;
-  fetchAllBlogs: () => Promise<void>;
+  fetchAllBlogs: (page: number) => Promise<void>;
   getBlogById: (blogId: string) => Promise<Blog | null>;
-  getBlogsByAuthor: (authorId: string) => Promise<void>;
+  getBlogsByAuthor: (authorId: string, page: number) => Promise<void>;
   createBlog: (data: {
     title: string;
     content: string;
@@ -48,10 +48,10 @@ export const useBlogStore = create<BlogStore>()(
             set({ authorId });
           },
   
-          fetchAllBlogs: async () => {
+          fetchAllBlogs: async (page: number) => {
             try {
                 
-              const res = await blogService.getAllBlogs();
+              const res = await blogService.getAllBlogs(page);
               set({ feeds: res });
             } catch (error) {
               const err = error as AxiosError<{ error: string }>;
@@ -78,10 +78,10 @@ export const useBlogStore = create<BlogStore>()(
             }
           },
   
-          getBlogsByAuthor: async (authorId: string) => {
+          getBlogsByAuthor: async (authorId: string, page: number) => {
             try {
               set({ isLoading: true, error: null });
-              const res = await blogService.getBlogsByAuthor(authorId);
+              const res = await blogService.getBlogsByAuthor(authorId, page);
               set({ profileFeeds: res });
             } catch (error) {
               const err = error as AxiosError<{ error: string }>;
