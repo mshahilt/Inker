@@ -13,7 +13,7 @@ import Loader from "../common/Loader";
 
 
 const Feeds = () => {
-  const { blogs, totalPages, fetchAllBlogs } = useBlogStore()
+  const { feeds, fetchAllBlogs } = useBlogStore()
   const { isAuthenticated, accessToken, isLoading } = useAuthStore()
   const navigate = useNavigate()
   const { state } = useSidebar()
@@ -36,15 +36,15 @@ const Feeds = () => {
   }
 
   return (
-    <section className="w-full mx-auto">
-      <h1 className="text-2xl font-bold mt-6">Filter box</h1>
-      {blogs.length > 0 ? (
+    <section className="w-full mx-auto  xl:max-w-7xl 2xl:border-x">
+      <h1 className="text-2xl font-bold mt-6 ml-4">Filter box</h1>
+      {feeds?.blogs.length > 0 ? (
         <>
           <div className={`grid ${state === 'expanded' ? "xl:grid-cols-3  md:grid-cols-2 " : "xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2"} grid-cols-1 gap-4 h-fit justify-center  mt-5 p-2`}>
-            {blogs.map((blog, index) => (
+            {feeds.blogs.map((blog, index) => (
               <article
                 key={index}
-                className="bg-white dark:bg-gray-800 border border-muted rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 mx-auto flex flex-col h-full relative p-2 max-w-[400px]"
+                className="bg-white dark:bg-gray-800 border border-muted rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 mx-auto flex flex-col h-full relative p-2 w-full max-w-[400px]"
               >
 
 
@@ -106,7 +106,7 @@ const Feeds = () => {
             ))}
           </div>
 
-          <Pagination onPageChange={onPageChange} currentPage={currentPage} totalPages={totalPages} />
+          <Pagination onPageChange={onPageChange} currentPage={currentPage} totalPages={feeds?.totalPages} />
         </>
       ) : (
         <div

@@ -16,7 +16,7 @@ const ProfileFeed: FC = () => {
   const [activeTab, setActiveTab] = useState<"Posts" | "Archieve" | "Saved">(
     "Posts"
   );
-  const { getBlogsByAuthor, deleteBlog, authorId, blogs, totalPages, isLoading } = useBlogStore()
+  const { getBlogsByAuthor, deleteBlog, authorId, profileFeeds, isLoading } = useBlogStore()
   const { user } = useAuthStore();
   const dispatch = useDispatch<AppDispatch>();
   const { state } = useSidebar()
@@ -52,7 +52,7 @@ const ProfileFeed: FC = () => {
 
 
   return (
-    <div className="my-4 lg:m-0 h-full  flex-1 max-w-[900px] relative ">
+    <div className="my-4 lg:m-0 h-full  flex-1 max-w-[1000px] relative lg:border-x">
       <div className="flex gap-4 justify-around border-b text-gray-600 sticky top-[73px] z-20 bg-white dark:bg-black">
         {TAB_OPTIONS.map((tab) => (
           <div className="relative">
@@ -80,9 +80,9 @@ const ProfileFeed: FC = () => {
           :
           <>
             <div className="flex justify-center  lg:overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              <div className={`grid ${state === 'expanded' ? "xl:grid-cols-2 " : "xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2"} grid-cols-1 gap-4 h-fit justify-center mt-5 px-4 pb-4`}>
-                {activeTab === 'Posts' && blogs.length > 0 ? (
-                  blogs.map((blog, index) => (
+              <div className={`grid ${state === 'expanded' ? "xl:grid-cols-2 " : "xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2"} grid-cols-1 gap-4 h-fit justify-center  mt-5 px-4 pb-4`}>
+                {activeTab === 'Posts' && profileFeeds?.blogs.length > 0 ? (
+                  profileFeeds?.blogs.map((blog, index) => (
                     <div
                       key={index}
                       className="p-2 border-2 rounded-lg max-w-[400px] flex flex-col justify-between relative">
@@ -137,7 +137,7 @@ const ProfileFeed: FC = () => {
               </div>
             </div>
 
-            <Pagination onPageChange={onPageChange} currentPage={currentPage} totalPages={totalPages} />
+            <Pagination onPageChange={onPageChange} currentPage={currentPage} totalPages={profileFeeds?.totalPages} />
           </>
       }
 

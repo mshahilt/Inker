@@ -7,7 +7,8 @@ import { devtools, persist } from "zustand/middleware";
 
 interface BlogState {
   authorId: string | null;
-  blogs: Blog[];
+  feeds: { blogs: Blog[], totalPages: number };
+  profileFeeds: { blogs: Blog[], totalPages: number };
   totalPages: number;
   error: string | null;
   isLoading: boolean;
@@ -37,7 +38,8 @@ export const useBlogStore = create<BlogStore>()(
       persist(
         (set) => ({
           authorId: null,
-          blogs: [],
+          feeds: { blogs: [], totalPages: 0 },
+          profileFeeds: { blogs: [], totalPages: 0 },
           totalPages: 0,
           isLoading: false,
           error: null,
@@ -50,7 +52,7 @@ export const useBlogStore = create<BlogStore>()(
             try {
                 
               const res = await blogService.getAllBlogs();
-              set({ blogs: res.blogs, totalPages: res.totalPages });
+              set({ feeds: res });
             } catch (error) {
               const err = error as AxiosError<{ error: string }>;
               const message = err.response?.data?.error || "Failed to fetch blogs";
@@ -80,7 +82,7 @@ export const useBlogStore = create<BlogStore>()(
             try {
               set({ isLoading: true, error: null });
               const res = await blogService.getBlogsByAuthor(authorId);
-              set({ blogs: res.blogs, totalPages: res.totalPages });
+              set({ profileFeeds: res });
             } catch (error) {
               const err = error as AxiosError<{ error: string }>;
               const message =
@@ -114,7 +116,7 @@ export const useBlogStore = create<BlogStore>()(
               toast.success(res.message || "Blog deleted successfully");
           
               set((state) => ({
-                blogs: state.blogs.filter((blog) => blog._id !== blogId),
+                profileFeeds: { blogs: state.profileFeeds.blogs.filter((blog) => blog._id !== blogId), totalPages: state.profileFeeds.totalPages },
               }));
             } catch (error) {
               const err = error as AxiosError<{ error: string }>;
@@ -143,7 +145,7 @@ export const useBlogStore = create<BlogStore>()(
           },
         }),
         {
-          name: "blog-storage", // optional, for persist
+          name: "blog-storage",
         }
       )
     )

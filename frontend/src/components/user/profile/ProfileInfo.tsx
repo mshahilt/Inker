@@ -48,7 +48,7 @@ const ProfileInfo: FC = () => {
   }, [user, userTag, setAuthorId]);
 
   return (
-    <div className="min-w-[300px]  lg:w-[400px] p-2 lg:border-l lg:h-full">
+    <div className="min-w-[300px]  lg:w-[400px] p-2 lg:border-x lg:h-full">
       <div className="flex justify-between items-center mb-5 px-2">
         <div className="flex cursor-pointer" onClick={() => navigate(-1)}>
           <ChevronLeft strokeWidth={1.8} className="md:hidden"  />
