@@ -8,11 +8,12 @@ import { Link } from "react-router-dom"
 import ThemeToggle from "../common/ThemeToggle";
 import { useState, useEffect } from "react";
 import useAuthStore from "@/store/authStore.ts";
+import { DEFAULT_IMG } from "@/utils/constents"
 
 const LandingMenuBar = () => {
     const navigate = useNavigate()
     const { theme } = useTheme()
-    const {isAuthenticated} = useAuthStore();
+    const {isAuthenticated, user} = useAuthStore();
 
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -39,9 +40,9 @@ const LandingMenuBar = () => {
             <div className="flex items-center gap-4">
                 <ThemeToggle/>
                 {isAuthenticated ? (
-                    <Link to="/profile">
+                    <Link to={`/profile/${user?.username}`}>
                         <img
-                            src={`https://res.cloudinary.com/dwyxogyrk/image/upload/v1737433466/h0xf7zi0blmclfqrjeo7.png`} 
+                            src={user?.profilePicture || DEFAULT_IMG} 
                             alt="Profile"
                             className={`
                                 rounded-md border-2 object-cover transition-all duration-300
@@ -51,7 +52,7 @@ const LandingMenuBar = () => {
                     </Link>
                 ) : (
                     <Button
-                        onClick={() => navigate("/auth")}
+                        onClick={() => navigate(`/auth`)}
                        className={`
                         duration-300 active:scale-95 hover:scale-105 transition-transform ease-in-out
                         ${isScrolled ? "py-1 px-3 text-sm" : "py-2 px-4"}

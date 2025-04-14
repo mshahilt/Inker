@@ -6,20 +6,21 @@ import BottomNavigation from "@/components/user/common/BottomNavbar";
 import {GlobalConfirmDialog} from "@/components/user/common/GlobalConfirmDialog";
 import useAuthStore from "@/store/authStore.ts";
 import {useEffect} from "react";
+import Loader from "@/components/user/common/Loader";
 
 export default function AppLayout() {
 
     const {refreshUser, isLoading, isAuthenticated} = useAuthStore();
-
     useEffect(() => {
         refreshUser();
+        
     }, [refreshUser, isAuthenticated]);
 
-    if (isLoading) {
+    if (isLoading ) {
         return (
-            <div className="flex items-center justify-center h-screen">
-                <div className="loader">Loading...</div>
-            </div>
+          <div className="flex items-center justify-center h-screen">
+          <Loader className="max-w-[200px]"/>
+          </div>
         );
     }
 

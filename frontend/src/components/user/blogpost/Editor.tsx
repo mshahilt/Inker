@@ -6,7 +6,6 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { X } from "lucide-react";
 import { ThumbnailUploader } from "./ThumbnailUploader";
-
 import { useNavigate } from "react-router-dom";
 import { useBlogEditorStore } from "@/store/useBlogEditorStore";
 
@@ -22,7 +21,7 @@ export const Editor: React.FC<EditorProps> = ({ isEditMode }) => {
     title,
     content,
     tags,
-    loading,
+    isLoading,
     setTitle,
     setContent,
     addTag,
@@ -42,10 +41,11 @@ export const Editor: React.FC<EditorProps> = ({ isEditMode }) => {
   };
 
   const handleSave = async () => {
-      await saveBlog();
+    await saveBlog();
     navigate("/feed");
   };
 
+  
   return (
     <div data-color-mode="dark">
       <ThumbnailUploader />
@@ -111,8 +111,8 @@ export const Editor: React.FC<EditorProps> = ({ isEditMode }) => {
         <Button onClick={() => navigate(-1)} variant="outline">
           Cancel
         </Button>
-        <Button onClick={handleSave} disabled={loading}>
-          {loading ? "Saving..." : isEditMode ? "Update" : "Save"}
+        <Button onClick={handleSave} disabled={isLoading}>
+          {isLoading ? "Saving..." : isEditMode ? "Update" : "Save"}
         </Button>
       </div>
     </div>

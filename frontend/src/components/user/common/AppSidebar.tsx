@@ -29,6 +29,7 @@ import {showConfirmDialog} from "@/store/slices/confirmDialogSlice";
 import useAuthStore from "@/store/authStore.ts";
 import {useDispatch} from "react-redux";
 import {toast} from "sonner";
+import { DEFAULT_IMG } from "@/utils/constents";
 
 
 const items = [
@@ -146,7 +147,7 @@ export function AppSidebar() {
                                     <SidebarMenuButton className="h-fit">
                                         <Avatar className="rounded">
                                             <AvatarImage
-                                                src={user?.profilePicture || "https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg"}/>
+                                                src={user?.profilePicture || DEFAULT_IMG}/>
                                             <AvatarFallback>U</AvatarFallback>
                                         </Avatar>
                                         <div className="flex flex-col">

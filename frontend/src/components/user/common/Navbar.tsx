@@ -3,6 +3,7 @@ import ThemeToggle from "./ThemeToggle";
 import SearchBar from "./SearchBar";
 import { Link } from "react-router-dom";
 import useAuthStore from "@/store/authStore";
+import { DEFAULT_IMG } from "@/utils/constents";
 
 const Navbar = () => {
   const {isAuthenticated, user} = useAuthStore()
@@ -15,7 +16,7 @@ const Navbar = () => {
         <div className="flex items-center gap-4 mr-2">
           <SearchBar />
           <ThemeToggle />
-          { isAuthenticated && <Link to={`/profile/${user?.username}`}><img className="w-10 h-10 rounded-md border-2" src={user?.profilePicture} alt="" /></Link>}
+          { isAuthenticated && <Link to={`/profile/${user?.username}`}><img className="w-10 h-10 rounded-md border-2" src={user?.profilePicture  || DEFAULT_IMG} alt="" /></Link>}
         </div>
       </div>
     </header>
