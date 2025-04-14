@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import useAuthStore from "@/store/authStore";
 import { useBlogEditorStore } from "@/store/useBlogEditorStore";
 import Loader from "../common/Loader";
+import { formatBlogTimestamp } from "@/utils/formateDate";
 
 export default function ViewBlog() {
   const { blogId } = useParams<{ blogId: string }>();
@@ -87,7 +88,7 @@ export default function ViewBlog() {
             />
           </div>
           <p className="text-muted-foreground mt-4 text-sm">
-            By {currentBlog?.authorName} on {new Date(currentBlog?.createdAt).toLocaleDateString()}
+            By {currentBlog?.authorName} | {currentBlog?.createdAt ? formatBlogTimestamp(currentBlog?.createdAt) : "Date Unknown"}
           </p>
         </CardContent>
       </Card>

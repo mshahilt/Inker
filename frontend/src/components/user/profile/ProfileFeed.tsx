@@ -10,7 +10,6 @@ import useAuthStore from "@/store/authStore";
 import { useBlogStore } from "@/store/blogStore";
 import Pagination from "@/components/user/common/Pagination";
 import Loader from "../common/Loader";
-import { Button } from "@/components/ui/button";
 import { useBlogEditorStore } from "@/store/useBlogEditorStore";
 const TAB_OPTIONS = ["Posts", "Archieve", "Saved"] as const;
 
@@ -103,7 +102,7 @@ const ProfileFeed: FC = () => {
                       </Link>
 
                       <div className="flex gap-2 justify-around mt-5 max-h-12 text-muted-foreground border-t py-2">
-                        <div
+                      {user?._id === blog?.authorId && <div
                           className="flex items-center justify-center p-2 w-fit rounded hover:bg-muted cursor-pointer"
                           onClick={() =>
                             dispatch(
@@ -117,7 +116,7 @@ const ProfileFeed: FC = () => {
                             )}
                         >
                           <Trash2 size={17} strokeWidth={1} />
-                        </div>
+                        </div>}
                         {user?._id === blog?.authorId && <div
                           onClick={() => handleEditNavigator(blog?._id)}
                           className="flex items-center justify-center gap-2 p-2 w-fit rounded hover:bg-muted cursor-pointer text-sm"

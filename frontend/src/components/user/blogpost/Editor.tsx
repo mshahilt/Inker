@@ -49,7 +49,7 @@ export const Editor: React.FC<EditorProps> = ({ isEditMode }) => {
   return (
     <div data-color-mode="dark">
       <ThumbnailUploader />
-      <div className="relative">
+      <div className="relative mt-4">
         <Input
           value={title}
           onChange={handleTitleChange}

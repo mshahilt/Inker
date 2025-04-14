@@ -55,9 +55,9 @@ const ProfileInfo: FC = () => {
           <p> Profile</p>
         </div>
 
-       {userTag === user?.username} <Button className="active:scale-95" onClick={() => navigate("/account/profile")}>
+       {userTag === user?.username && <Button className="active:scale-95" onClick={() => navigate("/account/profile")}>
           Edit Profile
-        </Button>
+        </Button>}
       </div>
 
       <div className="w-full  p-1 rounded-3xl mb-3 flex items-center">
