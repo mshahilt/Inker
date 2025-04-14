@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import BlogCard from "../common/BlogCard";
 import { ArrowBigUp, ArrowBigDown, MessageCircle, Pencil, Trash2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { useSidebar } from "@/components/ui/sidebar";
@@ -10,6 +10,8 @@ import useAuthStore from "@/store/authStore";
 import { useBlogStore } from "@/store/blogStore";
 import Pagination from "@/components/user/common/Pagination";
 import Loader from "../common/Loader";
+import { Button } from "@/components/ui/button";
+import { useBlogEditorStore } from "@/store/useBlogEditorStore";
 const TAB_OPTIONS = ["Posts", "Archieve", "Saved"] as const;
 
 const ProfileFeed: FC = () => {
@@ -17,9 +19,11 @@ const ProfileFeed: FC = () => {
     "Posts"
   );
   const { getBlogsByAuthor, deleteBlog, authorId, profileFeeds, isLoading } = useBlogStore()
+  const { setEditingBlog } = useBlogEditorStore()
   const { user } = useAuthStore();
   const dispatch = useDispatch<AppDispatch>();
   const { state } = useSidebar()
+  const navigate = useNavigate()
 
   useEffect(() => {
     switch (activeTab) {
@@ -47,6 +51,13 @@ const ProfileFeed: FC = () => {
 
   const onPageChange = (page: number) => {
     setCurrentPage(page)
+  }
+
+  const handleEditNavigator = async (id: string) => {
+    const val = await setEditingBlog(id)
+    if (val) {
+      navigate(`/blog/edit`)
+    }
   }
 
 
@@ -107,11 +118,12 @@ const ProfileFeed: FC = () => {
                         >
                           <Trash2 size={17} strokeWidth={1} />
                         </div>
-                        <div
-                          className="flex items-center justify-center p-2 w-fit rounded hover:bg-muted cursor-pointer"
+                        {user?._id === blog?.authorId && <div
+                          onClick={() => handleEditNavigator(blog?._id)}
+                          className="flex items-center justify-center gap-2 p-2 w-fit rounded hover:bg-muted cursor-pointer text-sm"
                         >
                           <Pencil size={17} strokeWidth={1} />
-                        </div>
+                        </div>}
                         <div className="flex items-center justify-center gap-2 p-2 w-fit rounded hover:bg-muted cursor-pointer text-sm">
                           {blog.comments}
                           <MessageCircle size={19} strokeWidth={1} />

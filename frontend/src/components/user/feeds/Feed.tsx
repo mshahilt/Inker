@@ -10,6 +10,7 @@ import Pagination from "@/components/user/common/Pagination";
 import useAuthStore from "@/store/authStore";
 import { DEFAULT_IMG } from "@/utils/constents";
 import Loader from "../common/Loader";
+import { toast } from "sonner";
 
 
 const Feeds = () => {
@@ -78,6 +79,11 @@ const Feeds = () => {
                   className="flex gap-2 justify-around mt-5 max-h-12 text-muted-foreground border-t py-2">
                   <div
                     className="flex items-center justify-center p-2 w-fit rounded hover:bg-muted cursor-pointer"
+                    onClick={() => {
+                      navigator.clipboard.writeText(`http://inker-dev.vercel.app/blog/${blog?._id}`);
+                      toast.success("Blog link copied!");
+                    }}
+                    title="Copy blog link"
                   >
                     <Clipboard size={17} strokeWidth={1} />
                   </div>
