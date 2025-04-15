@@ -18,14 +18,15 @@ const PictureInput: FC = () => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const { user } = useAuthStore()
+  const { user, updateProfilePicture } = useAuthStore();
+
   useEffect(() => {
     if (user?.profilePicture) {
-      setCroppedImage(user?.profilePicture)
+      setCroppedImage(user?.profilePicture);
     }
-  }, [user])
+  }, [user]);
 
   // Handle file selection
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,17 +53,19 @@ const PictureInput: FC = () => {
   const removeImage = () => {
     setImage(null);
     setCroppedImage(null);
-  }
+  };
 
-  const onCropComplete = useCallback((_val: Area,
-    croppedAreaPixels: Area) => {
+  const onCropComplete = useCallback((_val: Area, croppedAreaPixels: Area) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
   const handleSaveImage = async () => {
     if (image && croppedAreaPixels) {
       try {
-        const { croppedImageUrl, croppedImageFile } = await getCroppedImg(image, croppedAreaPixels);
+        const { croppedImageUrl, croppedImageFile } = await getCroppedImg(
+          image,
+          croppedAreaPixels
+        );
 
         setCroppedImage(croppedImageUrl);
         setCroppedImageFile(croppedImageFile);
@@ -71,24 +74,31 @@ const PictureInput: FC = () => {
         console.error(e);
       }
     }
-  }
+  };
 
   const uploadImageHanlder = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       if (croppedImageFile) {
-        await ProfileService.changeProfilePictureService(croppedImageFile)
-        setCroppedImageFile(null)
-        setImage(null)
+        const response =
+          await ProfileService.changeProfilePictureService(croppedImageFile);
+        if (response.profileUrl) {
+          updateProfilePicture(response.profileUrl);
+          toast.success("Profile picture updated successfully");
+        } else {
+          toast.error("Failed to update profile picture");
+        }
+        setCroppedImageFile(null);
+        setImage(null);
       } else {
-        toast.error('Image not uploaded')
+        toast.error("No image selected");
       }
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex w-full max-w-sm items-center gap-3 bg-gray-200 dark:bg-gray-900 p-4 rounded-2xl relative shadow-md">
@@ -102,8 +112,12 @@ const PictureInput: FC = () => {
       )}
 
       {croppedImage ? (
-        <img className="w-24 h-24 rounded-2xl object-cover border border-gray-300 
-          dark:border-gray-700" src={croppedImage} alt="Profile" />
+        <img
+          className="w-24 h-24 rounded-2xl object-cover border border-gray-300 
+          dark:border-gray-700"
+          src={croppedImage}
+          alt="Profile"
+        />
       ) : (
         <div className="w-24 h-24 rounded-2xl bg-gray-400 dark:bg-gray-800 flex items-center justify-center text-white">
           No Image
@@ -122,10 +136,7 @@ const PictureInput: FC = () => {
         />
 
         {/* Button to Trigger File Input */}
-        <button
-          onClick={triggerFileInput}
-          className="text-sm cursor-pointer"
-        >
+        <button onClick={triggerFileInput} className="text-sm cursor-pointer">
           Upload Image
         </button>
 
@@ -133,7 +144,8 @@ const PictureInput: FC = () => {
           <Button
             className="h-7 absolute bottom-1 right-1 scale-75"
             onClick={uploadImageHanlder}
-            disabled={loading}>
+            disabled={loading}
+          >
             Confirm
           </Button>
         )}
@@ -151,7 +163,11 @@ const PictureInput: FC = () => {
         />
       )}
 
-      {loading && <div className="w-full h-full rounded-xl font-semibold absolute top-0 left-0 flex justify-end items-end p-4 bg-black/30 text-brand-orange">loading...</div>}
+      {loading && (
+        <div className="w-full h-full rounded-xl font-semibold absolute top-0 left-0 flex justify-end items-end p-4 bg-black/30 text-brand-orange">
+          loading...
+        </div>
+      )}
     </div>
   );
 };
