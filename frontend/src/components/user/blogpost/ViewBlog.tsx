@@ -53,11 +53,11 @@ export default function ViewBlog() {
   }
 
   return (
-    <div className="min-h-screen p-4">
+    <div className="min-h-screen p-4 max-w-screen">
       {currentBlog ? (
         <>
           {/* Mobile View: No Card */}
-          <div className="block sm:hidden">
+          <div className="block sm:hidden ">
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <Button
