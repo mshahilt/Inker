@@ -40,11 +40,25 @@ export class ProfileService implements IProfileService {
   async updateProfile(id: string, updateData: Partial<IUserModel>): Promise<IUserModel> {
     const isExist = await this._userRepository.findUserById(id);
 
+    const allowedFields: (keyof IUserModel)[] = [
+      'name',
+      'bio',
+      'socialLinks',
+      'resume',
+      'dateOfBirth',
+    ];
+  
+    const filteredData = Object.fromEntries(
+      Object.entries(updateData).filter(([key, value]) =>
+        allowedFields.includes(key as keyof IUserModel) && value !== undefined
+      )
+    ) as Partial<IUserModel>;
+
     if (!isExist) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND);
     }
 
-    const updatedData = await this._userRepository.updateUserProfile(id, updateData)
+    const updatedData = await this._userRepository.updateUserProfile(id, filteredData)
 
     if (!updatedData) {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.USER_NOT_FOUND)
