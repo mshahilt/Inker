@@ -89,8 +89,7 @@ export class AuthService implements IAuthService {
             throw new Error('Invalid credentials');
         }
 
-        const sanitizedGoogleUser = { ...googleUser, password: undefined }; // Remove sensitive fields
-        console.log("Google user details:", JSON.stringify(sanitizedGoogleUser));
+        console.log("Google user details:", JSON.stringify(googleUser));
         const userExist = await this._userRepository.findByEmail(googleUser.email);
 
         if (userExist) {
@@ -106,9 +105,9 @@ export class AuthService implements IAuthService {
 
         const user = {
             username: uniqUsername,
-            name: googleUser.name,
+            name: googleUser.given_name,
             email: googleUser.email,
-            password: googleUser.password,
+            password: "fghjkl;lkjhgfcdfghj",
         };
 
         const createdUser = await this._userRepository.create(user as IUserModel);
