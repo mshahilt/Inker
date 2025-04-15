@@ -1,10 +1,12 @@
 import { transporter } from "@/configs";
-import { env } from "../configs/env.config";
+import { env } from "@/configs/env.config";
+
 
 export const sendOtpEmail = async (email: string, otp: string) => {
   try {
+    
     const mailOptions = {
-      from: "",
+      from: '',
       to: email,
       subject: "inker OTP Verificaiton",
       html: `
@@ -17,7 +19,6 @@ export const sendOtpEmail = async (email: string, otp: string) => {
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log("OTP mail send successfully", info.response);
   } catch (err) {
     console.error("Error sending verification email:", err);
     throw new Error("Error sending otp email");
@@ -29,7 +30,7 @@ export const sendResetPasswordEmail = async (email: string, token: string) => {
     const resetPasswordUrl = `${env.RESET_PASS_URL}?token=${token}`;
 
     const mailOptions = {
-      from: "",
+      from: `"Inker" <${env.SENDER_EMAIL}>`,
       to: email,
       subject: "Reset Your Password - Inker",
       html: `
