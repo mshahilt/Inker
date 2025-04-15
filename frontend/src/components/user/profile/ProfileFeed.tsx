@@ -30,7 +30,7 @@ const ProfileFeed: FC = () => {
     switch (activeTab) {
       case "Posts":
         if (authorId) {
-          getBlogsByAuthor(authorId, currentPage)
+          getBlogsByAuthor( authorId, currentPage)
         }
         break;
       case "Archieve":
@@ -41,7 +41,7 @@ const ProfileFeed: FC = () => {
         break;
     }
 
-  }, [getBlogsByAuthor, activeTab, authorId]);
+  }, [getBlogsByAuthor, activeTab, authorId, currentPage]);
 
 
   const handleDelete = (blogId: string) => {
@@ -85,13 +85,13 @@ const ProfileFeed: FC = () => {
       </div>
       {
         isLoading ?
-          <div className="flex items-center justify-center h-screen">
+          <div className="flex items-center justify-center h-full">
             <Loader className="max-w-[200px]" />
           </div>
           :
           <>
             <div className="flex justify-center  lg:overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              <div className={`grid ${state === 'expanded' ? "xl:grid-cols-2 " : "xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2"} grid-cols-1 gap-4 h-fit justify-center  mt-5 px-4 pb-4`}>
+              <div className={`grid ${state === 'expanded' ? "xl:grid-cols-2 " : "xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2"} grid-cols-1 gap-4 h-fit justify-center  mt-5 px-4 pb-4 w-full`}>
                 {activeTab === 'Posts' && profileFeeds?.blogs.length > 0 ? (
                   profileFeeds?.blogs.map((blog, index) => (
                     <div

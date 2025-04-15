@@ -10,7 +10,7 @@ export interface Blog {
   authorName: string;
   authorProfilePicture: string;
   tags: string[];
-  thumbnail: { type: string; url: string } | null;
+  thumbnail: string | null;
   attachments: Array<{
     name: string;
     url: string;

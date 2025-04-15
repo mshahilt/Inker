@@ -42,6 +42,7 @@ export const AuthService = {
         } catch (error: unknown) {
             const err = error as AxiosError<{ error: string }>;
             const errorMessage = err.response?.data?.error || "Registration failed. Please try again.";
+            toast.error(errorMessage)
             return {data: null, error: errorMessage};
         }
     },
@@ -67,11 +68,12 @@ export const AuthService = {
 
     otpVerificationService: async (data: OtpData) => {
         try {
-            const response = await axiosInstance.post<{ status: number; message: string }>("/api/auth/otp", data);
+            const response = await axiosInstance.post<{ message: string, user: IUser, token: string }>("/api/auth/otp", data);
             return {data: response.data, error: null};
         } catch (error: unknown) {
             const err = error as AxiosError<{ error: string }>;
             const errorMessage = err.response?.data?.error || "OTP validation failed. Please try again.";
+            toast.error(errorMessage)
             return {data: null, error: errorMessage};
         }
     },

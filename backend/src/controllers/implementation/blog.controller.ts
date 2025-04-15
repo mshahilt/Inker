@@ -116,11 +116,11 @@ export class BlogController implements IBlogController {
 
   async uploadImage(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      
-      if (req.file) {
-        const signedUrl = await this.blogService.uploadImage(req.file)
-        res.status(HttpStatus.OK).json(signedUrl)
+      if (!req.file) {
+        throw new Error("No file uploaded");
       }
+      const signedUrl = await this.blogService.uploadImage(req.file);
+      res.status(HttpStatus.OK).json({ url: signedUrl });
     } catch (error) {
       next(error);
     }
