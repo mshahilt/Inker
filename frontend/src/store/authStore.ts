@@ -23,6 +23,8 @@ interface AuthStore extends AuthState {
     clearState: () => Promise<void>;
     refreshToken: () => Promise<string>;
     setState: (state: Partial<AuthState>) => void;
+    updateProfilePicture: (profilePicture: string) => void;
+
 }
 
 const AuthStore = create<AuthStore>();
@@ -163,6 +165,14 @@ export const useAuthStore = AuthStore(
 
                     setState: ({isLoading, isAuthenticated, user, accessToken}) => {
                         set({isLoading, isAuthenticated, user, accessToken});
+                    },
+
+                    updateProfilePicture: (profilePicture: string) => {
+                        set((state) => ({
+                            user: state.user
+                                ? { ...state.user, profilePicture }
+                                : state.user,
+                        }));
                     },
 
                     clearState:

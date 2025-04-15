@@ -1,1 +1,2 @@
-export const DEFAULT_IMG = "https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg"
+export const DEFAULT_IMG =
+  "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png";

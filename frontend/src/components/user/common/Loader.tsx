@@ -1,13 +1,15 @@
 import React from "react";
+import { useTheme } from "./theme-provider";
 
 interface LogoProps {
   className?: string;
   style?: React.CSSProperties;
-  dark?: boolean
+  dark?: boolean;
 }
 
-const Loader: React.FC<LogoProps> = ({ className, style, dark }) => {
-  
+const Loader: React.FC<LogoProps> = ({ className, style }) => {
+  const { theme } = useTheme();
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -27,32 +29,32 @@ const Loader: React.FC<LogoProps> = ({ className, style, dark }) => {
           animation-delay: 0.5s;
         }
         .i-shape {
-          fill: ${dark ? 'white' : '#292929' };
+          fill: ${theme === 'dark' ? "white" : "#292929"};
           animation: fadeInOut 3s ease-in-out infinite;
           animation-delay: 0.7s;
         }
         .letter-n {
-          fill: #292929;
+          fill: ${theme === 'dark' ? "white" : "#292929"};
           animation: fadeInOut 3s ease-in-out infinite;
           animation-delay: 1.2s;
         }
         .letter-k {
-          fill: #292929;
+          fill: ${theme === 'dark' ? "white" : "#292929"};
           animation: fadeInOut 3s ease-in-out infinite;
           animation-delay: 1.6s;
         }
         .letter-k-2 {
-          fill: #292929;
+          fill: ${theme === 'dark' ? "white" : "#292929"};
           animation: fadeInOut 3s ease-in-out infinite;
           animation-delay: 1.8s;
         }
         .letter-e {
-          fill: #292929;
+          fill: ${theme === 'dark' ? "white" : "#292929"};
           animation: fadeInOut 3s ease-in-out infinite;
           animation-delay: 2.0s;
         }
         .letter-r {
-          fill: #292929;
+          fill: ${theme === 'dark' ? "white" : "#292929"};
           animation: fadeInOut 3s ease-in-out infinite;
           animation-delay: 2.4s;
         }

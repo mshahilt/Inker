@@ -145,7 +145,7 @@ export function AppSidebar() {
                         {isAuthenticated ? <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <SidebarMenuButton className="h-fit">
-                                        <Avatar className="rounded">
+                                        <Avatar className="rounded -translate-x-2">
                                             <AvatarImage
                                                 src={user?.profilePicture || DEFAULT_IMG}/>
                                             <AvatarFallback>U</AvatarFallback>
@@ -157,7 +157,7 @@ export function AppSidebar() {
                                         <ChevronUp className="ml-auto"/>
                                     </SidebarMenuButton>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-]">
+                                <DropdownMenuContent side="top" className=" w-[--radix-popper-anchor-]">
                                     <DropdownMenuItem onClick={() => navigate(`/profile/${user?.username}`)}>
                                         <span>Profile</span>
                                     </DropdownMenuItem>

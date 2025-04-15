@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import useAuthStore from "@/store/authStore";
 import { useBlogStore } from "@/store/blogStore";
 import { DEFAULT_IMG } from "@/utils/constents";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ProfileInfo: FC = () => {
-  const {setAuthorId,setLoading} = useBlogStore()
+  const {setAuthorId,setLoading, isLoading} = useBlogStore()
   const [userDetails, setUserDetails] = useState<ProfileData>((): ProfileData => {
     return {
       username: '',
@@ -28,9 +29,9 @@ const ProfileInfo: FC = () => {
   const navigate = useNavigate();
   const { userTag }  = useParams() ;
   const {user} = useAuthStore()
+
   useEffect(() => {
     setLoading(true)
-    setAuthorId('')
     const fetchUserProfile = async () => {
 
       let result: {
@@ -47,7 +48,7 @@ const ProfileInfo: FC = () => {
     };
 
     fetchUserProfile();
-  }, [user, userTag, setAuthorId, setLoading]);
+  }, [ userTag, setAuthorId, setLoading]);
 
   return (
     <div className="min-w-[300px]  lg:w-[400px] p-2 lg:border-x lg:h-full">
@@ -63,11 +64,13 @@ const ProfileInfo: FC = () => {
       </div>
 
       <div className="w-full  p-1 rounded-3xl mb-3 flex items-center">
-        <img
+        { isLoading ? 
+        <Skeleton className="w-[100px] h-[100px] rounded-md"/>
+         : <img
           className="w-26 h-26 rounded-3xl"
           src={userDetails?.profilePicture || DEFAULT_IMG}
           alt=""
-        />
+        /> }
         <div className="flex justify-around w-full">
           <div className="flex flex-col items-center">
             <p>followers</p>
@@ -81,14 +84,21 @@ const ProfileInfo: FC = () => {
       </div>
 
       <div className="p-2 flex flex-col gap-3">
-        <p className="text-xl font-semibold">{userDetails?.name}</p>
-        <p className="text-sm px-1 font-light text-muted-foreground">
+      { isLoading ? 
+        <Skeleton className="w-[50%] h-6 rounded-md"/>
+         :  <p className="text-xl font-semibold">{userDetails?.name}</p> }
+
+         { isLoading ? 
+        <Skeleton className="w-full h-26 rounded-3xl"/>
+         : <p className="text-sm px-1 font-light text-muted-foreground">
           {userDetails?.bio}
-        </p>
-        <div className="flex gap-2 items-center mt-2">
+        </p>}
+        { isLoading ? 
+        <Skeleton className="w-full h-3 rounded-3xl"/>
+         : <div className="flex gap-2 items-center mt-2">
           <p className="text-sm text-gray-600">@{userDetails?.username}</p>
           <p className="text-xs text-gray-400">. Joined {formatDateToMonthYear(userDetails?.createdAt)}</p>
-        </div>
+        </div>}
         <div className="flex gap-2 text-sm font-light text-muted-foreground">
           <p>
             <span className="font-semibold text-foreground">0</span> Posts
@@ -103,7 +113,11 @@ const ProfileInfo: FC = () => {
       </div>
       <div className="mt-4 px-2">
         <h2 className="text-lg font-semibold mb-2">Social Links</h2>
-        <div className="flex flex-wrap gap-2">
+        { isLoading ? 
+        <>
+        <Skeleton className="w-26 h-10 mt-2"/>
+        <Skeleton className="w-26 h-10 mt-2"/>
+         </>: <div className="flex flex-wrap gap-2">
           {userDetails.socialLinks.length > 0 ? (
             userDetails.socialLinks.map((link, index) => (
               <div className="hover:bg-muted px-4 py-1 rounded-full border transition-all text-sm duration-300 hover:scale-105">
@@ -120,7 +134,7 @@ const ProfileInfo: FC = () => {
           ) : (
             <p className="text-gray-500 text-sm">No social links added.</p>
           )}
-        </div>
+        </div>}
       </div>
     </div>
   );
