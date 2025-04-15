@@ -1,20 +1,15 @@
-
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { Blog } from "@/types";
 import { formatBlogTimestamp } from "@/utils/formateDate";
 import { FC } from "react";
-
 
 interface BlogCardProps {
   blog: Blog;
 }
 
 const BlogCard: FC<BlogCardProps> = ({ blog }) => {
-
-
-
-  const fallbackThumbnail = "https://tse1.mm.bing.net/th?id=OIP.kkJ4tBMv2tT9OqxmUWlQFgHaEK&pid=Api&P=0&h=180";
-
+  const fallbackThumbnail =
+    "https://tse1.mm.bing.net/th?id=OIP.kkJ4tBMv2tT9OqxmUWlQFgHaEK&pid=Api&P=0&h=180";
 
   return (
     <div className="max-w-[400px] w-full rounded-lg justify-items-stretch">
@@ -28,8 +23,10 @@ const BlogCard: FC<BlogCardProps> = ({ blog }) => {
         </p>
       </CardHeader>
 
-      <div className="flex max-w-[400px] w-full overflow-y-auto  gap-2 mt-2"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <div
+        className="flex max-w-[400px] w-full overflow-y-auto  gap-2 mt-2"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
         {blog.tags.map((tag: string, index: number) => (
           <span
             key={index}
@@ -42,7 +39,7 @@ const BlogCard: FC<BlogCardProps> = ({ blog }) => {
 
       <div className="mt-3">
         <img
-          src={fallbackThumbnail}
+          src={blog.thumbnail || fallbackThumbnail}
           alt={blog.title}
           className="w-full h-48 object-cover rounded-md  hover:cursor-pointer"
         />

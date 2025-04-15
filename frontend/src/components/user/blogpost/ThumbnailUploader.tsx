@@ -23,7 +23,7 @@ export const ThumbnailUploader: React.FC = () => {
     const file = e.target.files?.[0];
     if (file) {
       const url = URL.createObjectURL(file);
-      setThumbnail({ name: file.name, url })
+      setThumbnail({ name: file.name, url, file });
     }
   }, [setThumbnail]);
 

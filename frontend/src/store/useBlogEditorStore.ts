@@ -4,13 +4,13 @@ import { blogService } from "@/services/blogServices";
 import { AxiosError } from "axios";
 
 interface BlogEditorState {
-    thumbnail: { name: string; url: string } | null;
+    thumbnail: { name: string; url: string, file?: File} | null;
     title: string;
     content: string;
     tags: string[];
     editingBlogId: string | undefined;
     isLoading: boolean;
-    setThumbnail: (thumbnail: { name: string; url: string } | null) => void
+    setThumbnail: (thumbnail: { name: string; url: string, file?: File } | null) => void
     setTitle: (title: string) => void;
     setContent: (content: string) => void;
     addTag: (tag: string) => void;
@@ -34,15 +34,23 @@ export const useBlogEditorStore = create<BlogEditorState>((set, get) => ({
     removeTag: (tag) => set((state) => ({ tags: state.tags.filter((t) => t !== tag) })),
 
     saveBlog: async () => {
-        const { title, content, tags, editingBlogId } = get();
+        const { title, content, tags, editingBlogId, thumbnail } = get();
         set({ isLoading: true });
 
         try {
+
+            let thumbnailUrl: string | undefined;
+            if (thumbnail?.file) {
+                thumbnailUrl = await blogService.uploadImage(thumbnail.file);
+            } else if (thumbnail?.url) {
+                thumbnailUrl = thumbnail.url; 
+            }
             if (editingBlogId) {
-                const res = await blogService.editBlog(editingBlogId, { title, content, tags });
+                const res = await blogService.editBlog(editingBlogId, { title, content, tags, thumbnail: thumbnailUrl });
                 toast.success(res.message || 'Updated edited blog.');
             } else {
-                const res = await blogService.createBlog({ title, content, tags });
+                const res = await blogService.createBlog({ title, content, tags, thumbnail: thumbnailUrl });
+                console.log(res)
                 toast.success(res.message || 'Saved new blog');
             }
         } catch (error: unknown) {
@@ -60,10 +68,10 @@ export const useBlogEditorStore = create<BlogEditorState>((set, get) => ({
         try {
             if (editingBlogId) {
                 const res = await blogService.getBlogById(editingBlogId);
-                const { title, content, tags } = res
-                set({ title, content, tags, editingBlogId })
+                const { title, content, tags, thumbnail } = res
+                set({ title, content, tags, editingBlogId, thumbnail: thumbnail ? { name: "thumbnail", url: thumbnail } : null, })
             } else {
-                set({ title: '', content: '', tags: [] })
+                set({ title: '', content: '', tags: [], thumbnail: null, editingBlogId: undefined })
             }
             return true
         } catch (error: unknown) {
