@@ -21,7 +21,7 @@ const ProfileInfo: FC = () => {
       name: '',
       bio: '',
       resume: '',
-      created_at: '',
+      createdAt: '',
       socialLinks: []
     };
   });
@@ -47,7 +47,7 @@ const ProfileInfo: FC = () => {
     };
 
     fetchUserProfile();
-  }, [user, userTag, setAuthorId]);
+  }, [user, userTag, setAuthorId, setLoading]);
 
   return (
     <div className="min-w-[300px]  lg:w-[400px] p-2 lg:border-x lg:h-full">
@@ -87,7 +87,7 @@ const ProfileInfo: FC = () => {
         </p>
         <div className="flex gap-2 items-center mt-2">
           <p className="text-sm text-gray-600">@{userDetails?.username}</p>
-          <p className="text-xs text-gray-400">. Joined {formatDateToMonthYear(userDetails?.created_at)}</p>
+          <p className="text-xs text-gray-400">. Joined {formatDateToMonthYear(userDetails?.createdAt)}</p>
         </div>
         <div className="flex gap-2 text-sm font-light text-muted-foreground">
           <p>

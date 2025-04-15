@@ -2,6 +2,7 @@ import {create} from 'zustand/index';
 import {devtools, persist} from 'zustand/middleware';
 import {IUser} from "shared/types";
 import {AuthService} from '@/services/authServices';
+import { toast } from 'sonner';
 
 interface AuthState {
     user: Partial<IUser> | null
@@ -13,9 +14,9 @@ interface AuthState {
 }
 
 interface AuthStore extends AuthState {
-    login: (email: string, password: string) => Promise<void>;
+    login: (email: string, password: string) => Promise<boolean>;
     googleAuthLogin: (token: string) => Promise<void>;
-    register: (name: string, email: string, password: string) => Promise<void>;
+    register: (name: string, email: string, password: string) => Promise<boolean>;
     refreshUser: () => Promise<void>;
     fetchUser: () => Promise<void>;
     logout: () => Promise<{ error: string | null, status: boolean }>;
@@ -38,16 +39,15 @@ export const useAuthStore = AuthStore(
                     error: null,
                     signUpError: null,
 
-                    login: async (email, password) => {
+                    login: async (email, password): Promise<boolean> => {
                         set({isLoading: true, error: null});
-                        // const {data, error} = await auth.login(email, password);
                         const {data, error} = await AuthService.loginService({email, password});
 
                         if (error) {
                             set({error: error, isLoading: false});
-                            return;
+                            return false;
                         }
-
+                        toast.success('Logged in successfully.')
                         const {user, accessToken} = data;
 
                         set({
@@ -56,6 +56,7 @@ export const useAuthStore = AuthStore(
                             isAuthenticated: true,
                             isLoading: false,
                         });
+                        return true
                     },
 
                     googleAuthLogin: async (token: string) => {
@@ -77,17 +78,15 @@ export const useAuthStore = AuthStore(
                         });
                     },
 
-                    register: async (name: string, email: string, password: string) => {
+                    register: async (name: string, email: string, password: string): Promise<boolean> => {
                         set({isLoading: true, signUpError: null});
                         const {data, error} = await AuthService.registerService({name, email, password});
-
+                        
                         if (error) {
                             set({signUpError: error, isLoading: false});
-                            return;
+                            return false
                         }
-
-                        console.log('signup data', data);
-
+                        toast.success('OTP shared successfully')
                         const {user, token: accessToken} = data;
 
                         set({
@@ -96,6 +95,7 @@ export const useAuthStore = AuthStore(
                             isAuthenticated: true,
                             isLoading: false,
                         });
+                        return true
                     },
 
                     logout: async () => {
@@ -106,7 +106,6 @@ export const useAuthStore = AuthStore(
                             return {error: error, status: false};
                         }
                         await getState().clearState();
-                        console.log('Logged out');
                         return {error: null, status: true};
                     },
 

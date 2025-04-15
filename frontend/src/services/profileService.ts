@@ -22,7 +22,7 @@ export interface ProfileData extends UpdateProfileData {
     role: "user" | "admin";
     profilePicture: string;
     dateOfBirth: string; 
-    created_at: string; 
+    createdAt: string; 
     updatedAt?: string; 
   }
 

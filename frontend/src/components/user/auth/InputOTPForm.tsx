@@ -25,6 +25,7 @@ import { useState } from "react"
 import { AuthService } from "@/services/authServices"
 import { toast } from "sonner"
 import { Loader2 } from "lucide-react"
+import useAuthStore from "@/store/authStore"
 
 
 
@@ -39,17 +40,18 @@ export function InputOTPForm() {
             otp: "",
         },
     })
-
+    const {setState} = useAuthStore()
     const onSubmit = async (data: z.infer<typeof OtpSchema>) => {
         setIsLoading(true)
         const email = location.state?.email as string
 
         try {
             const response = await AuthService.otpVerificationService({ ...data, email })
-            navigate('/home')
             if (response.data?.message) {
+                setState({isLoading: false, isAuthenticated: false, user: response?.data?.user, accessToken: response?.data?.token})
+                navigate('/feed')
                 toast.success(response.data?.message)
-            }
+            } 
         } catch (error: unknown) {
             if (error instanceof Error) {
                 toast.error(error.message);

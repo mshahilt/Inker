@@ -41,7 +41,7 @@ const ProfileFeed: FC = () => {
         break;
     }
 
-  }, [getBlogsByAuthor, activeTab, authorId]);
+  }, [getBlogsByAuthor, activeTab, authorId, currentPage]);
 
 
   const handleDelete = (blogId: string) => {
