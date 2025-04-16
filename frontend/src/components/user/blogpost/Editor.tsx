@@ -65,7 +65,7 @@ export const Editor: React.FC<EditorProps> = ({ isEditMode }) => {
     <div data-color-mode="dark">
       <ThumbnailUploader />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSave)} onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}>
+        <form onSubmit={form.handleSubmit(handleSave)}>
           {/* Post Title */}
           <FormField
             control={form.control}
