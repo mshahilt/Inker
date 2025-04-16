@@ -117,9 +117,13 @@ export class BlogController implements IBlogController {
   async uploadImage(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       if (!req.file) {
-        throw new Error("No file uploaded");
+        if(req.fileValidationError) {
+          res.status(HttpStatus.BAD_REQUEST).json({ error: req.fileValidationError })
+        } else {
+          throw new Error("No file uploaded");
+        }
       }
-      const signedUrl = await this.blogService.uploadImage(req.file);
+      const signedUrl = await this.blogService.uploadImage(req.file as Express.Multer.File);
       res.status(HttpStatus.OK).json({ url: signedUrl });
     } catch (error) {
       next(error);

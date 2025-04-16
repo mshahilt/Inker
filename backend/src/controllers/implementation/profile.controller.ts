@@ -73,6 +73,13 @@ export class ProfileController implements IProfileController {
       const { id } = JSON.parse(req.headers["x-user-payload"] as string)
       const file = req.file as Express.Multer.File;
 
+      if(!file) {
+        if(req.fileValidationError) {
+          res.status(HttpStatus.BAD_REQUEST).json({ error: req.fileValidationError })
+        }
+        
+      }
+
       const profileUrl = await this._profileService.updateProfilePicture(id, file);
 
       res.status(HttpStatus.OK).json({ message: HttpResponse.PROFILE_PICTURE_CHANGED, profileUrl });
