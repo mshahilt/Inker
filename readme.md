@@ -78,8 +78,17 @@ The forked repository will be available in "your repositories".
    > ```bash
    > sudo kill -9 $(sudo lsof -t -i:27017)
    > ```
+2. **Configure Environment Variables**
 
-2. **Access the applications**
+- Before running the project, copy the `.env.example` file and rename it to `.env`:
+
+  ```bash
+  cp .env.example .env
+  ```
+- Then,update the values with your own credentials (e.g., database URL, API keys, secrets).
+  This file is required for the application to run correctly.
+
+3. **Access the applications**
    - Frontend: [http://localhost:5173](http://localhost:5173)
    - Backend: [http://localhost:3000](http://localhost:3000)
 
