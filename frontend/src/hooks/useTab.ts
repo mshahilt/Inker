@@ -1,11 +1,11 @@
 import * as React from "react";
 
-export function useIsMobile() {
-  const [isMobile, setIsMobile] = React.useState(false);
+export function useIsTab() {
+  const [isTab, setIsTab] = React.useState(false);
 
   React.useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsTab(window.innerWidth < 1024);
     };
 
     handleResize();
@@ -14,5 +14,5 @@ export function useIsMobile() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  return isMobile;
+  return isTab;
 }
