@@ -49,7 +49,7 @@ export const FormLayout = ({ isSwap, setSwap }: PropsType) => {
         setTimeout(() => {
             setCssAnimation("");
         }, 500);
-    }, [authState]);
+    }, [authState, setSwap, setCssAnimation]);
 
     return (
         <div
