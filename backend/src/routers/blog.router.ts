@@ -5,7 +5,7 @@ import { BlogService } from "@/services/implementation/blog.service";
 import { BlogController } from "@/controllers/implementation/blog.controller";
 import { UserRepository } from "@/repositories/implementation/user.repository";
 import { createBlogSchema, editBlogSchema } from "@/schema";
-import authenticate from "@/middlewares/verify-token.middleware";
+import verifyToken from "@/middlewares/verify-token.middleware";
 import { uploadMiddleware } from "@/middlewares";
 
 const router = Router();
@@ -18,43 +18,44 @@ const blogController = new BlogController(blogService);
 router.post(
   "/",
   validate(createBlogSchema),
-  authenticate("user"),
+  verifyToken("user"),
   blogController.createBlog.bind(blogController)
 );
 
 router.get(
   "/",
-  authenticate("user"),
+  verifyToken("user"),
   blogController.getAllBlogs.bind(blogController)
 );
 
 router.get(
   "/:id",
-  authenticate("user"),
+  verifyToken("user"),
   blogController.getBlogById.bind(blogController)
 );
 
 router.get(
   "/user/:id",
-  authenticate("user"),
+  verifyToken("user"),
   blogController.getBlogByAuthorId.bind(blogController)
 );
 
 router.put(
   "/:id",
   validate(editBlogSchema),
-  authenticate("user"),
+  verifyToken("user"),
   blogController.updateBlog.bind(blogController)
 );
 
 router.delete(
   "/:id",
-  authenticate("user"),
+  verifyToken("user"),
   blogController.deleteBlog.bind(blogController)
 );
 
 router.post(
   '/upload-image',
+  verifyToken("user"),
   uploadMiddleware('image'),
   blogController.uploadImage.bind(blogController)
 )
