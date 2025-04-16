@@ -1,0 +1,11 @@
+body{
+    outline: none;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+html {
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    will-change: auto;
+}
