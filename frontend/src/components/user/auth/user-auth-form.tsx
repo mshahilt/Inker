@@ -89,7 +89,12 @@ export const UserAuthForm: FC<PropsType> = ({ delayedAuthState }) => {
                                                 <Label className="text-sm" htmlFor="name">
                                                     Name
                                                 </Label>
-                                                <Input id="name" placeholder="Name" {...field} />
+                                                <Input
+                                                    required
+                                                    id="name"
+                                                    placeholder="Name"
+                                                    {...field}
+                                                />
                                             </div>
                                         </FormControl>
                                         <FormMessage />
@@ -109,7 +114,12 @@ export const UserAuthForm: FC<PropsType> = ({ delayedAuthState }) => {
                                             <Label className="text-sm" htmlFor="email">
                                                 Email
                                             </Label>
-                                            <Input id="email" placeholder="Email" {...field} />
+                                            <Input
+                                                required
+                                                id="email"
+                                                placeholder="Email"
+                                                {...field}
+                                            />
                                         </div>
                                     </FormControl>
                                     <FormMessage />
