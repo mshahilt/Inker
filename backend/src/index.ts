@@ -39,6 +39,10 @@ app.use(express.urlencoded({ extended: true }));
 connectDb();
 connectRedis();
 
+app.get('/health', (_req, res) => {
+  console.log('health checkup')
+  res.status(200).send('Healthy')
+})
 app.use("/api/auth", authRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/blog", blogRouter);
