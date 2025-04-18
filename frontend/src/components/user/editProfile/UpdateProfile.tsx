@@ -8,6 +8,7 @@ import { ProfileService } from '@/services/profileService'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import useAuthStore from '@/store/authStore'
+import { updateProfileSchema } from '@/schemas/userSchema'
 
 interface SocialLink {
   platform: string;
@@ -15,18 +16,18 @@ interface SocialLink {
 }
 
 const UpdateProfile: FC = () => {
-  const {user} = useAuthStore()
+  const { user } = useAuthStore()
   const [fullName, setFullName] = useState('');
   const [bio, setBio] = useState('');
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([
     { platform: '', url: '' },
   ]);
 
-    useEffect(() => {
-      if (user?.name) setFullName(user?.name)
-      if (user?.bio) setBio(user.bio)
-      if (user?.socialLinks) setSocialLinks(user?.socialLinks)
-    },[user])
+  useEffect(() => {
+    if (user?.name) setFullName(user?.name)
+    if (user?.bio) setBio(user.bio)
+    if (user?.socialLinks) setSocialLinks(user?.socialLinks)
+  }, [user])
 
   const handleSocialLinkChange = (index: number, platform: string, url: string) => {
     const updated = [...socialLinks];
@@ -44,9 +45,23 @@ const UpdateProfile: FC = () => {
       bio,
       socialLinks: socialLinks.filter(link => link.platform && link.url),
     };
-    const { message } = await ProfileService.updateProfileService(payload)
-    if (message) toast.success(message)
-    
+
+    const result = updateProfileSchema.safeParse(payload);
+
+    if (!result.success) {
+      const errors = result.error.flatten().fieldErrors;
+      Object.values(errors).forEach((errorArray) => {
+        if (errorArray) {
+          errorArray.forEach(err => toast.error(err));
+        }
+      });
+      return;
+    }
+
+    const { message } = await ProfileService.updateProfileService(payload);
+    if (message) toast.success(message);
+
+
   };
 
   return (
