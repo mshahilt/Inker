@@ -32,5 +32,7 @@ export const HttpResponse = {
     REQUIRED_AUTHOR_NAME: "Author name is required",
     REQUIRED_TITLE: "Blog title is required",
     REQUIRED_CONTENT: "Blog content is required",
-    BLOG_IMAGE_NOT_FOUND: "Blog thumbnail not found"
+    BLOG_IMAGE_NOT_FOUND: "Blog thumbnail not found",
+    UNFOLLOWED_SUCCESSFULL: "Unfollowed successfully",
+    FOLLOWED_SUCCESSFULL : "Followed successfully"
 };
