@@ -3,11 +3,13 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { cn } from "@/lib/cn";
 import { Button } from "@/components/ui/button";
 import { useIsTab } from "@/hooks/useTab";
+import { useNavigate } from "react-router-dom";
+import LightLogo from "@/assets/inker_main.svg";
 
 // Interface for Props
 interface PropsType {
     isSwap: boolean;
-    setSwap: React.Dispatch<React.SetStateAction<boolean>>;
+    setSwap: (isSwap: boolean) => void;
 }
 
 // Form layout component
@@ -17,6 +19,17 @@ export const FormLayout = ({ isSwap, setSwap }: PropsType) => {
     const [delayedAuthState, setDelayedAuthState] = useState<
         "login" | "register" | ""
     >("");
+
+    useLayoutEffect(() => {
+        setAuthState("login");
+        setDelayedAuthState("login");
+    }, []);
+
+    // Navigate
+    const navigate = useNavigate();
+
+    // isTabSize
+    const isTabSize = useIsTab();
 
     // Css state
     const [cssAnimation, setCssAnimation] = useState<string>("");
@@ -37,8 +50,6 @@ export const FormLayout = ({ isSwap, setSwap }: PropsType) => {
     }, [authState]);
 
     // Swap
-    const isTabSize = useIsTab(); // Assuming your custom hook is imported
-
     useEffect(() => {
         setSwap(authState === "register");
 
@@ -63,8 +74,17 @@ export const FormLayout = ({ isSwap, setSwap }: PropsType) => {
                     : "translate-x-0"
             )}
         >
+            {isTabSize && (
+                <img
+                    src={LightLogo}
+                    className="fixed z-[60] left-5 top-5 w-24 transition-opacity duration-300"
+                    alt="Inker"
+                    onClick={() => navigate("/")}
+                />
+            )}
+
             <div className="mx-auto flex w-full flex-col justify-center space-y-2 px-5 sm:px-0 sm:w-[400px]">
-                <div className="flex flex-col space-y-2 text-left mb-8">
+                <div className="flex flex-col space-y-3 text-left mb-10">
                     <h1 className="text-3xl text-center font-medium font-serif tracking-tight transition-all duration-500">
                         {delayedAuthState === "login"
                             ? "Welcome Back!"
@@ -88,7 +108,9 @@ export const FormLayout = ({ isSwap, setSwap }: PropsType) => {
                             Or continue with
                         </span>
                     </div>
-                </div> */}
+            </div>
+
+            {/* Link */}
                 <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
                     {delayedAuthState === "login" ? (
                         <span className="space-y-2 text-nowrap">

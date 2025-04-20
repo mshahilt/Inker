@@ -20,6 +20,8 @@ export interface ProfileData extends UpdateProfileData {
     role: "user" | "admin";
     profilePicture: string;
     dateOfBirth: string; 
+    followers: number | null;
+    followings: number | null;
     createdAt: string; 
     updatedAt?: string; 
   }

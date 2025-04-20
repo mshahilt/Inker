@@ -23,6 +23,7 @@ import { env } from "@/configs";
 import profileRouter from "./routers/profile.router";
 import blogRouter from "./routers/blog.router";
 import voteRouter from "./routers/vote.router";
+import followRouter from "./routers/follow.router";
 
 const app = express();
 app.use(
@@ -40,8 +41,13 @@ app.use(express.urlencoded({ extended: true }));
 connectDb();
 connectRedis();
 
+app.get('/health', (_req, res) => {
+  console.log('health checkup')
+  res.status(200).send('Healthy')
+})
 app.use("/api/auth", authRouter);
 app.use("/api/profile", profileRouter);
+app.use("/api/follow", followRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/vote", voteRouter);
 

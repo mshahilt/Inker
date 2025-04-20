@@ -18,7 +18,7 @@ export const sendOtpEmail = async (email: string, otp: string) => {
             `,
     };
 
-    const info = await transporter.sendMail(mailOptions);
+   await transporter.sendMail(mailOptions);
   } catch (err) {
     console.error("Error sending verification email:", err);
     throw new Error("Error sending otp email");

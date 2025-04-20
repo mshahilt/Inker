@@ -71,7 +71,7 @@ export const useAuthStore = AuthStore(
                         }
 
                         const {user, token: accessToken} = data;
-
+                        console.log('This sithe  AccessToken::::',accessToken)
                         set({
                             user,
                             accessToken,

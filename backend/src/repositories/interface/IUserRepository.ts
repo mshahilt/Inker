@@ -1,4 +1,5 @@
 import { IUserModel } from "@/models/implementation/user.model";
+import { Types } from "mongoose";
 
 export interface IUserRepository {
   create(user: IUserModel): Promise<IUserModel>;
@@ -23,4 +24,7 @@ export interface IUserRepository {
 
   updateProfilePicture(id: string, profilePicture: string): Promise<void>;
 
+  incrementFollow(followerId: Types.ObjectId, followingId: Types.ObjectId): Promise<void> 
+
+  decrementFollow(followerId: Types.ObjectId, followingId: Types.ObjectId): Promise<void>
 }
