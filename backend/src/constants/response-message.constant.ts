@@ -38,5 +38,5 @@ export const HttpResponse = {
     VOTE_REMOVED: "Vote Deleted Successfully",
     VOTE_ALREADY_EXISTS: "Vote already exist",
     VOTE_NOT_FOUND: "Vote not found",
-    TOO_MANY_REQUESTS: "Too many voting requests, please try again later."
+    TOO_MANY_REQUESTS: "Too many requests, please try again later."
 };

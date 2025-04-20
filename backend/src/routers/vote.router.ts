@@ -6,7 +6,7 @@ import { VoteController } from "@/controllers/implementation/vote.controller";
 import { validate } from "@/middlewares/validate.middleware";
 import { updateVoteSchema } from "@/schema";
 import { BlogRepository } from "@/repositories/implementation/blog.repository";
-import { voteRateLimiter } from "@/middlewares/ratelimit"; 
+import { voteRateLimiter } from "@/middlewares/ratelimit.middleware"; 
 
 const router = Router();
 
