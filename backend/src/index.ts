@@ -22,6 +22,7 @@ import { errorHandler } from "@/middlewares";
 import { env } from "@/configs";
 import profileRouter from "./routers/profile.router";
 import blogRouter from "./routers/blog.router";
+import voteRouter from "./routers/vote.router";
 import followRouter from "./routers/follow.router";
 
 const app = express();
@@ -48,6 +49,8 @@ app.use("/api/auth", authRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/follow", followRouter);
 app.use("/api/blog", blogRouter);
+app.use("/api/vote", voteRouter);
+
 app.use(notFoundHandler);
 app.use(errorHandler);
 

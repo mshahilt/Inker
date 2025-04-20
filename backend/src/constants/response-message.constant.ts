@@ -33,6 +33,12 @@ export const HttpResponse = {
     REQUIRED_TITLE: "Blog title is required",
     REQUIRED_CONTENT: "Blog content is required",
     BLOG_IMAGE_NOT_FOUND: "Blog thumbnail not found",
+    VOTE_ADDED: "Vote Added Successfully",
+    VOTE_UPDATED: "Vote Updated Successfully",
+    VOTE_REMOVED: "Vote Deleted Successfully",
+    VOTE_ALREADY_EXISTS: "Vote already exist",
+    VOTE_NOT_FOUND: "Vote not found",
+    TOO_MANY_REQUESTS: "Too many requests, please try again later."
     UNFOLLOWED_SUCCESSFULL: "Unfollowed successfully",
     FOLLOWED_SUCCESSFULL : "Followed successfully"
 };

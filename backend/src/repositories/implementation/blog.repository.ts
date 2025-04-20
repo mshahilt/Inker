@@ -1,7 +1,7 @@
 import { BaseRepository } from "../base.repository";
 import { IBlogRepository } from "../interface/IBlogRepository";
 import Blog, { IBlogModel } from "@/models/implementation/blog.model";
-import { Types } from "mongoose";
+import { Types,UpdateQuery } from "mongoose";
 
 export class BlogRepository
   extends BaseRepository<IBlogModel>
@@ -49,6 +49,14 @@ export class BlogRepository
   ): Promise<IBlogModel | null> {
     await this.updateOne({_id: blogId, authorId}, updateData);
     return await this.findOne({_id: blogId, authorId})
+  }
+
+  async updateBlogVote(
+    blogId: Types.ObjectId,
+    updateData: UpdateQuery<IBlogModel>
+  ): Promise<IBlogModel | null> {
+    await this.updateOne({ _id: blogId }, updateData);
+    return await this.findOne({ _id: blogId });
   }
 
   async deleteBlog(blogId: Types.ObjectId, authorId: Types.ObjectId): Promise<IBlogModel | null> {

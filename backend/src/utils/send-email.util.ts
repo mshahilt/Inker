@@ -6,7 +6,7 @@ export const sendOtpEmail = async (email: string, otp: string) => {
   try {
     
     const mailOptions = {
-      from: '',
+      from: `"Inker" <${env.SENDER_EMAIL}>`,
       to: email,
       subject: "inker OTP Verificaiton",
       html: `
