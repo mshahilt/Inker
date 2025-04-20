@@ -28,7 +28,8 @@ export interface IBlog {
   thumbnail: string;
   content: string;
   tags: string[];
-  votes: number;
+  upVotes: number;
+  downVotes: number;
   comments: number;
   createdAt: Date;
   updatedAt: Date;

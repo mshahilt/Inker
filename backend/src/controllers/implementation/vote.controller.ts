@@ -9,7 +9,7 @@ export class VoteController implements IVoteController {
 
   async upVote(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { blogId } = req.body;
+      const blogId = req.query.blogId as string;
       const { id: userId } = JSON.parse(req.headers["x-user-payload"] as string);
       await this._voteService.updateUpVote(userId, blogId);
      
@@ -21,7 +21,7 @@ export class VoteController implements IVoteController {
 
   async downVote(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { blogId } = req.body;
+      const blogId = req.query.blogId as string;
       const { id: userId } = JSON.parse(req.headers["x-user-payload"] as string);
       
        await this._voteService.updateDownVote(userId, blogId);

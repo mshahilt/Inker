@@ -15,7 +15,7 @@ const blogRepository = new BlogRepository();
 const voteService = new VoteService(voteRepository, blogRepository);
 const voteController = new VoteController(voteService);
 
-router.post(
+router.get(
     "/upvote",
     verifyToken("user"),
     voteRateLimiter,
@@ -23,7 +23,7 @@ router.post(
     voteController.upVote.bind(voteController)
 );
 
-router.post(
+router.get(
     "/downvote",
     verifyToken("user"),
     voteRateLimiter,
