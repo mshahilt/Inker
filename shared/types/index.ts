@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export interface IUser {
   _id: string;
   username: string;
@@ -7,6 +9,8 @@ export interface IUser {
   status: "active" | "blocked";
   role: "user" | "moderator";
   bio: string;
+  followers: number,
+  followings : number,
   profilePicture?: string;
   socialLinks: { platform: string; url: string }[];
   resume?: string;
@@ -36,4 +40,11 @@ export interface ICreateBlogRequestDTO {
   content: string;
   authorName: string;
   authorId: string;
+}
+
+// Interface for a follow document
+export interface IFollow extends Document {
+  followerId: Types.ObjectId;   // user who follows
+  followingId: Types.ObjectId;  // user being followed
+  createdAt?: Date;
 }

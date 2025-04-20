@@ -99,4 +99,31 @@ export class UserRepository extends BaseRepository<IUserModel> implements IUserR
         throw new Error("error while updating profile picture")
       }
   }
+
+    async incrementFollow(followerId: Types.ObjectId, followingId: Types.ObjectId): Promise<void> {
+      try {
+      console.log('follower //////////////  id :::',followerId)
+      console.log('followingId ///////////// id :::',followingId)
+      const respo = await Promise.all([
+        this.model.findByIdAndUpdate(followerId, { $inc: { followings: 1 } }),
+        this.model.findByIdAndUpdate(followingId, { $inc: { followers: 1 } }),
+      ]);
+      console.log('the is the respooo',respo)
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error incrementing followers/followings count");
+    }
+  }
+
+  async decrementFollow(followerId: Types.ObjectId, followingId: Types.ObjectId): Promise<void> {
+    try {
+      await Promise.all([
+        this.model.findByIdAndUpdate(followerId, { $inc: { followings: -1 } }),
+        this.model.findByIdAndUpdate(followingId, { $inc: { followers: -1 } }),
+      ]);
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error decrementing followers/followings count");
+    }
+  }
 }

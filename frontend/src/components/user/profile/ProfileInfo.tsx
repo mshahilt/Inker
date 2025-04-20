@@ -8,9 +8,14 @@ import useAuthStore from "@/store/authStore";
 import { useBlogStore } from "@/store/blogStore";
 import { DEFAULT_IMG } from "@/utils/constents";
 import { Skeleton } from "@/components/ui/skeleton";
+import { followService } from "@/services/followServices";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 const ProfileInfo: FC = () => {
-  const {setAuthorId,setLoading, isLoading} = useBlogStore()
+  const { setAuthorId, setLoading, isLoading } = useBlogStore()
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowLoading, setIsFollowLoading] = useState(false);
   const [userDetails, setUserDetails] = useState<ProfileData>((): ProfileData => {
     return {
       username: '',
@@ -22,13 +27,63 @@ const ProfileInfo: FC = () => {
       name: '',
       bio: '',
       resume: '',
+      followers: null,
+      followings : null,
       createdAt: '',
       socialLinks: []
     };
   });
   const navigate = useNavigate();
   const { userTag }  = useParams() ;
-  const {user} = useAuthStore()
+  const { user } = useAuthStore()
+  
+  useEffect(() => {
+  const checkFollow = async () => {
+    if (!userDetails._id || user?._id === userDetails._id) return;
+
+    try {
+      const res = await followService.checkFollowStatus(userDetails._id);
+      setIsFollowing(res.isFollowing);
+    } catch (err) {
+        const error = err as AxiosError<{ message: string }>;
+        console.error("Error checking follow status:", error);
+        const message = error.response?.data?.message || "Failed to check follow status.";
+        toast.error(message);
+      }
+    };
+
+  checkFollow();
+  }, [userDetails._id, user?._id]);
+  
+  const handleFollowToggle = async () => {
+  setIsFollowLoading(true);
+  try {
+    const res = await followService.toggleFollow(userDetails._id);
+
+    if (res) {
+      setIsFollowing((prev) => !prev);
+
+      setUserDetails((prevDetails) => ({
+        ...prevDetails,
+        followers:
+          prevDetails.followers !== null
+            ? isFollowing
+              ? prevDetails.followers - 1
+              : prevDetails.followers + 1
+            : isFollowing
+              ? 0
+              : 1,
+      }));
+    }
+  } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      console.error("Error toggling follow:", error);
+      const message = error.response?.data?.message || "Something went wrong while toggling follow.";
+      toast.error(message);
+    } finally {
+      setIsFollowLoading(false);
+    }
+  };
 
   useEffect(() => {
     setLoading(true)
@@ -40,8 +95,7 @@ const ProfileInfo: FC = () => {
       } | null = null
 
       
-        result = await ProfileService.profileDetailsService(userTag as string);
-
+      result = await ProfileService.profileDetailsService(userTag as string);
 
       if (result.profileDetails?._id) setAuthorId(result.profileDetails?._id)
       setUserDetails(result.profileDetails)
@@ -57,10 +111,26 @@ const ProfileInfo: FC = () => {
           <ChevronLeft strokeWidth={1.8} className="md:hidden"  />
           <p> Profile</p>
         </div>
-
-       {userTag === user?.username && <Button className="active:scale-95" onClick={() => navigate("/account/profile")}>
-          Edit Profile
-        </Button>}
+       {/* Buttons */}
+      <div className="flex gap-3">
+        {userTag === user?.username ? (
+          <Button className="active:scale-95" onClick={() => navigate("/account/profile")}>
+            Edit Profile
+          </Button>
+        ) : (
+          <Button
+            className={`active:scale-95 ${isFollowing ? "bg-gray-200 hover:bg-gray-300 text-black" : ""}`}
+            onClick={handleFollowToggle}
+            disabled={isFollowLoading} // optionally disable to prevent spamming
+          >
+            {isFollowLoading ? (
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              isFollowing ? "Unfollow" : "Follow"
+            )}
+          </Button>
+        )}
+      </div>
       </div>
 
       <div className="w-full  p-1 rounded-3xl mb-3 flex items-center">
@@ -74,11 +144,11 @@ const ProfileInfo: FC = () => {
         <div className="flex justify-around w-full">
           <div className="flex flex-col items-center">
             <p>followers</p>
-            <p className="font-semibold">0</p>
+            <p className="font-semibold">{userDetails?.followers}</p>
           </div>
           <div className="flex flex-col items-center">
             <p>followings</p>
-            <p className="font-semibold">0</p>
+            <p className="font-semibold">{userDetails?.followings}</p>
           </div>
         </div>
       </div>
