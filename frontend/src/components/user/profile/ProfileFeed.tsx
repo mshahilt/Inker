@@ -149,7 +149,7 @@ const ProfileFeed: FC = () => {
                             <button className="flex items-center justify-center p-2 w-fit rounded hover:bg-muted cursor-pointer">
                               <ArrowBigUp size={17} strokeWidth={1} />
                             </button>
-                            {blog?.likes}
+                            {blog?.upVotes}
                             <div className="h-[25px] bg-muted-foreground/30 w-[1.5px]"></div>
                           </div>
                           <button className="flex items-center justify-center p-2 w-fit rounded hover:bg-muted cursor-pointer">
