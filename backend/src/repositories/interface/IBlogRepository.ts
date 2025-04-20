@@ -1,5 +1,5 @@
 import { IBlogModel } from "@/models/implementation/blog.model";
-import { Types } from "mongoose";
+import { Types,UpdateQuery } from "mongoose";
 
 export interface IBlogRepository {
   createBlog(blogData: Partial<IBlogModel>): Promise<IBlogModel>;
@@ -10,6 +10,10 @@ export interface IBlogRepository {
     blogId: Types.ObjectId,
     authorId: Types.ObjectId,
     updateData: Partial<IBlogModel>
+  ): Promise<IBlogModel | null>;
+  updateBlogVote(
+    blogId: Types.ObjectId,
+    updateData: UpdateQuery<IBlogModel>
   ): Promise<IBlogModel | null>;
   deleteBlog(blogId: Types.ObjectId, authorId: Types.ObjectId): Promise<IBlogModel | null>;
   updateUsername(authorId: string, username: string): Promise<void>;
