@@ -1,8 +1,7 @@
 import { IVoteRepository } from "../interface/IVoteRepository";
 import Vote, { IVote } from "../../models/implementation/vote.model";
 import { BaseRepository } from "../base.repository";
-import { Types,UpdateQuery } from "mongoose";
-// import { toObjectId } from "@/utils";
+import { Types } from "mongoose";
 
 export class VoteRepository extends BaseRepository<IVote> implements IVoteRepository {
   constructor() {

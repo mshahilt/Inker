@@ -24,7 +24,6 @@ export class VoteService implements IVoteService {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.BLOG_NOT_FOUND);
     }
   
-    const authorId = targetBlog.authorId;
     const existingVote = await this._voteRepository.findVoteByUserAndBlog(userId, blogId);
   
     if (!existingVote) {
@@ -54,7 +53,6 @@ export class VoteService implements IVoteService {
       throw createHttpError(HttpStatus.NOT_FOUND, HttpResponse.BLOG_NOT_FOUND);
     }
   
-    const authorId = targetBlog.authorId;
     const existingVote = await this._voteRepository.findVoteByUserAndBlog(userId, blogId);
   
     if (!existingVote) {
