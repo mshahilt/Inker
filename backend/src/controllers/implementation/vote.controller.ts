@@ -10,6 +10,12 @@ export class VoteController implements IVoteController {
   async upVote(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const blogId = req.query.blogId as string;
+
+      if (!blogId) {
+        res.status(HttpStatus.NOT_FOUND).json({ message: HttpResponse.BLOG_ID_NOT_FOUND})
+        return;
+      }
+        
       const { id: userId } = JSON.parse(req.headers["x-user-payload"] as string);
       await this._voteService.updateUpVote(userId, blogId);
      
