@@ -18,7 +18,8 @@ export interface Blog {
   attachmentUrls: string[];
   createdAt: string;
   updatedAt: string;
-  likes: number;
+  upVotes: number;
+  downVotes: number;
   comments: number;
 }
 
