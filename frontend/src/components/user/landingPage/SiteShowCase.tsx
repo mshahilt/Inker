@@ -1,5 +1,5 @@
 import { FC } from "react"
-import banck_img from "/blank-h9v8oske8iey8nkq.jpg"
+import banck_img from "../../../assets/svgviewer-output.svg"
 
 const SiteShowCase: FC = () => {
   return (

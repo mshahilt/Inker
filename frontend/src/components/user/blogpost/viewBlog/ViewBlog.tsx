@@ -49,7 +49,9 @@ export default function ViewBlog() {
             comments={currentBlog?.comments} 
             upVotes={currentBlog?.upVotes} 
             downVotes={currentBlog?.downVotes}
-            authorId={currentBlog?.authorId} />
+            authorId={currentBlog?.authorId} 
+            hasUpVoted={currentBlog?.hasUpVoted}
+            hasDownVoted={currentBlog?.hasDownVoted} />
 
             <CardTitle className="text-3xl font-bold text-foreground mt-5">
               {currentBlog.title}

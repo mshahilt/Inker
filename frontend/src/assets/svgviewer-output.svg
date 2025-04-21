@@ -1,0 +1,404 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <!-- Background with code-like pattern -->
+  <rect width="800" height="500" fill="#0D1117" />
+  
+  <!-- Animated code symbols in background -->
+  <g fill="#2A3144" font-family="monospace" font-size="14">
+    <!-- Row 1 - Web Development -->
+    <text x="30" y="20" opacity="0.5">
+      <tspan>&lt;div class="container"&gt;</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="280" y="20" opacity="0.4">
+      <tspan>function renderComponent()</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="5s" repeatCount="indefinite" />
+    </text>
+    <text x="550" y="20" opacity="0.5">
+      <tspan>&lt;/div&gt;</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 2 - React -->
+    <text x="20" y="45" opacity="0.3">
+      <tspan>import React, { useState } from 'react'</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="6s" repeatCount="indefinite" />
+    </text>
+    <text x="380" y="45" opacity="0.4">
+      <tspan>const [data, setData] = useState([])</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="670" y="45" opacity="0.5">
+      <tspan>useEffect()</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
+    </text>
+
+    <!-- Row 3 - Python -->
+    <text x="30" y="70" opacity="0.4">
+      <tspan>def process_data(input_file):</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3s" repeatCount="indefinite" />
+    </text>
+    <text x="330" y="70" opacity="0.5">
+      <tspan>with open(input_file, 'r') as f:</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="600" y="70" opacity="0.3">
+      <tspan>return results</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="6s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 4 - Java -->
+    <text x="40" y="95" opacity="0.5">
+      <tspan>public static void main(String[] args)</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
+    </text>
+    <text x="390" y="95" opacity="0.3">
+      <tspan>System.out.println("Processing");</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="650" y="95" opacity="0.4">
+      <tspan>return null;</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="6s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 5 - Golang -->
+    <text x="50" y="120" opacity="0.3">
+      <tspan>func main() {</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="6s" repeatCount="indefinite" />
+    </text>
+    <text x="250" y="120" opacity="0.4">
+      <tspan>if err != nil { return err }</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="520" y="120" opacity="0.5">
+      <tspan>fmt.Println("Completed")</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 6 - SQL -->
+    <text x="30" y="145" opacity="0.4">
+      <tspan>SELECT user_id, username FROM users</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3s" repeatCount="indefinite" />
+    </text>
+    <text x="350" y="145" opacity="0.5">
+      <tspan>WHERE created_at > NOW() - INTERVAL</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="650" y="145" opacity="0.3">
+      <tspan>ORDER BY id DESC</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="6s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 7 - DevOps -->
+    <text x="40" y="170" opacity="0.5">
+      <tspan>docker-compose up -d</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
+    </text>
+    <text x="270" y="170" opacity="0.3">
+      <tspan>kubectl apply -f deployment.yaml</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="580" y="170" opacity="0.4">
+      <tspan>terraform apply</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="6s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 8 - C++ -->
+    <text x="50" y="195" opacity="0.3">
+      <tspan>#include &lt;iostream&gt;</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="6s" repeatCount="indefinite" />
+    </text>
+    <text x="250" y="195" opacity="0.4">
+      <tspan>std::vector&lt;int&gt; values;</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="480" y="195" opacity="0.5">
+      <!-- <tspan>for(auto &item : collection)</tspan> -->
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 9 - Data Science -->
+    <text x="30" y="220" opacity="0.4">
+      <tspan>import pandas as pd</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3s" repeatCount="indefinite" />
+    </text>
+    <text x="220" y="220" opacity="0.5">
+      <tspan>df = pd.read_csv('data.csv')</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="470" y="220" opacity="0.3">
+      <tspan>model.fit(X_train, y_train)</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="6s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 10 - Machine Learning -->
+    <text x="40" y="245" opacity="0.5">
+      <tspan>from tensorflow import keras</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
+    </text>
+    <text x="280" y="245" opacity="0.3">
+      <tspan>model = Sequential()</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="470" y="245" opacity="0.4">
+      <tspan>model.add(Dense(128, activation='relu'))</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="6s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 11 - Rust -->
+    <text x="50" y="270" opacity="0.3">
+      <tspan>fn main() -> Result&lt;(), Error&gt; {</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="6s" repeatCount="indefinite" />
+    </text>
+    <text x="350" y="270" opacity="0.4">
+      <tspan>let mut result = Vec::new();</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="600" y="270" opacity="0.5">
+      <tspan>Ok(())</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 12 - Flutter -->
+    <text x="30" y="295" opacity="0.4">
+      <tspan>class MyApp extends StatelessWidget {</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3s" repeatCount="indefinite" />
+    </text>
+    <text x="330" y="295" opacity="0.5">
+      <tspan>Widget build(BuildContext context) {</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="600" y="295" opacity="0.3">
+      <tspan>return MaterialApp();</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="6s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 13 - Cyber Security -->
+    <text x="40" y="320" opacity="0.5">
+      <tspan>nmap -sV -p 1-1000 10.0.0.1</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
+    </text>
+    <text x="320" y="320" opacity="0.3">
+      <tspan>ssh-keygen -t rsa -b 4096</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="570" y="320" opacity="0.4">
+      <tspan>openssl enc -aes-256-cbc</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="6s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 14 - Spring Boot -->
+    <text x="50" y="345" opacity="0.3">
+      <tspan>@SpringBootApplication</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="6s" repeatCount="indefinite" />
+    </text>
+    <text x="280" y="345" opacity="0.4">
+      <tspan>@RestController</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="450" y="345" opacity="0.5">
+      <tspan>@GetMapping("/api/users")</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 15 - MERN Stack -->
+    <text x="30" y="370" opacity="0.4">
+      <tspan>const express = require('express');</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3s" repeatCount="indefinite" />
+    </text>
+    <text x="330" y="370" opacity="0.5">
+      <tspan>mongoose.connect(mongoURI)</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="580" y="370" opacity="0.3">
+      <tspan>app.listen(3000)</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="6s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 16 - Git -->
+    <text x="40" y="395" opacity="0.5">
+      <tspan>git checkout -b feature/auth</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
+    </text>
+    <text x="320" y="395" opacity="0.3">
+      <tspan>git commit -m "Add authentication"</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="620" y="395" opacity="0.4">
+      <tspan>git push origin</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="6s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 17 - IoT -->
+    <text x="50" y="420" opacity="0.3">
+      <tspan>#include "Arduino.h"</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="6s" repeatCount="indefinite" />
+    </text>
+    <text x="250" y="420" opacity="0.4">
+      <tspan>digitalWrite(LED_PIN, HIGH);</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="500" y="420" opacity="0.5">
+      <tspan>client.publish("sensors/temp", payload);</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 18 - Cloud Services -->
+    <text x="30" y="445" opacity="0.4">
+      <tspan>aws s3 cp file.txt s3://bucket/</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3s" repeatCount="indefinite" />
+    </text>
+    <text x="330" y="445" opacity="0.5">
+      <tspan>gcloud compute instances list</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="580" y="445" opacity="0.3">
+      <tspan>az webapp up --name myapp</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="6s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 19 - Swift -->
+    <text x="40" y="470" opacity="0.5">
+      <tspan>import UIKit</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
+    </text>
+    <text x="170" y="470" opacity="0.3">
+      <tspan>class ViewController: UIViewController {</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="470" y="470" opacity="0.4">
+      <tspan>override func viewDidLoad() {</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="6s" repeatCount="indefinite" />
+    </text>
+    
+    <!-- Row 20 - Blockchain -->
+    <text x="50" y="495" opacity="0.3">
+      <tspan>contract Token {</tspan>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="6s" repeatCount="indefinite" />
+    </text>
+    <text x="200" y="495" opacity="0.4">
+      <tspan>mapping(address => uint256) balances;</tspan>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="500" y="495" opacity="0.5">
+      <tspan>function transfer() public returns (bool) {</tspan>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite" />
+    </text>
+  </g>
+
+  <!-- Center circuit pattern -->
+  <g stroke="#1E2735" stroke-width="0.5" opacity="0.4">
+    <line x1="350" y1="200" x2="350" y2="300" />
+    <line x1="450" y1="200" x2="450" y2="300" />
+    <line x1="300" y1="250" x2="500" y2="250" />
+    <line x1="325" y1="225" x2="475" y2="225" />
+    <line x1="325" y1="275" x2="475" y2="275" />
+    
+    <!-- Circular paths -->
+    <circle cx="400" cy="250" r="80" fill="none" />
+    <circle cx="400" cy="250" r="60" fill="none" />
+    <circle cx="400" cy="250" r="40" fill="none" />
+  </g>
+
+  <!-- Central moving particles -->
+  <g>
+    <!-- Circular orbit particles -->
+    <circle r="3" fill="#4D9EFF" opacity="0.8">
+      <animateTransform 
+        attributeName="transform" 
+        type="rotate" 
+        from="0 400 250" 
+        to="360 400 250" 
+        dur="5s" 
+        repeatCount="indefinite" />
+      <animate attributeName="cx" values="400;480;400" dur="5s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="250;250;250" dur="5s" repeatCount="indefinite" />
+    </circle>
+    
+    <circle r="3" fill="#4D9EFF" opacity="0.8">
+      <animateTransform 
+        attributeName="transform" 
+        type="rotate" 
+        from="120 400 250" 
+        to="480 400 250" 
+        dur="4s" 
+        repeatCount="indefinite" />
+      <animate attributeName="cx" values="400;460;400" dur="4s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="250;250;250" dur="4s" repeatCount="indefinite" />
+    </circle>
+    
+    <circle r="3" fill="#4D9EFF" opacity="0.8">
+      <animateTransform 
+        attributeName="transform" 
+        type="rotate" 
+        from="240 400 250" 
+        to="600 400 250" 
+        dur="6s" 
+        repeatCount="indefinite" />
+      <animate attributeName="cx" values="400;440;400" dur="6s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="250;250;250" dur="6s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Moving particles across central area -->
+    <circle r="2.5" fill="#4D9EFF" opacity="0.7">
+      <animate attributeName="cx" values="300;500;300" dur="7s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="200;300;200" dur="7s" repeatCount="indefinite" />
+    </circle>
+    
+    <circle r="2.5" fill="#4D9EFF" opacity="0.7">
+      <animate attributeName="cx" values="500;300;500" dur="8s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="200;300;200" dur="8s" repeatCount="indefinite" />
+    </circle>
+    
+    <circle r="2" fill="#4D9EFF" opacity="0.7">
+      <animate attributeName="cx" values="350;450;350" dur="4s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="210;290;210" dur="4s" repeatCount="indefinite" />
+    </circle>
+    
+    <circle r="2" fill="#4D9EFF" opacity="0.7">
+      <animate attributeName="cx" values="450;350;450" dur="5s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="210;290;210" dur="5s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Pulsing central particle -->
+    <circle cx="400" cy="250" r="5" fill="#4D9EFF">
+      <animate attributeName="r" values="4;7;4" dur="3s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite" />
+    </circle>
+  </g>
+  
+  <!-- Data streams connecting to center -->
+  <g stroke="#4D9EFF" stroke-width="0.5" opacity="0.3">
+    <line x1="0" y1="100" x2="300" y2="250">
+      <animate attributeName="opacity" values="0.1;0.4;0.1" dur="5s" repeatCount="indefinite" />
+    </line>
+    <line x1="0" y1="400" x2="300" y2="250">
+      <animate attributeName="opacity" values="0.1;0.4;0.1" dur="6s" repeatCount="indefinite" />
+    </line>
+    <line x1="800" y1="100" x2="500" y2="250">
+      <animate attributeName="opacity" values="0.1;0.4;0.1" dur="7s" repeatCount="indefinite" />
+    </line>
+    <line x1="800" y1="400" x2="500" y2="250">
+      <animate attributeName="opacity" values="0.1;0.4;0.1" dur="4s" repeatCount="indefinite" />
+    </line>
+  </g>
+  
+  <!-- Data stream particles -->
+  <g fill="#4D9EFF">
+    <circle r="1.5">
+      <animate attributeName="cx" values="0;300" dur="5s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="100;250" dur="5s" repeatCount="indefinite" />
+    </circle>
+    <circle r="1.5">
+      <animate attributeName="cx" values="0;300" dur="7s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="400;250" dur="7s" repeatCount="indefinite" />
+    </circle>
+    <circle r="1.5">
+      <animate attributeName="cx" values="800;500" dur="6s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="100;250" dur="6s" repeatCount="indefinite" />
+    </circle>
+    <circle r="1.5">
+      <animate attributeName="cx" values="800;500" dur="8s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="400;250" dur="8s" repeatCount="indefinite" />
+    </circle>
+  </g>
+</svg>

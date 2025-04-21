@@ -111,7 +111,6 @@ const ProfileInfo: FC = () => {
           <ChevronLeft strokeWidth={1.8} className="md:hidden"  />
           <p> Profile</p>
         </div>
-       {/* Buttons */}
       <div className="flex gap-3">
         {userTag === user?.username ? (
           <Button className="active:scale-95" onClick={() => navigate("/account/profile")}>
@@ -119,14 +118,14 @@ const ProfileInfo: FC = () => {
           </Button>
         ) : (
           <Button
-            className={`active:scale-95 ${isFollowing ? "bg-gray-200 hover:bg-gray-300 text-black" : ""}`}
+            className={`active:scale-95 ${isFollowing ? "bg-gray-200 hover:bg-gray-300 text-black" : "bg-transparent hover:bg-transparent text-black/80 border-2 border-black/80 dark:text-white/80 dark:border-white/80 "}`}
             onClick={handleFollowToggle}
-            disabled={isFollowLoading} // optionally disable to prevent spamming
+            disabled={isFollowLoading} 
           >
             {isFollowLoading ? (
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              <div className={`${isFollowing? '' : ''} w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin`} />
             ) : (
-              isFollowing ? "Unfollow" : "Follow"
+              isFollowing ? "Following" : "Follow"
             )}
           </Button>
         )}
