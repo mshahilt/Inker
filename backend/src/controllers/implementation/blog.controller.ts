@@ -33,8 +33,10 @@ export class BlogController implements IBlogController {
     next: NextFunction
   ): Promise<void> {
     try {
+      const { id } = JSON.parse(req.headers["x-user-payload"] as string);
       const blogId = new Types.ObjectId(req.params.id);
-      const blog = await this.blogService.getBlogById(blogId);
+      const userId = new Types.ObjectId(id as string);
+      const blog = await this.blogService.getBlogById( blogId, userId );
       res.status(HttpStatus.OK).json(blog);
     } catch (error) {
       next(error);
@@ -60,18 +62,41 @@ export class BlogController implements IBlogController {
     }
   }
 
+  async getBlogByAuthorName(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const { id } = JSON.parse(req.headers["x-user-payload"] as string);
+      const userId = new Types.ObjectId(id as string);
+      const authorName = req.params.authorName;
+      const { page } = req.query
+      let pageNo = 1
+      if(!isNaN(Number(page))) {
+        pageNo = Number(page)
+      }
+      const data = await this.blogService.findBlogByAuthorName( userId, authorName, pageNo);
+      res.status(HttpStatus.OK).json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async getAllBlogs(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
     try {
+      const { id } = JSON.parse(req.headers["x-user-payload"] as string);
+      const userId = new Types.ObjectId(id as string);
       const { page } = req.query
       let pageNo = 1
       if (!isNaN(Number(page))) {
         pageNo = Number(page)
       }
-      const data = await this.blogService.getAllBlogs(pageNo);
+      const data = await this.blogService.getAllBlogs( userId, pageNo);
       res.status(HttpStatus.OK).json(data);
     } catch (error) {
       next(error);

@@ -30,9 +30,9 @@ export class VoteRepository extends BaseRepository<IVote> implements IVoteReposi
     }
   }
 
-  async findVoteByUserAndBlog(userId: string, blogId: string): Promise<IVote | null> {
+  async findVoteByUserAndBlog(userId:  Types.ObjectId, blogId:  Types.ObjectId): Promise<IVote | null> {
     try {
-      return await this.findOne({ userId: new Types.ObjectId(userId), blogId: new Types.ObjectId(blogId) });
+      return await this.findOne({ userId, blogId });
     } catch (error) {
       console.error(error);
       throw new Error("Error finding user's vote for blog");

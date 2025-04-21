@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { IFollowService } from "../interface/IFollowService";
-import { IFollowRepository } from "@/repositories/interface/IFollow.Repository";
+import { IFollowRepository } from "@/repositories/interface/IFollowRepository";
 import { IFollow } from "shared/types";
 import { IUserRepository } from "@/repositories/interface/IUserRepository";
 import { HttpResponse } from "@/constants";

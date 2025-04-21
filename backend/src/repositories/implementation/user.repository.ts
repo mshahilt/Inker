@@ -102,8 +102,6 @@ export class UserRepository extends BaseRepository<IUserModel> implements IUserR
 
     async incrementFollow(followerId: Types.ObjectId, followingId: Types.ObjectId): Promise<void> {
       try {
-      console.log('follower //////////////  id :::',followerId)
-      console.log('followingId ///////////// id :::',followingId)
       const respo = await Promise.all([
         this.model.findByIdAndUpdate(followerId, { $inc: { followings: 1 } }),
         this.model.findByIdAndUpdate(followingId, { $inc: { followers: 1 } }),

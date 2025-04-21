@@ -31,6 +31,17 @@ export class BlogRepository
     return {blogs: data, totalCount}
   }
 
+  async findBlogByAuthorName( authorName: string, skip: number, limit: number): Promise<{blogs: IBlogModel[], totalCount: number}> {
+    const [data, totalCount] = await Promise.all([
+      Blog.find({ authorName })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      Blog.countDocuments()
+    ])
+    return {blogs: data, totalCount}
+  }
+
   async findAllBlogs(skip: number, limit: number): Promise<{blogs: IBlogModel[], totalCount: number}> {
     const [data, totalCount] = await Promise.all([
       Blog.find()
