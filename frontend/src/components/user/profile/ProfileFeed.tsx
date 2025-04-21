@@ -1,26 +1,27 @@
 import { FC, useEffect, useState } from "react";
 import BlogCard from "../common/BlogCard";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useBlogStore } from "@/store/blogStore";
 import Pagination from "@/components/user/common/Pagination";
 import Loader from "../common/Loader";
-import BlogActionBar from "../feeds/BlogActionBar";
+import ViewBlogActionBar from "../blogpost/viewBlog/ViewBlogActionBar";
 const TAB_OPTIONS = ["Posts", "Archieve", "Saved"] as const;
 
 const ProfileFeed: FC = () => {
   const [activeTab, setActiveTab] = useState<"Posts" | "Archieve" | "Saved">(
     "Posts"
   );
-  const { getBlogsByAuthor, authorId, profileFeeds, isLoading } = useBlogStore()
+  const { getBlogsByAuthorName, profileFeeds, isLoading } = useBlogStore()
+  const { userTag }  = useParams() ;
   const [currentPage, setCurrentPage] = useState(1)
   const { state } = useSidebar()
 
   useEffect(() => {
     switch (activeTab) {
       case "Posts":
-        if (authorId) {
-          getBlogsByAuthor( authorId, currentPage)
+        if (userTag) {
+          getBlogsByAuthorName( userTag, currentPage)
         }
         break;
       case "Archieve":
@@ -31,7 +32,7 @@ const ProfileFeed: FC = () => {
         break;
     }
 
-  }, [getBlogsByAuthor, activeTab, authorId, currentPage]);
+  }, [ getBlogsByAuthorName, activeTab, userTag, currentPage]);
 
 
   const onPageChange = (page: number) => {
@@ -78,10 +79,17 @@ const ProfileFeed: FC = () => {
                       className="p-2 border-2 rounded-lg max-w-[400px] flex flex-col justify-between relative">
 
                       <Link to={`/blog/${blog._id}`}>
-                        <BlogCard blog={blog} />
+                        <BlogCard blog={blog} />  
                       </Link>
 
-                      <BlogActionBar  blogId={blog?._id} comments={blog?.comments} upVotes={blog?.upVotes}  downVotes={blog?.downVotes}  />
+                      <ViewBlogActionBar  
+                      blogId={blog?._id} 
+                      comments={blog?.comments} 
+                      upVotes={blog?.upVotes}  
+                      downVotes={blog?.downVotes}
+                      hasUpVoted={blog?.hasUpVoted}
+                      hasDownVoted={blog?.hasDownVoted}
+                      authorId={blog?.authorId} />
                     </div>
                   ))
                 ) : (

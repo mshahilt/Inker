@@ -8,7 +8,7 @@ export const VoteService = {
       const response = await axiosInstance.post<{
         status: number;
         message: string;
-      }>("/api/vote/upvote", { params: { blogId }});
+      }>(`/api/vote/upvote?blogId=${blogId}`);
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
@@ -24,7 +24,7 @@ export const VoteService = {
       const response = await axiosInstance.post<{
         status: number;
         message: string;
-      }>("/api/vote/downvote", { params: { blogId }});
+      }>(`/api/vote/downvote?blogId=${blogId}`);
       return response.data;
     } catch (error: unknown) {
       const err = error as AxiosError<{ error: string }>;
