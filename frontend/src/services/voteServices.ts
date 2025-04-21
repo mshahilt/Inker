@@ -5,7 +5,7 @@ import { toast } from "sonner";
 export const VoteService = {
   upVote: async (blogId: string) => {
     try {
-      const response = await axiosInstance.get<{
+      const response = await axiosInstance.post<{
         status: number;
         message: string;
       }>("/api/vote/upvote", { params: { blogId }});
@@ -21,7 +21,7 @@ export const VoteService = {
 
   downVote: async (blogId: string) => {
     try {
-      const response = await axiosInstance.get<{
+      const response = await axiosInstance.post<{
         status: number;
         message: string;
       }>("/api/vote/downvote", { params: { blogId }});
