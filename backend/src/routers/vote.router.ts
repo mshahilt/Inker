@@ -13,14 +13,14 @@ const blogRepository = new BlogRepository();
 const voteService = new VoteService(voteRepository, blogRepository);
 const voteController = new VoteController(voteService);
 
-router.get(
+router.post(
     "/upvote",
     verifyToken("user"),
     voteRateLimiter,
     voteController.upVote.bind(voteController)
 );
 
-router.get(
+router.post(
     "/downvote",
     verifyToken("user"),
     voteRateLimiter,
