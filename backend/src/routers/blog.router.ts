@@ -7,12 +7,14 @@ import { UserRepository } from "@/repositories/implementation/user.repository";
 import { createBlogSchema, editBlogSchema } from "@/schema";
 import verifyToken from "@/middlewares/verify-token.middleware";
 import { uploadMiddleware } from "@/middlewares";
+import { VoteRepository } from "@/repositories/implementation/vote.repository";
 
 const router = Router();
 
 const blogRepository = new BlogRepository();
 const userRepository = new UserRepository();
-const blogService = new BlogService(blogRepository, userRepository);
+const voteRepository = new VoteRepository()
+const blogService = new BlogService(blogRepository, userRepository, voteRepository);
 const blogController = new BlogController(blogService);
 
 router.post(
@@ -35,9 +37,9 @@ router.get(
 );
 
 router.get(
-  "/user/:id",
+  "/user/:authorName",
   verifyToken("user"),
-  blogController.getBlogByAuthorId.bind(blogController)
+  blogController.getBlogByAuthorName.bind(blogController)
 );
 
 router.put(

@@ -1,4 +1,4 @@
-import { IFollowRepository } from "../interface/IFollow.Repository";
+import { IFollowRepository } from "@/repositories/interface/IFollowRepository";
 import Follow, { IFollowDocument } from "@/models/implementation/follow.model";
 import { BaseRepository } from "../base.repository";
 import { Types } from "mongoose";

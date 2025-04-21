@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IFollowService } from "@/services/interface/IFollowService";
 import { Types } from "mongoose";
 import { HttpStatus } from "@/constants";
-import { IFollowController } from "../interface/IfollowController";
+import { IFollowController } from "@/controllers/interface/IfollowController";
 
 export class FollowController implements IFollowController {
   constructor(private followService: IFollowService) {}
