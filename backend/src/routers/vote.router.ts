@@ -3,8 +3,6 @@ import { VoteRepository } from "../repositories/implementation/vote.repository";
 import verifyToken from "@/middlewares/verify-token.middleware";
 import { VoteService } from "@/services/implementation/vote.service";
 import { VoteController } from "@/controllers/implementation/vote.controller";
-import { validate } from "@/middlewares/validate.middleware";
-import { updateVoteSchema } from "@/schema";
 import { BlogRepository } from "@/repositories/implementation/blog.repository";
 import { voteRateLimiter } from "@/middlewares/ratelimit.middleware"; 
 
@@ -19,7 +17,6 @@ router.post(
     "/upvote",
     verifyToken("user"),
     voteRateLimiter,
-    validate(updateVoteSchema),
     voteController.upVote.bind(voteController)
 );
 
@@ -27,7 +24,6 @@ router.post(
     "/downvote",
     verifyToken("user"),
     voteRateLimiter,
-    validate(updateVoteSchema),
     voteController.downVote.bind(voteController)
 );
 

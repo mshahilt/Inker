@@ -7,4 +7,3 @@ export { resetPasswordSchema } from "./reset-pass.schema";
 export { verifyEmailSchema } from "./forgot-pass.schema";
 export { CreateBlogRequestType, createBlogSchema } from "./create-blog.schema";
 export { EditBlogRequestType, editBlogSchema } from "./edit-blog-schema";
-export { updateVoteSchema } from "./update-vote.schema";
