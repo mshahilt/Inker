@@ -20,6 +20,8 @@ export interface Blog {
   updatedAt: string;
   upVotes: number;
   downVotes: number;
+  hasDownVoted: boolean;
+  hasUpVoted: boolean;
   comments: number;
 }
 

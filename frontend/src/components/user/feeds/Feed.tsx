@@ -8,9 +8,9 @@ import { useEffect, useState } from "react";
 import Pagination from "@/components/user/common/Pagination";
 import useAuthStore from "@/store/authStore";
 import Loader from "../common/Loader";
-import BlogActionBar from "./BlogActionBar";
 import BlogAuthorInfo from "./BlogAuthorInfo";
 import EmptyFeedMessage from "./EmptyFeedMessage";
+import ViewBlogActionBar from "../blogpost/viewBlog/ViewBlogActionBar";
 
 
 const Feeds = () => {
@@ -40,7 +40,7 @@ const Feeds = () => {
   return (
     <section className="w-full mx-auto  xl:max-w-7xl 2xl:border-x">
       {feeds?.blogs.length > 0 ? (
-        
+
         <>
           <div className={`grid ${state === 'expanded' ? "xl:grid-cols-3  md:grid-cols-2 " : "xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2"} grid-cols-1 gap-4 h-fit justify-center  mt-5 p-2`}>
             {feeds.blogs.map((blog, index) => (
@@ -61,7 +61,14 @@ const Feeds = () => {
                   </div>
                 </Link>
 
-                <BlogActionBar blogId={blog?._id} comments={blog?.comments} upVotes={blog?.upVotes}  downVotes={blog?.downVotes}/>
+                <ViewBlogActionBar
+                  blogId={blog?._id}
+                  comments={blog?.comments}
+                  upVotes={blog?.upVotes}
+                  downVotes={blog?.downVotes}
+                  hasUpVoted={blog?.hasUpVoted}
+                  hasDownVoted={blog?.hasDownVoted}
+                  authorId={blog?.authorId} />
 
               </article>
             ))}
@@ -69,7 +76,7 @@ const Feeds = () => {
 
           <Pagination onPageChange={onPageChange} currentPage={currentPage} totalPages={feeds?.totalPages} />
         </>
-        
+
       ) : (
         <EmptyFeedMessage />
       )}
