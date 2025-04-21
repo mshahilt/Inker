@@ -17,6 +17,7 @@ interface BlogEditorState {
     removeTag: (tag: string) => void;
     saveBlog: () => Promise<void>;
     setEditingBlog: (editingBlogId: string | undefined) => Promise<boolean>
+    clearBlog: () => Promise<void>
 }
 
 export const useBlogEditorStore = create<BlogEditorState>((set, get) => ({
@@ -82,5 +83,11 @@ export const useBlogEditorStore = create<BlogEditorState>((set, get) => ({
         } finally {
             set({ isLoading: false });
         }
+    },
+
+    clearBlog: async (): Promise<void> => {
+        set({ isLoading: true });
+        set({ title: '', content: '', tags: [], thumbnail: null, editingBlogId: undefined })
+        set({ isLoading: false });
     }
 }));

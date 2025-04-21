@@ -39,10 +39,10 @@ export default function ViewBlog() {
   }
 
   return (
-    <div className="min-h-screen p-2 md:p-4 max-w-screen">
+    <div className="min-h-screen md:p-4 max-w-screen">
       {currentBlog ? (
 
-          <div className="block w-full max-w-3xl mx-auto rounded-xl bg-background">
+          <div className="relative block w-full max-w-3xl mx-auto rounded-xl bg-background">
 
             <ViewBlogActionBar 
             blogId={currentBlog?._id} 
