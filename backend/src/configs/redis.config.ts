@@ -3,7 +3,7 @@ import { env } from "@/configs/env.config"
 
 let redisClient: RedisClientType;
 
-function connectRedis() {
+async function connectRedis() {
 
   redisClient = createClient({
     url: env.REDIS_URL,
@@ -27,7 +27,7 @@ function connectRedis() {
     console.error("Redis connection error:", err);
   });
 
-  redisClient.connect();
+  await redisClient.connect();
 }
 
 export { connectRedis, redisClient };
