@@ -11,6 +11,8 @@ export default function (
     try {
       const authHeader = req.headers.authorization;
 
+      console.log("Authorization Header:", authHeader);
+
       if (!authHeader || !authHeader.startsWith("Bearer")) {
         throw createHttpError(HttpStatus.UNAUTHORIZED, HttpResponse.NO_TOKEN)
       }
@@ -29,6 +31,14 @@ export default function (
       if (payload.role !== userLevel) {
         throw createHttpError(HttpStatus.UNAUTHORIZED, HttpResponse.UNAUTHORIZED)
       }
+
+      req.user = {
+        id: payload.id,
+        email: payload.email,
+        role: payload.role,
+      }
+
+      console.log("User payload:", req.user);
 
       req.headers["x-user-payload"] = JSON.stringify(payload);
       next();

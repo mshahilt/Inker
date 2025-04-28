@@ -62,14 +62,13 @@ const Feeds = () => {
                 </Link>
 
                 <ViewBlogActionBar
-                  blogId={blog?._id}
-                  comments={blog?.comments}
-                  upVotes={blog?.upVotes}
-                  downVotes={blog?.downVotes}
-                  hasUpVoted={blog?.hasUpVoted}
-                  hasDownVoted={blog?.hasDownVoted}
-                  authorId={blog?.authorId} />
-
+                  blogId={blog._id}
+                  comments={blog.comments}
+                  upVotes={blog.upVotes}
+                  downVotes={blog.downVotes}
+                  hasUpVoted={blog.hasUpVoted}
+                  hasDownVoted={blog.hasDownVoted}
+                  authorId={blog.authorId} />
               </article>
             ))}
           </div>
