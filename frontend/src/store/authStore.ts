@@ -1,4 +1,4 @@
-import {create} from 'zustand/index';
+import {create} from 'zustand';
 import {devtools, persist} from 'zustand/middleware';
 import {IUser} from "shared/types";
 import {AuthService} from '@/services/authServices';
@@ -175,8 +175,7 @@ export const useAuthStore = AuthStore(
                         }));
                     },
 
-                    clearState:
-                        async () => {
+                    clearState: async () => {
                             set({
                                 user: null,
                                 accessToken: null,
@@ -186,8 +185,7 @@ export const useAuthStore = AuthStore(
                                 signUpError: null,
                             });
                         },
-                }
-                    ;
+                };
             },
             {
                 name: 'auth-storage',
@@ -196,7 +194,8 @@ export const useAuthStore = AuthStore(
                     isAuthenticated: state.isAuthenticated,
                 }),
             },
-        ), {name: 'auth-store', enabled: true},
+        ),
+        {name: 'auth-store', enabled: true},
     ),
 );
 
