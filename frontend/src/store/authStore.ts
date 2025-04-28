@@ -36,7 +36,7 @@ export const useAuthStore = AuthStore(
                 return {    
                     user: null,
                     accessToken: null,
-                    isAuthenticated: true,
+                    isAuthenticated: false,
                     isLoading: true,
                     error: null,
                     signUpError: null,
