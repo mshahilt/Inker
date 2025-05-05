@@ -63,7 +63,7 @@ const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
     return (
         <div
             className={`${isViewBlog
-                    ? "sticky top-[75px] md:top-[73px]  border-b justify-end "
+                    ? "sticky top-[75px] md:top-[73px] z-10 border-b justify-end "
                     : " border-t justify-between mt-2"
                 } bg-white dark:bg-black flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 py-2 px-2 sm:px-4 overflow-x-auto sm:overflow-visible z-10`}
         >
