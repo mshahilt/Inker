@@ -27,4 +27,8 @@ export interface ICommentRepository extends BaseRepository<ICommentModel> {
     commentId: Types.ObjectId,
     update: UpdateQuery<ICommentModel>
   ): Promise<ICommentModel | null>;
+
+  updateUsername(userId: string, username: string): Promise<void>;
+  updateProfilePicture(userId: string, profileUrl: string): Promise<void>;
+
 }

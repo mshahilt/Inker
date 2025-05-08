@@ -177,4 +177,12 @@ export class CommentRepository
       .findByIdAndUpdate(commentId, update, { new: true })
       .exec();
   }
+
+  async updateUsername(userId: string, username: string): Promise<void> {
+    await Comment.updateMany({ userId }, { username: username })
+  }
+
+  async updateProfilePicture(userId: string, profileUrl: string): Promise<void> {
+    await Comment.updateMany({ userId }, { profilePicture: profileUrl })
+  }
 }
