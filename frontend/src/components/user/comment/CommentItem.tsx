@@ -12,7 +12,7 @@ import { formatRelativeTime } from "@/utils/formateDate";
 interface CommentItemProps {
   comment: IComment;
   blogId: string;
-  allComments: IComment[]; // Full list of loaded comments
+  allComments: IComment[]; 
   displayLevel?: number; // 0 for top-level, 1 for all descendants in the flat list
 }
 
@@ -30,13 +30,11 @@ const findAllDescendants = (
     );
   descendants.push(...directChildren);
 
-  // Recursively find grandchildren and beyond
   directChildren.forEach((child) => {
     const grandchildren = findAllDescendants(allComments, child._id);
     descendants.push(...grandchildren);
   });
 
-  // Sort all descendants by creation time
   return descendants.sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
   );
@@ -44,17 +42,26 @@ const findAllDescendants = (
 
 const getReplyCountDisplay = (
   comment: IComment,
-  repliesPagination: Map<string, any>
+  repliesPagination: Map<
+    string,
+    {
+      ids: string[];
+      currentPage: number;
+      totalCount: number;
+      isLoading: boolean;
+      isVisible: boolean;
+    }
+  >
 ) => {
-  // Only calculate for top-level comments
   if (comment.parentId !== null) return 0;
 
-  // First check if the comment has a totalDescendantCount property from the backend
-  if (comment.totalDescendantCount !== undefined && comment.totalDescendantCount > 0) {
+  if (
+    comment.totalDescendantCount !== undefined &&
+    comment.totalDescendantCount > 0
+  ) {
     return comment.totalDescendantCount;
   }
-  
-  // Otherwise check our local pagination state
+
   const parentPagination = repliesPagination.get(comment._id);
   if (parentPagination) {
     return parentPagination.totalCount ?? 0;
@@ -85,12 +92,11 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const isLiked = comment.likes.includes(userId as string);
   const isReplying = replyingToId === comment._id;
 
-  // For top-level comments, get the pagination state
   const myRepliesPaginationState =
     comment.parentId === null ? repliesPagination.get(comment._id) : undefined;
   const isVisible = myRepliesPaginationState?.isVisible ?? false;
   const isLoadingReplies = myRepliesPaginationState?.isLoading ?? false;
-    const totalReplies = getReplyCountDisplay(comment, repliesPagination);
+  const totalReplies = getReplyCountDisplay(comment, repliesPagination);
 
   let descendants: IComment[] = [];
   if (displayLevel === 0 && isVisible) {
@@ -98,7 +104,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
   }
   const loadedDirectReplyIds = myRepliesPaginationState?.ids || [];
   const loadedAllReplies = descendants.length >= totalReplies;
-  const hasMoreRepliesToLoad = !loadedAllReplies && loadedDirectReplyIds.length < totalReplies;
+  const hasMoreRepliesToLoad =
+    !loadedAllReplies && loadedDirectReplyIds.length < totalReplies;
 
   const immediateParentComment = comment.parentId
     ? allComments.find((c) => c._id === comment.parentId)
@@ -181,13 +188,13 @@ const CommentItem: React.FC<CommentItemProps> = ({
       <div className="flex items-start space-x-3">
         <Avatar>
           <AvatarImage src={comment?.profilePicture} alt={comment?.username} />
-          <AvatarFallback>{comment?.username?.charAt(0)}</AvatarFallback>      
+          <AvatarFallback>{comment?.username?.charAt(0)}</AvatarFallback>
         </Avatar>
         <div className="flex-1">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold">{comment?.username}</p>        
+            <p className="text-sm font-semibold">{comment?.username}</p>
             <span className="text-xs text-gray-500">
-              {formatRelativeTime(comment.createdAt)}         
+              {formatRelativeTime(comment.createdAt)}
             </span>
           </div>
           <p className="text-sm mt-1">
@@ -220,9 +227,11 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 onClick={handleReplyClick}
                 disabled={isPostingComment}
                 className={`flex items-center space-x-1 ${isReplying ? "font-bold text-blue-600" : ""}`}
-              >Reply
+              >
+                Reply
               </Button>
             )}
+            
             {/* Only show reply controls for top-level comments */}
             {comment.parentId === null && totalReplies > 0 && (
               <Button
@@ -237,7 +246,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                   : isVisible
                     ? `Hide Replies (${totalReplies})`
                     : `Show Replies (${totalReplies})`}
-                               
+
                 {isLoadingReplies ? null : isVisible ? (
                   <ChevronUpIcon className="h-4 w-4" />
                 ) : (
@@ -255,6 +264,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
           )}
         </div>
       </div>
+
       {/* Show descendants for top-level comments when visible */}
       {displayLevel === 0 && isVisible && descendants.length > 0 && (
         <div className="mt-4 space-y-4">
@@ -275,7 +285,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 onClick={handleLoadMoreReplies}
                 disabled={isLoadingReplies}
               >
-                {isLoadingReplies ? "Loading More..." : "Load More Replies"}   
+                {isLoadingReplies ? "Loading More..." : "Load More Replies"}
               </Button>
             </div>
           )}

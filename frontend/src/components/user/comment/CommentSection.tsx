@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useCommentStore } from "@/store/commentStore";
 import CommentItem from "./CommentItem";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { useAuthStore } from "@/store/authStore";
 import { toast } from "sonner";
 import { IComment } from "shared/types";
@@ -121,7 +120,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
             </span>
             {replyingToComment && (
               <span className="text-sm text-gray-600">
-                Replying to {" "}
+                Replying to{" "}
                 <span className="font-semibold">
                   @{replyingToComment?.username}
                 </span>
@@ -131,7 +130,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
                   onClick={() => setReplyingToId(null)}
                   className="ml-2 px-1 h-auto text-red-500 bg-red-100"
                 >
-                  Cancel Reply  
+                  Cancel Reply
                 </Button>
               </span>
             )}
@@ -159,10 +158,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
         </div>
       ) : (
         <div className="mb-6 text-center text-gray-600 p-4 border rounded-lg bg-gray-50">
-          Please login to add comments or like.        
+          Please login to add comments or like.
         </div>
       )}
-      <Separator className="my-6" />     
+      <Separator className="my-6" />
       {!isLoadingTopLevel &&
         topLevelComments.length === 0 &&
         topLevelCurrentPage === 0 && (
@@ -175,11 +174,11 @@ const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
         topLevelCurrentPage > 0 &&
         topLevelTotalCount === 0 && (
           <div className="text-center text-gray-500 mb-6">
-            No comments yet. Be the first to comment!        
+            No comments yet. Be the first to comment!
           </div>
         )}
       {error && <div className="text-center text-red-500">Error: {error}</div>}
-      {/* Comments List */}     
+      {/* Comments List */}
       {topLevelComments.length > 0 && (
         <div className="space-y-6">
           {topLevelComments.map((topComment) => (
