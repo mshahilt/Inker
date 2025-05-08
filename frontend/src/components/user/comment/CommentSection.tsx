@@ -9,6 +9,7 @@ import { IComment } from "shared/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Separator } from "@radix-ui/react-separator";
 import { Send } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 interface CommentSectionProps {
   blogId: string;
@@ -30,12 +31,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
     resetCommentsState,
   } = useCommentStore();
 
-  const { user } = useAuthStore(); 
+  const { user } = useAuthStore();
   const userId = user?._id;
 
   const [newCommentContent, setNewCommentContent] = useState("");
 
-  const commentInputRef = useRef<HTMLTextAreaElement>(null);
+  const commentInputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (replyingToId !== null) {
       const commentToReply = comments.find((c) => c._id === replyingToId);
@@ -83,13 +84,13 @@ const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
       return;
     }
 
-    const parentId = replyingToId; 
+    const parentId = replyingToId;
 
     setNewCommentContent("");
     setReplyingToId(null);
 
-    await addComment(blogId, newCommentContent, parentId); 
-  }; 
+    await addComment(blogId, newCommentContent, parentId);
+  };
 
   const topLevelComments = topLevelIds
     .map((commentId) => comments.find((c) => c._id === commentId))
@@ -99,10 +100,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
 
   return (
     <div className="mt-8 p-4 md:p-0">
-      <h2 className="text-2xl font-bold mb-4">Comments</h2>
+      <h2 className="text-2xl font-bold mb-4">
+        Comments <span className="text-sm font-semibold">( {topLevelTotalCount} )</span>
+      </h2>
       {user ? (
         <div
-          className={`mb-6 p-4 border rounded-lg bg-gray-50 ${replyingToId ? "sticky top-30 z-10" : ""}`}
+          className={`mb-6 p-4 border rounded-lg bg-gray-50 dark:bg-gray-900 ${replyingToId ? "sticky top-30 z-10" : ""}`}
         >
           <div className="flex items-center space-x-3 mb-3 ">
             <Avatar>
@@ -133,30 +136,24 @@ const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
               </span>
             )}
           </div>
-          <Textarea
-            ref={commentInputRef}
-            placeholder={
-              replyingToComment
-                ? `Add a reply to ${replyingToComment?.username}...` 
-                : "Add a comment..."
-            }
-            value={newCommentContent}
-            onChange={(e) => setNewCommentContent(e.target.value)}
-            rows={replyingToComment ? 2 : 4}
-            disabled={isPostingComment}
-            className="w-full"
-          />
           <div className="flex justify-end mt-3">
+            <Input
+              ref={commentInputRef}
+              placeholder={
+                replyingToComment
+                  ? `Add a reply to ${replyingToComment?.username}...`
+                  : "Add a comment..."
+              }
+              value={newCommentContent}
+              onChange={(e) => setNewCommentContent(e.target.value)}
+              disabled={isPostingComment}
+              className="w-full dark:bg-gray-100/10 border-2 mr-2 focus:ring-0"
+            />
             <Button
               onClick={handleAddComment}
               disabled={isPostingComment || !newCommentContent.trim()}
             >
-              <Send
-                size={17}
-                strokeWidth={1}
-                color="#fff"
-                fill="#000"
-              />
+              <Send size={17} strokeWidth={1} color="#fff" fill="#000" />
             </Button>
           </div>
         </div>
@@ -168,7 +165,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
       <Separator className="my-6" />     
       {!isLoadingTopLevel &&
         topLevelComments.length === 0 &&
-        topLevelCurrentPage === 0 && ( 
+        topLevelCurrentPage === 0 && (
           <div className="text-center text-gray-500 mb-20">
             Loading comments...
           </div>
@@ -176,7 +173,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
       {!isLoadingTopLevel &&
         topLevelComments.length === 0 &&
         topLevelCurrentPage > 0 &&
-        topLevelTotalCount === 0 && ( 
+        topLevelTotalCount === 0 && (
           <div className="text-center text-gray-500 mb-6">
             No comments yet. Be the first to comment!        
           </div>
@@ -185,14 +182,13 @@ const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
       {/* Comments List */}     
       {topLevelComments.length > 0 && (
         <div className="space-y-6">
-          
           {topLevelComments.map((topComment) => (
             <CommentItem
               key={topComment._id}
               comment={topComment}
               blogId={blogId}
               allComments={comments}
-              displayLevel={0} 
+              displayLevel={0}
             />
           ))}
         </div>
@@ -201,12 +197,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
         !isLoadingTopLevel &&
         hasMoreTopLevelComments && (
           <div className="text-center mt-6 ">
-            
             <Button
               onClick={() => loadTopLevelComments(blogId)}
               disabled={isLoadingTopLevel}
             >
-              
               {isLoadingTopLevel
                 ? "Loading More Comments..."
                 : "Load More Comments"}
