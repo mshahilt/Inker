@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { IComment } from "shared/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Separator } from "@radix-ui/react-separator";
+import { Send } from "lucide-react";
 
 interface CommentSectionProps {
   blogId: string;
@@ -98,7 +99,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
 
   return (
     <div className="mt-8 p-4 md:p-0">
-      <h2 className="text-2xl font-bold mb-4">Comments</h2>     
+      <h2 className="text-2xl font-bold mb-4">Comments</h2>
       {user ? (
         <div
           className={`mb-6 p-4 border rounded-lg bg-gray-50 ${replyingToId ? "sticky top-30 z-10" : ""}`}
@@ -150,11 +151,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
               onClick={handleAddComment}
               disabled={isPostingComment || !newCommentContent.trim()}
             >
-              {isPostingComment
-                ? "Posting..."
-                : replyingToComment
-                  ? "Add Reply"
-                  : "Add Comment"}
+              <Send
+                size={17}
+                strokeWidth={1}
+                color="#fff"
+                fill="#000"
+              />
             </Button>
           </div>
         </div>

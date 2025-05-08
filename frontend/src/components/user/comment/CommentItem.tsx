@@ -20,37 +20,41 @@ const findAllDescendants = (
   allComments: IComment[],
   parentId: string
 ): IComment[] => {
-  let descendants: IComment[] = [];
+  const descendants: IComment[] = [];
+
   const directChildren = allComments
     .filter((c) => c.parentId === parentId)
     .sort(
       (a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
     );
-
   descendants.push(...directChildren);
 
+  // Recursively find grandchildren and beyond
   directChildren.forEach((child) => {
     const grandchildren = findAllDescendants(allComments, child._id);
     descendants.push(...grandchildren);
   });
 
-  descendants.sort(
+  // Sort all descendants by creation time
+  return descendants.sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
   );
-
-  return descendants;
 };
 
 const getReplyCountDisplay = (
   comment: IComment,
   repliesPagination: Map<string, any>
 ) => {
+  // Only calculate for top-level comments
   if (comment.parentId !== null) return 0;
 
-  if (comment.totalDescendantCount !== undefined) {
+  // First check if the comment has a totalDescendantCount property from the backend
+  if (comment.totalDescendantCount !== undefined && comment.totalDescendantCount > 0) {
     return comment.totalDescendantCount;
   }
+  
+  // Otherwise check our local pagination state
   const parentPagination = repliesPagination.get(comment._id);
   if (parentPagination) {
     return parentPagination.totalCount ?? 0;
@@ -81,18 +85,20 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const isLiked = comment.likes.includes(userId as string);
   const isReplying = replyingToId === comment._id;
 
+  // For top-level comments, get the pagination state
   const myRepliesPaginationState =
     comment.parentId === null ? repliesPagination.get(comment._id) : undefined;
   const isVisible = myRepliesPaginationState?.isVisible ?? false;
   const isLoadingReplies = myRepliesPaginationState?.isLoading ?? false;
-  const totalReplies = getReplyCountDisplay(comment, repliesPagination);
-  const loadedDirectReplyIds = myRepliesPaginationState?.ids || [];
-  const hasMoreRepliesToLoad = loadedDirectReplyIds.length < totalReplies;
+    const totalReplies = getReplyCountDisplay(comment, repliesPagination);
 
   let descendants: IComment[] = [];
   if (displayLevel === 0 && isVisible) {
     descendants = findAllDescendants(allComments, comment._id);
   }
+  const loadedDirectReplyIds = myRepliesPaginationState?.ids || [];
+  const loadedAllReplies = descendants.length >= totalReplies;
+  const hasMoreRepliesToLoad = !loadedAllReplies && loadedDirectReplyIds.length < totalReplies;
 
   const immediateParentComment = comment.parentId
     ? allComments.find((c) => c._id === comment.parentId)
@@ -156,7 +162,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
     } else {
       if (loadedDirectReplyIds.length === 0 && totalReplies > 0) {
         loadReplies(comment._id, true);
-      } else if (loadedDirectReplyIds.length > 0) {
+      } else {
         toggleRepliesVisibility(comment._id, true);
       }
     }
@@ -175,13 +181,13 @@ const CommentItem: React.FC<CommentItemProps> = ({
       <div className="flex items-start space-x-3">
         <Avatar>
           <AvatarImage src={comment?.profilePicture} alt={comment?.username} />
-          <AvatarFallback>{comment?.username?.charAt(0)}</AvatarFallback>      
+          <AvatarFallback>{comment?.username?.charAt(0)}</AvatarFallback>      
         </Avatar>
         <div className="flex-1">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold">{comment?.username}</p>        
+            <p className="text-sm font-semibold">{comment?.username}</p>        
             <span className="text-xs text-gray-500">
-                            {formatRelativeTime(comment.createdAt)}         
+              {formatRelativeTime(comment.createdAt)}         
             </span>
           </div>
           <p className="text-sm mt-1">
@@ -205,7 +211,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 color={isLiked ? "#FFAA01" : "#464545"}
                 fill={isLiked ? "#FFAA01" : "none"}
               />
-                            <span>{comment.likes.length}</span>
+              <span>{comment.likes.length}</span>
             </Button>
             {user && (
               <Button
@@ -217,6 +223,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
               >Reply
               </Button>
             )}
+            {/* Only show reply controls for top-level comments */}
             {comment.parentId === null && totalReplies > 0 && (
               <Button
                 variant="ghost"
@@ -230,7 +237,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                   : isVisible
                     ? `Hide Replies (${totalReplies})`
                     : `Show Replies (${totalReplies})`}
-                               
+                               
                 {isLoadingReplies ? null : isVisible ? (
                   <ChevronUpIcon className="h-4 w-4" />
                 ) : (
@@ -248,6 +255,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
           )}
         </div>
       </div>
+      {/* Show descendants for top-level comments when visible */}
       {displayLevel === 0 && isVisible && descendants.length > 0 && (
         <div className="mt-4 space-y-4">
           {descendants.map((descendant) => (
@@ -267,7 +275,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 onClick={handleLoadMoreReplies}
                 disabled={isLoadingReplies}
               >
-                {isLoadingReplies ? "Loading More..." : "Load More Replies"}   
+                {isLoadingReplies ? "Loading More..." : "Load More Replies"}   
               </Button>
             </div>
           )}

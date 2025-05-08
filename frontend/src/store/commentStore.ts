@@ -1,4 +1,3 @@
-// src/store/commentStore.ts
 import { create } from "zustand";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
@@ -11,7 +10,7 @@ const REPLIES_PER_PAGE = 5;
 
 interface CommentState {
   comments: IComment[];
-  
+
   topLevelIds: string[];
   topLevelCurrentPage: number;
   topLevelTotalCount: number;
@@ -31,7 +30,7 @@ interface CommentState {
   currentBlogId: string | null;
   isPostingComment: boolean;
   error: string | null;
-  // State to track which comment is being replied to ( helpful for UI)
+  // State to track which comment is being replied to (helpful for UI)
   replyingToId: string | null;
 }
 
@@ -73,6 +72,22 @@ const getOrCreateReplyPaginationState = (
   }
   return map.get(parentId)!;
 };
+
+// Helper function to find the root parent of a comment
+const findRootParentId = (
+  comments: IComment[],
+  commentId: string
+): string | null => {
+  const comment = comments.find((c) => c._id === commentId);
+  if (!comment) return null;
+
+  // If it's a top-level comment, return itself
+  if (comment.parentId === null) return comment._id;
+
+  // Otherwise, recursively find the root parent
+  return findRootParentId(comments, comment.parentId as string);
+};
+
 
 export const useCommentStore = create<CommentStore>()(
   devtools((set, get) => ({
@@ -148,39 +163,33 @@ export const useCommentStore = create<CommentStore>()(
           );
 
         set((state) => {
-          const commentsMap = new Map(state.comments.map(c => [c._id, c]));
-          fetchedComments.forEach(comment => {
-               commentsMap.set(comment._id, {
-                   ...commentsMap.get(comment._id), 
-                   ...comment 
-               });
+          const commentsMap = new Map(state.comments.map((c) => [c._id, c]));
+          fetchedComments.forEach((comment) => {
+            commentsMap.set(comment._id, {
+              ...commentsMap.get(comment._id),
+              ...comment,
+            });
           });
-           const updatedComments = Array.from(commentsMap.values()).sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
-
-          const topLevelIdsSet = new Set(state.topLevelIds); 
-          const newTopLevelIds = fetchedComments
-            .filter((c) => c.parentId === null)
-            .map((c) => c._id);
-          newTopLevelIds.forEach((id) => topLevelIdsSet.add(id));
+          const updatedComments = Array.from(commentsMap.values());
 
           const updatedTopLevelIds = [...state.topLevelIds];
           fetchedComments
-               .filter(c => c.parentId === null) 
-               .map(c => c._id)
-               .forEach(id => {
-                  if (!updatedTopLevelIds.includes(id)) {
-                      updatedTopLevelIds.push(id);
-                  }
-               });
+            .filter((c) => c.parentId === null)
+            .map((c) => c._id)
+            .forEach((id) => {
+              if (!updatedTopLevelIds.includes(id)) {
+                updatedTopLevelIds.push(id);
+              }
+            });
 
           return {
-              comments: updatedComments,
-              topLevelIds: updatedTopLevelIds, 
-              topLevelCurrentPage: nextPage,
-              topLevelTotalCount: totalCount, 
+            comments: updatedComments,
+            topLevelIds: updatedTopLevelIds,
+            topLevelCurrentPage: nextPage,
+            topLevelTotalCount: totalCount,
           };
-      });
+        });
       } catch (error) {
         const err = error as AxiosError<{ error: string }>;
         const message =
@@ -242,23 +251,21 @@ export const useCommentStore = create<CommentStore>()(
 
       try {
         const { comments: fetchedComments, totalCount } =
-          await commentService.getReplies(parentId, nextPage, REPLIES_PER_PAGE); 
+          await commentService.getReplies(parentId, nextPage, REPLIES_PER_PAGE);
 
         set((state) => {
           const commentsMap = new Map(state.comments.map((c) => [c._id, c]));
           fetchedComments.forEach((comment) => {
             commentsMap.set(comment._id, comment);
           });
-          const updatedComments = Array.from(commentsMap.values()).sort(
-            (a, b) =>
-              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-          );
+          const updatedComments = Array.from(commentsMap.values());
 
           const newRepliesPagination = new Map(state.repliesPagination);
           const currentParentPagination = newRepliesPagination.get(parentId)!;
 
+          // Get all direct replies to this parent
           const fetchedDirectReplyIds = fetchedComments
-            .filter((c) => c.parentId === parentId) 
+            .filter((c) => c.parentId === parentId)
             .map((c) => c._id);
 
           const updatedReplyIds = [...currentParentPagination.ids];
@@ -269,15 +276,15 @@ export const useCommentStore = create<CommentStore>()(
           });
 
           newRepliesPagination.set(parentId, {
-            ids: updatedReplyIds, 
+            ids: updatedReplyIds,
             currentPage: nextPage,
-            totalCount: totalCount, 
+            totalCount: totalCount,
             isLoading: false,
             isVisible: makeVisible || currentParentPagination.isVisible,
           });
 
           return {
-            comments: updatedComments, 
+            comments: updatedComments,
             repliesPagination: newRepliesPagination,
           };
         });
@@ -295,14 +302,17 @@ export const useCommentStore = create<CommentStore>()(
           });
           return { repliesPagination: newRepliesPagination, error: message };
         });
-      }finally {
-        set(state => {
-           const newRepliesPagination = new Map(state.repliesPagination);
-           const parentPagination = newRepliesPagination.get(parentId)!;
-           newRepliesPagination.set(parentId, { ...parentPagination, isLoading: false });
-           return { repliesPagination: newRepliesPagination };
+      } finally {
+        set((state) => {
+          const newRepliesPagination = new Map(state.repliesPagination);
+          const parentPagination = newRepliesPagination.get(parentId)!;
+          newRepliesPagination.set(parentId, {
+            ...parentPagination,
+            isLoading: false,
+          });
+          return { repliesPagination: newRepliesPagination };
         });
-    }
+      }
     },
 
     addComment: async (
@@ -322,106 +332,111 @@ export const useCommentStore = create<CommentStore>()(
           parentId,
         });
 
-        set((state) => ({
-          comments: [...state.comments, newComment],
-          replyingToId: null,
-        }));
+        set((state) => {
+          // Add the new comment to our state
+          const commentsMap = new Map(state.comments.map((c) => [c._id, c]));
+          commentsMap.set(newComment._id, newComment);
+          const updatedComments = Array.from(commentsMap.values()).sort(
+            (a, b) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
 
-        if (newComment.parentId === null) {
-          set((state) => ({
-            topLevelIds: [...state.topLevelIds, newComment._id],
-            topLevelTotalCount: state.topLevelTotalCount + 1,
-          }));
-        } else {
-          const parentIdString = newComment.parentId as string; 
-
-          set((state) => {
-            const parentCommentIndex = state.comments.findIndex(
-              (c) => c._id === parentIdString
-            );
-            if (parentCommentIndex === -1) return state; 
-
-            const parentComment = state.comments[parentCommentIndex];
-            const updatedParent = {
-              ...parentComment,
-              replyCount: (parentComment.totalDescendantCount  || 0) + 1, 
-            };
-
-            const newComments = [...state.comments];
-            newComments[parentCommentIndex] = updatedParent;
-            return { comments: newComments };
-          });
-
-          set((state) => {
-            const newRepliesPagination = new Map(state.repliesPagination);
-            const parentPagination = newRepliesPagination.get(parentIdString);
-
-            if (parentPagination && parentPagination.isVisible) {
-              newRepliesPagination.set(parentIdString, {
-                ...parentPagination,
-                ids: [...parentPagination.ids, newComment._id],
-                totalCount: parentPagination.totalCount + 1,
-              });
-              return { repliesPagination: newRepliesPagination };
-            } else {
-              const updatedPagination = getOrCreateReplyPaginationState(
-                newRepliesPagination,
-                parentIdString
-              );
-              newRepliesPagination.set(parentIdString, {
-                ...updatedPagination,
-                totalCount: updatedPagination.totalCount + 1, 
-              });
-              return { repliesPagination: newRepliesPagination };
+          if (newComment.parentId === null) {
+            const updatedTopLevelIds = [...state.topLevelIds];
+            if (!updatedTopLevelIds.includes(newComment._id)) {
+              updatedTopLevelIds.unshift(newComment._id);
             }
-          });
-        }
+
+            return {
+              comments: updatedComments,
+              topLevelIds: updatedTopLevelIds,
+              topLevelTotalCount: state.topLevelTotalCount + 1, 
+            };
+          } else {
+            const parentIdString = newComment.parentId as string;
+
+            const commentsBeforeAdd = state.comments; 
+            const rootParentId = findRootParentId(
+              commentsBeforeAdd,
+              parentIdString
+            );
+
+            const newRepliesPagination = new Map(state.repliesPagination);
+
+            if (rootParentId) {
+              const ancestorCommentIndex = updatedComments.findIndex(
+                (c) => c._id === rootParentId
+              );
+              if (ancestorCommentIndex !== -1) {
+                const ancestorComment = updatedComments[ancestorCommentIndex];
+                const updatedAncestorComment = {
+                  ...ancestorComment,
+                  totalDescendantCount:
+                    (ancestorComment?.totalDescendantCount || 0) + 1,
+                };
+                updatedComments[ancestorCommentIndex] = updatedAncestorComment;
+
+                const ancestorPagination = getOrCreateReplyPaginationState(
+                  newRepliesPagination,
+                  rootParentId
+                );
+                newRepliesPagination.set(rootParentId, {
+                  ...ancestorPagination,
+                  totalCount: ancestorPagination.totalCount + 1, 
+                });
+              } else {
+                console.warn(
+                  `CommentStore: Top-level ancestor ${rootParentId} not found in state to increment count.`
+                );
+              }
+            } else {
+              console.warn(
+                "CommentStore: Could not find top-level ancestor for new reply, skipping optimistic count update."
+              );
+            }
+
+            const immediateParentPagination = getOrCreateReplyPaginationState(
+              newRepliesPagination,
+              parentIdString
+            );
+
+            immediateParentPagination.totalCount += 1;
+
+            if (immediateParentPagination.isVisible) {
+              if (!immediateParentPagination.ids.includes(newComment._id)) {
+                immediateParentPagination.ids.push(newComment._id);
+              }
+            }
+
+            newRepliesPagination.set(parentIdString, immediateParentPagination);
+
+            return {
+              comments: updatedComments, 
+              repliesPagination: newRepliesPagination, 
+            };
+          }
+        });
+
         toast.success(
           parentId ? "Reply added successfully!" : "Comment added successfully!"
         );
+
+        if (parentId) {
+          const state = get();
+          const parentPagination = state.repliesPagination.get(
+            parentId as string
+          );
+          const isFirstReply = parentPagination?.totalCount === 1;
+
+          if (isFirstReply) {
+            get().toggleRepliesVisibility(parentId as string, true);
+          }
+        }
       } catch (error) {
         const err = error as AxiosError<{ error: string }>;
         const message = err.response?.data?.error || "Failed to add comment";
         toast.error(message);
         set({ error: message });
-        set((state) => {
-          const comments = state.comments.filter(
-            (c) => c._id !== (error as any)?.response?.data?._id
-          ); 
-          if (parentId) {
-            const parentIdString = parentId as string;
-            const parentCommentIndex = comments.findIndex(
-              (c) => c._id === parentIdString
-            );
-            if (parentCommentIndex !== -1) {
-              const parentComment = comments[parentCommentIndex];
-              comments[parentCommentIndex] = {
-                ...parentComment,
-                totalDescendantCount : Math.max(0, (parentComment.totalDescendantCount  || 0) - 1),
-              };
-            }
-            const newRepliesPagination = new Map(state.repliesPagination);
-            const parentPagination = newRepliesPagination.get(parentIdString);
-            if (parentPagination) {
-              newRepliesPagination.set(parentIdString, {
-                ...parentPagination,
-                ids: parentPagination.ids.filter(
-                  (id) => id !== (error as any)?.response?.data?._id
-                ), 
-                totalCount: Math.max(0, parentPagination.totalCount - 1), 
-              });
-            }
-            return { comments, repliesPagination: newRepliesPagination };
-          } else {
-            return {
-              comments,
-              topLevelIds: state.topLevelIds.filter(
-                (id) => id !== (error as any)?.response?.data?._id
-              ),
-              topLevelTotalCount: Math.max(0, state.topLevelTotalCount - 1),
-            };
-          }
-        });
       } finally {
         set({ isPostingComment: false });
       }
