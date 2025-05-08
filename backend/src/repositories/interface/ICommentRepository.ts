@@ -3,7 +3,7 @@ import { BaseRepository } from "../base.repository";
 import { ICommentModel } from "@/models/implementation/comment.model";
 
 export interface ITopLevelCommentAggregated extends ICommentModel {
-  totalDescendantCount: number;
+  totalDescendantCount?: number;
 }
 
 export interface ICommentRepository extends BaseRepository<ICommentModel> {
@@ -19,7 +19,7 @@ export interface ICommentRepository extends BaseRepository<ICommentModel> {
     parentId: Types.ObjectId,
     skip: number,
     limit: number
-  ): Promise<{ comments: ICommentModel[]; totalCount: number }>;
+  ): Promise<{ replies: ICommentModel[]; totalCount: number }>;
 
   findCommentById(commentId: Types.ObjectId): Promise<ICommentModel | null>;
 

@@ -164,7 +164,7 @@ export class CommentService implements ICommentService {
     const parentObjectId = new Types.ObjectId(parentId);
     const skip = (page - 1) * limit;
 
-    const { comments: fetchedComments, totalCount } =
+    const { replies: fetchedReplies, totalCount } =
       await this.commentRepository.findRepliesByParentId(
         parentObjectId,
         skip,
@@ -173,6 +173,6 @@ export class CommentService implements ICommentService {
 
     const totalPages = Math.ceil(totalCount / limit);
 
-    return { comments: fetchedComments, totalPages, totalCount };
+    return { comments: fetchedReplies, totalPages, totalCount };
   }
 }
