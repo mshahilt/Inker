@@ -113,7 +113,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
                 alt={user?.username}
                 className="w-8 rounded-full"
               />
-              <AvatarFallback>{user?.username?.charAt(0)}</AvatarFallback>
+              <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-800"><AvatarFallback>{user?.username?.charAt(0)}</AvatarFallback></div>
+              
             </Avatar>
             <span className="hidden sm:flex text-lg font-semibold">
               {user?.username}

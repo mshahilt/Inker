@@ -417,9 +417,7 @@ export const useCommentStore = create<CommentStore>()(
           }
         });
 
-        toast.success(
-          parentId ? "Reply added successfully!" : "Comment added successfully!"
-        );
+        
 
         if (parentId) {
           const state = get();
@@ -469,9 +467,8 @@ export const useCommentStore = create<CommentStore>()(
           return { comments: newComments };
         });
 
-        const result = await commentService.toggleLikeComment(commentId);
+        await commentService.toggleLikeComment(commentId);
 
-        toast.success(result.liked ? "Comment liked!" : "Comment unliked!");
       } catch (error) {
         const err = error as AxiosError<{ error: string }>;
         const message = err.response?.data?.error || "Failed to toggle like";
