@@ -7,7 +7,7 @@ const objectIdString = z.string().refine(
     try {
       new Types.ObjectId(val);
       return true;
-    } catch (error) {
+    } catch {
       return false;
     }
   },
