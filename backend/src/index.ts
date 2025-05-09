@@ -24,6 +24,7 @@ import profileRouter from "./routers/profile.router";
 import blogRouter from "./routers/blog.router";
 import voteRouter from "./routers/vote.router";
 import followRouter from "./routers/follow.router";
+import commentRouter from "./routers/comment.router";
 
 const app = express();
 
@@ -52,6 +53,7 @@ app.use("/api/profile", profileRouter);
 app.use("/api/follow", followRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/vote", voteRouter);
+app.use("/api/comment", commentRouter);
 
 app.use(notFoundHandler);
 

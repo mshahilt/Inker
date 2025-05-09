@@ -7,13 +7,15 @@ import { validate } from "@/middlewares/validate.middleware";
 import { editUsernameSchema, updateProfileSchema } from "@/schema";
 import { uploadMiddleware } from "@/middlewares";
 import { BlogRepository } from "@/repositories/implementation/blog.repository";
+import { CommentRepository } from "@/repositories/implementation/comment.repository";
 
 
 const router = Router();
 
 const userRepository = new UserRepository();
 const blogRepository = new BlogRepository();
-const profileService = new ProfileService(userRepository, blogRepository);
+const commentRepository = new CommentRepository()
+const profileService = new ProfileService(userRepository, blogRepository,commentRepository);
 const profileController = new ProfileController(profileService);
 
 router.get(
