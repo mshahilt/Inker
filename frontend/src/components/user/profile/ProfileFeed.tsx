@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import BlogCard from "../common/BlogCard";
 import { Link, useParams } from "react-router-dom";
 import { useSidebar } from "@/components/ui/sidebar";
@@ -24,17 +24,17 @@ const ProfileFeed: FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const { state } = useSidebar();
 
-  const refreshBlogs = () => {
+  const refreshBlogs = useCallback(() => {
     if (activeTab === "Posts" && userTag) {
       getBlogsByAuthorName(userTag, currentPage);
     } else if (activeTab === "Archives" && userTag) {
       getArchivedBlogs(currentPage);
     }
-  };
+  }, [getBlogsByAuthorName, getArchivedBlogs, activeTab, userTag, currentPage]);
 
   useEffect(() => {
     refreshBlogs();
-  }, [getBlogsByAuthorName, getArchivedBlogs, activeTab, userTag, currentPage]);
+  }, [refreshBlogs]);
 
   const onPageChange = (page: number) => {
     setCurrentPage(page);
@@ -45,8 +45,8 @@ const ProfileFeed: FC = () => {
       activeTab === "Posts"
         ? profileFeeds?.blogs
         : activeTab === "Archives"
-        ? profileArchivedFeeds?.archivedBlogs
-        : [];
+          ? profileArchivedFeeds?.archivedBlogs
+          : [];
 
     if (!blogs || blogs.length === 0) {
       return (
@@ -54,8 +54,8 @@ const ProfileFeed: FC = () => {
           {activeTab === "Posts"
             ? "No posts available !"
             : activeTab === "Archives"
-            ? "No archived posts available !"
-            : "No saved blogs available !"}
+              ? "No archived posts available !"
+              : "No saved blogs available !"}
         </p>
       );
     }
@@ -90,11 +90,10 @@ const ProfileFeed: FC = () => {
         {TAB_OPTIONS.map((tab) => (
           <div className="relative" key={tab}>
             <button
-              className={`px-5 py-2 rounded-lg text-md dark:hover:bg-neutral-500/10 hover:bg-gray-200/30 ${
-                activeTab === tab
-                  ? "font-semibold dark:text-white "
-                  : "font-medium"
-              }`}
+              className={`px-5 py-2 rounded-lg text-md dark:hover:bg-neutral-500/10 hover:bg-gray-200/30 ${activeTab === tab
+                ? "font-semibold dark:text-white "
+                : "font-medium"
+                }`}
               onClick={() => setActiveTab(tab)}
             >
               {tab}
@@ -116,11 +115,10 @@ const ProfileFeed: FC = () => {
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             <div
-              className={`grid ${
-                state === "expanded"
-                  ? "xl:grid-cols-2"
-                  : "xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2"
-              } grid-cols-1 gap-4 h-fit justify-center mt-5 px-4 pb-4 w-full`}
+              className={`grid ${state === "expanded"
+                ? "xl:grid-cols-2"
+                : "xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2"
+                } grid-cols-1 gap-4 h-fit justify-center mt-5 px-4 pb-4 w-full`}
             >
               {renderBlogs()}
             </div>
@@ -133,8 +131,8 @@ const ProfileFeed: FC = () => {
               activeTab === "Posts"
                 ? profileFeeds?.totalPages
                 : activeTab === "Archives"
-                ? profileArchivedFeeds?.totalPages
-                : profileFeeds?.totalPages
+                  ? profileArchivedFeeds?.totalPages
+                  : profileFeeds?.totalPages
             }
           />
         </>
