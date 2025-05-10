@@ -36,6 +36,17 @@ export const blogService = {
     return response.data;
   },
 
+  archiveBlog: async (
+    blogId: string,
+    action: boolean
+  ) => {
+    const response = await axiosInstance.patch<{ status: number; message: string }>(
+      `/api/blog/${blogId}/archive`,
+      { action }
+    );
+    return response.data;
+  },
+
   getAllBlogs: async (page: number) => {
     const response = await axiosInstance.get<{ blogs: Blog[]; totalPages: number }>(
       "/api/blog",
@@ -48,6 +59,7 @@ export const blogService = {
     return response.data;
   },
 
+
   getBlogById: async (blogId: string) => {
     const response = await axiosInstance.get<Blog>(`/api/blog/${blogId}`);
     return response.data;
@@ -59,6 +71,20 @@ export const blogService = {
   ): Promise<{ blogs: Blog[]; totalPages: number }> => {
     const response = await axiosInstance.get<{ blogs: Blog[]; totalPages: number }>(
       `/api/blog/user/${authorName}`,
+      {
+        params: {
+          page,
+        },
+      }
+    );
+    return response.data;
+  },
+
+  getArchivedBlogs: async (
+    page: number
+  ): Promise<{ archivedBlogs: Blog[]; totalPages: number }> => {
+    const response = await axiosInstance.get<{ archivedBlogs: Blog[]; totalPages: number }>(
+      `/api/blog/user/archived`,
       {
         params: {
           page,

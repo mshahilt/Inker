@@ -3,7 +3,7 @@ import useAuthStore from "@/store/authStore";
 import { useBlogStore } from "@/store/blogStore";
 import { showConfirmDialog } from "@/store/slices/confirmDialogSlice";
 import { useBlogEditorStore } from "@/store/useBlogEditorStore";
-import { ArrowBigDown, ArrowBigUp, ArrowLeft, Clipboard, MessageCircle, Pencil, Trash2 } from "lucide-react";
+import { Archive, ArchiveRestore, ArrowBigDown, ArrowBigUp, ArrowLeft, Clipboard, MessageCircle, Pencil, Trash2 } from "lucide-react";
 import { FC } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -17,6 +17,8 @@ interface ViewBlogActionBarProps {
     authorId: string;
     hasDownVoted: boolean;
     hasUpVoted: boolean;
+    isArchived: boolean;
+    onArchiveChange?: () => void;
 }
 
 const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
@@ -27,12 +29,14 @@ const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
     authorId,
     hasDownVoted,
     hasUpVoted,
+    isArchived,
+    onArchiveChange,
 }) => {
 
 
     const location = useLocation();
     const isViewBlog = location.pathname.startsWith("/blog");
-    const { deleteBlog } = useBlogStore();
+    const { deleteBlog, archiveBlog } = useBlogStore();
     const { setEditingBlog } = useBlogEditorStore();
     const { user } = useAuthStore();
 
@@ -60,11 +64,18 @@ const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
         }
     };
 
+    const handleArchive = async (action: boolean) => {
+        await archiveBlog(blogId, action);
+        if (onArchiveChange) {
+            onArchiveChange();
+        }
+    }
+
     return (
         <div
             className={`${isViewBlog
-                    ? "sticky top-[75px] md:top-[73px] z-10 border-b justify-end "
-                    : " border-t justify-between mt-2"
+                ? "sticky top-[75px] md:top-[73px] z-10 border-b justify-end "
+                : " border-t justify-between mt-2"
                 } bg-white dark:bg-black flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 py-2 px-2 sm:px-4 overflow-x-auto sm:overflow-visible z-10`}
         >
             <div
@@ -98,6 +109,18 @@ const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
                         strokeWidth={1}
                         onClick={handleEditNavigator}
                     />
+                    <div className="h-[20px] sm:h-[25px] bg-muted-foreground/30 w-[1.5px]" />
+                    {isArchived ?
+                        <ArchiveRestore
+                            className="w-4 h-4 sm:w-[17px] sm:h-[17px] cursor-pointer"
+                            strokeWidth={1}
+                            onClick={() => handleArchive(false)}
+                        /> :
+                        <Archive
+                            className="w-4 h-4 sm:w-[17px] sm:h-[17px] cursor-pointer"
+                            strokeWidth={1}
+                            onClick={() => handleArchive(true)}
+                        />}
                 </div>
             )}
 
@@ -119,7 +142,7 @@ const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
             </div>
 
             <div className="flex items-center gap-2 justify-center rounded border  px-2 text-xs sm:text-sm cursor-pointer"
-             onClick={isViewBlog ? handleDownVote : () => navigate(`/blog/${blogId}`)}>
+                onClick={isViewBlog ? handleDownVote : () => navigate(`/blog/${blogId}`)}>
                 {localDownVotes}
                 <div className="h-[20px] sm:h-[25px] bg-muted-foreground/30 w-[1.5px]" />
                 <ArrowBigDown
@@ -132,7 +155,7 @@ const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
             </div>
 
             <div className="flex items-center gap-2 justify-center rounded border px-2 text-xs sm:text-sm cursor-pointer"
-            onClick={isViewBlog ? handleUpVote : () => navigate(`/blog/${blogId}`)}>
+                onClick={isViewBlog ? handleUpVote : () => navigate(`/blog/${blogId}`)}>
                 {localUpVotes}
                 <div className="h-[20px] sm:h-[25px] bg-muted-foreground/30 w-[1.5px]" />
                 <ArrowBigUp
