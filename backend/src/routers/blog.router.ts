@@ -31,9 +31,9 @@ router.get(
 );
 
 router.get(
-  "/:id",
+  "/user/archived",
   verifyToken("user"),
-  blogController.getBlogById.bind(blogController)
+  blogController.getArchivedBlogs.bind(blogController)
 );
 
 router.get(
@@ -42,11 +42,23 @@ router.get(
   blogController.getBlogByAuthorName.bind(blogController)
 );
 
+router.get(
+  "/:id",
+  verifyToken("user"),
+  blogController.getBlogById.bind(blogController)
+);
+
 router.put(
   "/:id",
   validate(editBlogSchema),
   verifyToken("user"),
   blogController.updateBlog.bind(blogController)
+);
+
+router.patch(
+  "/:id/archive",
+  verifyToken("user"),
+  blogController.archiveBlog.bind(blogController)
 );
 
 router.delete(

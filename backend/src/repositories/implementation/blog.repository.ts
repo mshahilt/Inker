@@ -1,12 +1,11 @@
 import { BaseRepository } from "../base.repository";
 import { IBlogRepository } from "../interface/IBlogRepository";
 import Blog, { IBlogModel } from "@/models/implementation/blog.model";
-import { Types,UpdateQuery } from "mongoose";
+import { Types, UpdateQuery } from "mongoose";
 
 export class BlogRepository
   extends BaseRepository<IBlogModel>
-  implements IBlogRepository
-{
+  implements IBlogRepository {
   constructor() {
     super(Blog);
   }
@@ -20,37 +19,48 @@ export class BlogRepository
     return this.findById(blogId);
   }
 
-  async findBlogByAuthorId( authorId: Types.ObjectId, skip: number, limit: number): Promise<{blogs: IBlogModel[], totalCount: number}> {
+  async findBlogByAuthorId(authorId: Types.ObjectId, skip: number, limit: number): Promise<{ blogs: IBlogModel[], totalCount: number }> {
     const [data, totalCount] = await Promise.all([
-      Blog.find({ authorId })
+      Blog.find({ authorId, isArchived: false })
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit),
-      Blog.countDocuments()
+      Blog.countDocuments({ authorId, isArchived: false })
     ])
-    return {blogs: data, totalCount}
+    return { blogs: data, totalCount }
   }
 
-  async findBlogByAuthorName( authorName: string, skip: number, limit: number): Promise<{blogs: IBlogModel[], totalCount: number}> {
+  async findBlogByAuthorName(authorName: string, skip: number, limit: number): Promise<{ blogs: IBlogModel[], totalCount: number }> {
     const [data, totalCount] = await Promise.all([
-      Blog.find({ authorName })
+      Blog.find({ authorName, isArchived: false })
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit),
-      Blog.countDocuments()
+      Blog.countDocuments({ authorName, isArchived: false })
     ])
-    return {blogs: data, totalCount}
+    return { blogs: data, totalCount }
   }
 
-  async findAllBlogs(skip: number, limit: number): Promise<{blogs: IBlogModel[], totalCount: number}> {
+  async findArchivedBlogs(authorId: Types.ObjectId, skip: number, limit: number): Promise<{ archivedBlogs: IBlogModel[], totalCount: number }> {
     const [data, totalCount] = await Promise.all([
-      Blog.find()
+      Blog.find({ authorId, isArchived: true })
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit),
-      Blog.countDocuments()
+      Blog.countDocuments({ authorId, isArchived: true })
     ])
-    return {blogs: data, totalCount}
+    return { archivedBlogs: data, totalCount }
+  }
+
+  async findAllBlogs(skip: number, limit: number): Promise<{ blogs: IBlogModel[], totalCount: number }> {
+    const [data, totalCount] = await Promise.all([
+      Blog.find({ isArchived: false })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      Blog.countDocuments({ isArchived: false })
+    ])
+    return { blogs: data, totalCount }
   }
 
   async updateBlog(
@@ -58,8 +68,17 @@ export class BlogRepository
     authorId: Types.ObjectId,
     updateData: Partial<IBlogModel>
   ): Promise<IBlogModel | null> {
-    await this.updateOne({_id: blogId, authorId}, updateData);
-    return await this.findOne({_id: blogId, authorId})
+    await this.updateOne({ _id: blogId, authorId }, updateData);
+    return await this.findOne({ _id: blogId, authorId })
+  }
+
+  async archiveBlog(
+    blogId: Types.ObjectId,
+    authorId: Types.ObjectId,
+    action: boolean
+  ): Promise<IBlogModel | null> {
+    await this.updateOne({ _id: blogId, authorId }, { isArchived: action });
+    return await this.findOne({ _id: blogId, authorId })
   }
 
   async updateBlogVote(
@@ -71,8 +90,8 @@ export class BlogRepository
   }
 
   async deleteBlog(blogId: Types.ObjectId, authorId: Types.ObjectId): Promise<IBlogModel | null> {
-    const blog = await this.findOne({_id: blogId, authorId})
-    await this.deleteOne({_id: blogId, authorId});
+    const blog = await this.findOne({ _id: blogId, authorId })
+    await this.deleteOne({ _id: blogId, authorId });
     return blog
   }
 

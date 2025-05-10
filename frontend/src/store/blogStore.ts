@@ -9,6 +9,7 @@ interface BlogState {
   authorId: string | null;
   feeds: { blogs: Blog[]; totalPages: number };
   profileFeeds: { blogs: Blog[]; totalPages: number };
+  profileArchivedFeeds: { archivedBlogs: Blog[]; totalPages: number };
   totalPages: number;
   error: string | null;
   isLoading: boolean;
@@ -20,11 +21,16 @@ interface BlogStore extends BlogState {
   fetchAllBlogs: (page: number) => Promise<void>;
   getBlogById: (blogId: string) => Promise<Blog | null>;
   getBlogsByAuthorName: (authorId: string, page: number) => Promise<void>;
+  getArchivedBlogs: (page: number) => Promise<void>;
   createBlog: (data: {
     title: string;
     content: string;
     tags: string[];
   }) => Promise<void>;
+  archiveBlog: (
+    blogId: string,
+    action: boolean
+  ) => Promise<void>;
   deleteBlog: (blogId: string, authorId: string) => Promise<void>;
   editBlog: (
     blogId: string,
@@ -41,6 +47,7 @@ export const useBlogStore = create<BlogStore>()(
         authorId: null,
         feeds: { blogs: [], totalPages: 0 },
         profileFeeds: { blogs: [], totalPages: 0 },
+        profileArchivedFeeds: { archivedBlogs: [], totalPages: 0 },
         totalPages: 0,
         isLoading: false,
         error: null,
@@ -100,6 +107,24 @@ export const useBlogStore = create<BlogStore>()(
           }
         },
 
+        getArchivedBlogs: async (page: number) => {
+          try {
+            set({ isLoading: true, error: null });
+            const res = await blogService.getArchivedBlogs(
+              page
+            );
+            set({ profileArchivedFeeds: res });
+          } catch (error) {
+            const err = error as AxiosError<{ error: string }>;
+            const message =
+              err.response?.data?.error || "Failed to fetch author's archived blogs";
+            toast.error(message);
+            set({ error: message });
+          } finally {
+            set({ isLoading: false });
+          }
+        },
+
         createBlog: async (data) => {
           try {
             set({ isLoading: true });
@@ -108,6 +133,22 @@ export const useBlogStore = create<BlogStore>()(
           } catch (error) {
             const err = error as AxiosError<{ error: string }>;
             const message = err.response?.data?.error || "Blog creation failed";
+            toast.error(message);
+            set({ error: message });
+          } finally {
+            set({ isLoading: false });
+          }
+        },
+
+        archiveBlog: async (blogId, action) => {
+          const message = action ? "Blog archived successfully" : "Blog restored successfully";
+          try {
+            set({ isLoading: true });
+            const res = await blogService.archiveBlog(blogId, action);
+            toast.success(res.message || message);
+          } catch (error) {
+            const err = error as AxiosError<{ error: string }>;
+            const message = err.response?.data?.error || "Blog archive failed";
             toast.error(message);
             set({ error: message });
           } finally {

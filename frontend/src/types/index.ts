@@ -23,6 +23,7 @@ export interface Blog {
   hasDownVoted: boolean;
   hasUpVoted: boolean;
   comments: number;
+  isArchived: boolean;
 }
 
 export interface BlogEditorState {

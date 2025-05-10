@@ -1,13 +1,13 @@
-import {useVote} from "@/hooks/useVote.tsx";
+import { useVote } from "@/hooks/useVote.tsx";
 import useAuthStore from "@/store/authStore.ts";
-import {useBlogStore} from "@/store/blogStore.ts";
-import {showConfirmDialog} from "@/store/slices/confirmDialogSlice.ts";
-import {useBlogEditorStore} from "@/store/useBlogEditorStore.ts";
-import {ArrowBigDown, ArrowBigUp, ArrowLeft, Clipboard, MessageCircle, Pencil, Trash2} from "lucide-react";
-import {FC} from "react";
-import {useDispatch} from "react-redux";
-import {useLocation, useNavigate} from "react-router-dom";
-import {toast} from "sonner";
+import { useBlogStore } from "@/store/blogStore.ts";
+import { showConfirmDialog } from "@/store/slices/confirmDialogSlice.ts";
+import { useBlogEditorStore } from "@/store/useBlogEditorStore.ts";
+import { Archive, ArrowBigDown, ArrowBigUp, ArrowLeft, Clipboard, MessageCircle, Pencil, Trash2 } from "lucide-react";
+import { FC } from "react";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 interface ViewBlogActionBarProps {
     blogId: string;
@@ -17,24 +17,26 @@ interface ViewBlogActionBarProps {
     authorId: string;
     hasDownVoted: boolean;
     hasUpVoted: boolean;
+    onArchiveChange?: () => void;
 }
 
 const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
-                                                           blogId,
-                                                           comments,
-                                                           upVotes,
-                                                           downVotes,
-                                                           authorId,
-                                                           hasDownVoted,
-                                                           hasUpVoted,
-                                                       }) => {
+    blogId,
+    comments,
+    upVotes,
+    downVotes,
+    authorId,
+    hasDownVoted,
+    hasUpVoted,
+    onArchiveChange,
+}) => {
 
 
     const location = useLocation();
     const isViewBlog = location.pathname.startsWith("/blog");
-    const {deleteBlog} = useBlogStore();
-    const {setEditingBlog} = useBlogEditorStore();
-    const {user} = useAuthStore();
+    const { deleteBlog, archiveBlog } = useBlogStore();
+    const { setEditingBlog } = useBlogEditorStore();
+    const { user } = useAuthStore();
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -60,19 +62,26 @@ const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
         }
     };
 
+    const handleArchive = async (action: boolean) => {
+        await archiveBlog(blogId, action);
+        if (onArchiveChange) {
+            onArchiveChange();
+        }
+    }
+
     return (
         <div
             className={`${isViewBlog
                 ? "sticky top-[75px] md:top-[73px]  border-b justify-end "
                 : " border-t justify-between mt-2"
-            } bg-white dark:bg-black flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 py-2 px-2 sm:px-4 overflow-x-auto sm:overflow-visible`}
+                } bg-white dark:bg-black flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 py-2 px-2 sm:px-4 overflow-x-auto sm:overflow-visible`}
         >
             <div
                 onClick={() => navigate(-1)}
                 className={`text-muted-foreground hover:text-foreground mr-auto ${isViewBlog ? "" : "hidden"} `}
                 aria-label="Back to Blogs"
             >
-                <ArrowLeft className="h-3 w-3 sm:h-5 sm:w-5"/>
+                <ArrowLeft className="h-3 w-3 sm:h-5 sm:w-5" />
             </div>
 
             {user?._id === authorId && (
@@ -92,38 +101,44 @@ const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
                             )
                         }
                     />
-                    <div className="h-[20px] sm:h-[25px] bg-muted-foreground/30 w-[1.5px]"/>
+                    <div className="h-[20px] sm:h-[25px] bg-muted-foreground/30 w-[1.5px]" />
                     <Pencil
                         className="w-4 h-4 sm:w-[17px] sm:h-[17px] cursor-pointer"
                         strokeWidth={1}
                         onClick={handleEditNavigator}
+                    />
+                    <div className="h-[20px] sm:h-[25px] bg-muted-foreground/30 w-[1.5px]" />
+                    <Archive
+                        className="w-4 h-4 sm:w-[17px] sm:h-[17px] cursor-pointer"
+                        strokeWidth={1}
+                        onClick={() => handleArchive(true)}
                     />
                 </div>
             )}
 
             <div
                 className={`flex items-center justify-center p-1 rounded-md border hover:bg-muted cursor-pointer ${isViewBlog ? "" : "hidden"
-                }`}
+                    }`}
                 onClick={() => {
                     navigator.clipboard.writeText(`http://inker-dev.vercel.app/blog/${blogId}`);
                     toast.success("Blog link copied!");
                 }}
                 title="Copy blog link"
             >
-                <Clipboard className="w-3 h-3 sm:w-[17px] sm:h-[17px] cursor-pointer" strokeWidth={1}/>
+                <Clipboard className="w-3 h-3 sm:w-[17px] sm:h-[17px] cursor-pointer" strokeWidth={1} />
             </div>
 
             <div
                 className="flex items-center justify-center gap-1 p-1 text-xs sm:text-sm border px-2 rounded-md hover:bg-muted cursor-pointer">
                 <span className="hidden xs:inline">{comments}</span>
-                <MessageCircle className="w-3 h-3 sm:w-[17px] sm:h-[17px] cursor-pointer" strokeWidth={1}/>
+                <MessageCircle className="w-3 h-3 sm:w-[17px] sm:h-[17px] cursor-pointer" strokeWidth={1} />
             </div>
 
             <div
                 className="flex items-center gap-2 justify-center rounded border  px-2 text-xs sm:text-sm cursor-pointer"
                 onClick={handleDownVote}>
                 {localDownVotes}
-                <div className="h-[20px] sm:h-[25px] bg-muted-foreground/30 w-[1.5px]"/>
+                <div className="h-[20px] sm:h-[25px] bg-muted-foreground/30 w-[1.5px]" />
                 <ArrowBigDown
                     size={17}
                     strokeWidth={1}
@@ -137,7 +152,7 @@ const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
                 className="flex items-center gap-2 justify-center rounded border px-2 text-xs sm:text-sm cursor-pointer"
                 onClick={handleUpVote}>
                 {localUpVotes}
-                <div className="h-[20px] sm:h-[25px] bg-muted-foreground/30 w-[1.5px]"/>
+                <div className="h-[20px] sm:h-[25px] bg-muted-foreground/30 w-[1.5px]" />
                 <ArrowBigUp
                     size={17}
                     strokeWidth={1}

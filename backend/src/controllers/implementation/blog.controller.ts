@@ -73,10 +73,30 @@ export class BlogController implements IBlogController {
       const authorName = req.params.authorName;
       const { page } = req.query
       let pageNo = 1
-      if(!isNaN(Number(page))) {
+      if (!isNaN(Number(page))) {
         pageNo = Number(page)
       }
-      const data = await this.blogService.findBlogByAuthorName( userId, authorName, pageNo);
+      const data = await this.blogService.findBlogByAuthorName(userId, authorName, pageNo);
+      res.status(HttpStatus.OK).json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getArchivedBlogs(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const { id } = JSON.parse(req.headers["x-user-payload"] as string);
+      const userId = new Types.ObjectId(id as string);
+      const { page } = req.query
+      let pageNo = 1
+      if (!isNaN(Number(page))) {
+        pageNo = Number(page)
+      }
+      const data = await this.blogService.findArchivedBlogs(userId, pageNo);
       res.status(HttpStatus.OK).json(data);
     } catch (error) {
       next(error);
@@ -96,7 +116,7 @@ export class BlogController implements IBlogController {
       if (!isNaN(Number(page))) {
         pageNo = Number(page)
       }
-      const data = await this.blogService.getAllBlogs( userId, pageNo);
+      const data = await this.blogService.getAllBlogs(userId, pageNo);
       res.status(HttpStatus.OK).json(data);
     } catch (error) {
       next(error);
@@ -116,6 +136,25 @@ export class BlogController implements IBlogController {
       const updatedBlog = await this.blogService.updateBlog(blogId, userId, updateData);
 
       res.status(HttpStatus.OK).json(updatedBlog);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async archiveBlog(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const blogId = new Types.ObjectId(req.params.id);
+      const { id } = JSON.parse(req.headers["x-user-payload"] as string);
+      const { action } = req.body as { action: boolean };
+      const userId = new Types.ObjectId(String(id))
+
+      const archivedBlog = await this.blogService.archiveBlog(blogId, userId, action);
+
+      res.status(HttpStatus.OK).json(archivedBlog);
     } catch (error) {
       next(error);
     }
@@ -142,7 +181,7 @@ export class BlogController implements IBlogController {
   async uploadImage(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       if (!req.file) {
-        if(req.fileValidationError) {
+        if (req.fileValidationError) {
           res.status(HttpStatus.BAD_REQUEST).json({ error: req.fileValidationError })
         } else {
           throw new Error("No file uploaded");
