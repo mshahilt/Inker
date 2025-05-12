@@ -1,6 +1,4 @@
 import axios from 'axios';
-import {store} from '@/store/store';
-import {setAuth, logout} from "@/store/slices/authSlice"
 import {env} from "@/config/env.ts";
 import useAuthStore from "@/store/authStore.ts";
 
@@ -11,7 +9,6 @@ export const axiosInstance = axios.create({
     headers: {'Content-Type': 'application/json'}
 });
 
-// Request Interceptor: Attach Access Token
 axiosInstance.interceptors.request.use(
     (config) => {
         const {accessToken} = useAuthStore.getState()
@@ -24,6 +21,7 @@ axiosInstance.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
+
 // Response Interceptor: Handle Token Refresh
 axiosInstance.interceptors.response.use(
     (response) => {
@@ -35,19 +33,22 @@ axiosInstance.interceptors.response.use(
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
             try {
-                const refreshResponse = await axios.post(`${BASE_URL}/api/auth/refresh-token`, {}, {withCredentials: true});
-                const accessToken = refreshResponse.data;
+                const newAccessToken = await useAuthStore.getState().refreshToken()
 
-                store.dispatch(setAuth({accessToken}));
+                if (!newAccessToken) {
+                    console.log("No new access token")
+                    return Promise.reject(error);
+                }
 
-                originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
                 return axiosInstance(originalRequest);
             } catch (refreshError) {
-                store.dispatch(logout());
+                console.log("Token refresh failed", refreshError);
                 return Promise.reject(refreshError);
             }
         }
-
         return Promise.reject(error);
     }
 );
+
+export default axiosInstance;

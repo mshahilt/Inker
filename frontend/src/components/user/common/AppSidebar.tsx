@@ -30,6 +30,7 @@ import useAuthStore from "@/store/authStore.ts";
 import {useDispatch} from "react-redux";
 import {toast} from "sonner";
 import { DEFAULT_IMG } from "@/utils/constents";
+import { useBlogEditorStore } from "@/store/useBlogEditorStore";
 
 
 const items = [
@@ -41,6 +42,7 @@ const items = [
 
 export function AppSidebar() {
     const {isAuthenticated, user} = useAuthStore();
+    const {clearBlog} = useBlogEditorStore()
     const {state} = useSidebar();
     const isExpanded = state === "expanded";
     const dispatch = useDispatch();
@@ -106,13 +108,15 @@ export function AppSidebar() {
                     <SidebarGroupContent className="mt-2">
                         <SidebarMenu>
                             <SidebarMenuItem>
-                                <Link to="/blog/create">
                                     <SidebarMenuButton
-                                        className="!bg-black !text-white dark:!bg-white dark:!text-black flex justify-center mb-2">
+                                        className="!bg-black !text-white dark:!bg-white dark:!text-black flex justify-center mb-2"
+                                        onClick={async () => {
+                                            await clearBlog()
+                                            navigate('/blog/create')
+                                        }}>
                                         <Plus size={18} strokeWidth={3}/>
                                         {isExpanded && <Label className="whitespace-nowrap">New Post</Label>}
                                     </SidebarMenuButton>
-                                </Link>
                             </SidebarMenuItem>
                             {items.map((item) => {
                                 const isActive = location.pathname.startsWith(item.url);

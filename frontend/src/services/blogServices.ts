@@ -53,7 +53,22 @@ export const blogService = {
     return response.data;
   },
 
-  getBlogsByAuthor: async (
+  getBlogsByAuthorName: async (
+    authorName: string,
+    page: number
+  ): Promise<{ blogs: Blog[]; totalPages: number }> => {
+    const response = await axiosInstance.get<{ blogs: Blog[]; totalPages: number }>(
+      `/api/blog/user/${authorName}`,
+      {
+        params: {
+          page,
+        },
+      }
+    );
+    return response.data;
+  },
+
+  getBlogsByAuthorId: async (
     authorId: string,
     page: number
   ): Promise<{ blogs: Blog[]; totalPages: number }> => {

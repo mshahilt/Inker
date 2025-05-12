@@ -66,14 +66,14 @@ export const Editor: React.FC<EditorProps> = ({ isEditMode }) => {
       <ThumbnailUploader />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSave)}>
-          {/* Post Title */}
+
           <FormField
             control={form.control}
             name="title"
             render={({ field }) => (
               <FormItem className="relative mt-4">
                 <FormControl>
-                  <Input {...field} placeholder="Post Title*" className="pr-12" maxLength={250}/>
+                  <Input {...field} placeholder="Post Title*" className="pr-12" maxLength={250} />
                 </FormControl>
 
                 <span className="absolute right-3 top-3 text-xs text-muted-foreground">
@@ -110,7 +110,6 @@ export const Editor: React.FC<EditorProps> = ({ isEditMode }) => {
             </div>
           </div>
 
-          {/* Content */}
           <FormField
             control={form.control}
             name="content"
@@ -144,9 +143,15 @@ export const Editor: React.FC<EditorProps> = ({ isEditMode }) => {
             )}
           />
 
-          {/* Submit Buttons */}
           <div className="flex justify-end mt-4 gap-2">
-            <Button onClick={() => navigate(-1)} variant="outline">
+            <Button
+              type="button"
+              onClick={() => {
+                form.reset()
+                navigate(-1)
+              }}
+              variant="outline"
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={isLoading}>

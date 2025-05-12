@@ -12,7 +12,7 @@ import { env } from "@/config/env";
 import Feed from "@/pages/feed/Feed";
 import Community from "@/pages/community/Community";
 import EditBlog from "@/components/user/blogpost/EditBlog";
-import ViewBlog from "@/components/user/blogpost/ViewBlog";
+import ViewBlog from "@/components/user/blogpost/viewBlog/ViewBlog";
 import ProtectedRoute from "./ProtectedRoutes";
 import UnProtectedRoute from "./UnProtectedRoutes";
 import ResetPassword from "@/pages/auth/ResetPassword";
@@ -20,7 +20,7 @@ import ResetPassword from "@/pages/auth/ResetPassword";
 export const router = createBrowserRouter([
   { path: "/", element: <LandingPage /> },
   {
-    path: "/",
+    path: "",
     element: <AppLayout />,
     children: [
       { path: "feed", element: <ProtectedRoute><Feed /></ProtectedRoute> },

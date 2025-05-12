@@ -49,6 +49,14 @@ const userSchema = new Schema<IUserModel>(
       enum: ["user", "moderator"],
       default: "user",
     },
+    followers: {
+      type: Number,
+      default : 0
+    },
+    followings: {
+      type: Number,
+      default : 0
+    },
     bio: {
       type: String,
       default: '',
