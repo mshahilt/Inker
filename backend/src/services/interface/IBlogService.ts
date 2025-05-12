@@ -15,15 +15,21 @@ import { IBlogModel } from "@/models/implementation/blog.model";
 
 export interface IBlogService {
   createBlog(blogData: Partial<IBlogModel>): Promise<IBlogModel>;
-  getBlogById(blogId:  Types.ObjectId, userId:  Types.ObjectId): Promise<BlogWithVoteStatus>;
-  findBlogByAuthorId(authorId: Types.ObjectId, page: number): Promise<{blogs: IBlogModel[], totalPages: number}>;
-  findBlogByAuthorName( userId: Types.ObjectId, authorName: string, page: number): Promise<{blogs: IBlogModel[], totalPages: number}>;
-  getAllBlogs(userId: Types.ObjectId, page: number): Promise<{blogs: BlogWithVoteStatus[], totalPages: number}>;
+  getBlogById(blogId: Types.ObjectId, userId: Types.ObjectId): Promise<BlogWithVoteStatus>;
+  findBlogByAuthorId(authorId: Types.ObjectId, page: number): Promise<{ blogs: IBlogModel[], totalPages: number }>;
+  findBlogByAuthorName(userId: Types.ObjectId, authorName: string, page: number): Promise<{ blogs: IBlogModel[], totalPages: number }>;
+  findArchivedBlogs(authorId: Types.ObjectId, page: number): Promise<{ archivedBlogs: IBlogModel[], totalPages: number }>;
+  getAllBlogs(userId: Types.ObjectId, page: number): Promise<{ blogs: BlogWithVoteStatus[], totalPages: number }>;
   updateBlog(
     blogId: Types.ObjectId,
     authorId: Types.ObjectId,
     updateData: Partial<IBlogModel>
   ): Promise<IBlogModel>;
+  archiveBlog(
+    blogId: Types.ObjectId,
+    authorId: Types.ObjectId,
+    action: boolean
+  ): Promise<IBlogModel>
   deleteBlog(blogId: Types.ObjectId, authorId: Types.ObjectId): Promise<IBlogModel>;
   uploadImage(file: Express.Multer.File): Promise<string>
 }

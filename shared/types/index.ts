@@ -31,6 +31,7 @@ export interface IBlog {
   upVotes: number;
   downVotes: number;
   comments: number;
+  isArchived: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

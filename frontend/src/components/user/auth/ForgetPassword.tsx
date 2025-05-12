@@ -8,11 +8,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
 const ForgetPassword = () => {
     const [isLoading, setIsLoading] = useState(false)
+    const navigate = useNavigate()
     const form = useForm<z.infer<typeof forgetPasswordSchema>>({
         resolver: zodResolver(forgetPasswordSchema),
         defaultValues: {
@@ -26,6 +28,8 @@ const ForgetPassword = () => {
             const response = await AuthService.forgetPasswordService(data)
             if (response.data?.message) {
                 toast.success(response.data?.message)
+                form.reset()
+                navigate("/auth")
             }
         } catch (error) {
             if (error instanceof Error) {
