@@ -10,6 +10,7 @@ import Loader from "../common/Loader";
 import BlogAuthorInfo from "./BlogAuthorInfo";
 import EmptyFeedMessage from "./EmptyFeedMessage";
 import BlogActionBar from "@/components/user/feeds/BlogActionBar.tsx";
+import BlogCardDropdown from "../common/BlogCardDropdown";
 
 const Feeds = () => {
     const { feeds, fetchAllBlogs } = useBlogStore()
@@ -52,6 +53,12 @@ const Feeds = () => {
                                 className="bg-white dark:bg-transparent border border-muted rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 mx-auto flex flex-col h-full relative p-2 w-full max-w-[400px]"
                             >
 
+                                <BlogCardDropdown 
+                                    blogId={blog._id} 
+                                    authorId={blog.authorId} 
+                                    isArchived={blog.isArchived}
+                                    onArchiveChange={onArchiveChange} />
+
                                 <BlogAuthorInfo authorName={blog?.authorName}
                                     authorProfilePicture={blog?.authorProfilePicture} />
 
@@ -72,8 +79,7 @@ const Feeds = () => {
                                     downVotes={blog.downVotes}
                                     hasUpVoted={blog.hasUpVoted}
                                     hasDownVoted={blog.hasDownVoted}
-                                    authorId={blog.authorId}
-                                    onArchiveChange={onArchiveChange} />
+                                 />
                             </article>
                         ))}
                     </div>

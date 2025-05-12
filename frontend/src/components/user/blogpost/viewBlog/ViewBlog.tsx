@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import MDEditor from "@uiw/react-md-editor";
 import { CardContent, CardTitle } from "@/components/ui/card";
 import { useBlogStore } from "@/store/blogStore";
@@ -15,6 +15,8 @@ export default function ViewBlog() {
   const { blogId } = useParams<{ blogId: string }>();
   const { getBlogById, isLoading } = useBlogStore();
   const [currentBlog, setCurrentBlog] = useState<Blog | null>(null);
+  const commentSectionRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
 
   useEffect(() => {
     if (blogId) {
@@ -31,6 +33,20 @@ export default function ViewBlog() {
       toast.error("Blog ID is not provided");
     }
   }, [blogId, getBlogById]);
+
+  useEffect(() => {
+    // Check for query parameter to scroll to comments
+    const queryParams = new URLSearchParams(location.search);
+    if (queryParams.get("scrollToComments") === "true" && commentSectionRef.current) {
+      commentSectionRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [location, currentBlog]);
+
+  const handleCommentClick = () => {
+    if (commentSectionRef.current) {
+      commentSectionRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   if (isLoading) {
     return (
@@ -49,9 +65,9 @@ export default function ViewBlog() {
             comments={currentBlog?.comments}
             upVotes={currentBlog?.upVotes}
             downVotes={currentBlog?.downVotes}
-            authorId={currentBlog?.authorId}
             hasUpVoted={currentBlog?.hasUpVoted}
             hasDownVoted={currentBlog?.hasDownVoted}
+            onCommentClick={handleCommentClick}
           />
 
           <CardTitle className="text-3xl font-bold text-foreground mt-5">
@@ -73,7 +89,9 @@ export default function ViewBlog() {
             </p>
           </CardContent>
           <div className="w-80 h-[.1em] bg-black/30 mx-auto mb-6 rounded-full"></div>
-          <CommentSection blogId={blogId || ""} />
+          <div ref={commentSectionRef}>
+            <CommentSection blogId={blogId || ""} />
+          </div>
         </div>
       ) : (
         <div className="text-center text-2xl text-foreground">
