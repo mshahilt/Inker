@@ -1,11 +1,6 @@
 import { useVote } from "@/hooks/useVote";
-import useAuthStore from "@/store/authStore";
-import { useBlogStore } from "@/store/blogStore";
-import { showConfirmDialog } from "@/store/slices/confirmDialogSlice";
-import { useBlogEditorStore } from "@/store/useBlogEditorStore";
-import { Archive, ArchiveRestore, ArrowBigDown, ArrowBigUp, ArrowLeft, Clipboard, MessageCircle, Pencil, Trash2 } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp, ArrowLeft, Clipboard, MessageCircle } from "lucide-react";
 import { FC } from "react";
-import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -14,11 +9,9 @@ interface ViewBlogActionBarProps {
     comments: number;
     upVotes: number;
     downVotes: number;
-    authorId: string;
     hasDownVoted: boolean;
     hasUpVoted: boolean;
-    isArchived: boolean;
-    onArchiveChange?: () => void;
+    onCommentClick?: () => void;
 }
 
 const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
@@ -26,23 +19,16 @@ const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
     comments,
     upVotes,
     downVotes,
-    authorId,
     hasDownVoted,
     hasUpVoted,
-    isArchived,
-    onArchiveChange,
+    onCommentClick,
 }) => {
 
 
     const location = useLocation();
     const isViewBlog = location.pathname.startsWith("/blog");
-    const { deleteBlog, archiveBlog } = useBlogStore();
-    const { setEditingBlog } = useBlogEditorStore();
-    const { user } = useAuthStore();
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-
 
     const {
         localUpVotes,
@@ -52,24 +38,6 @@ const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
         handleUpVote,
         handleDownVote,
     } = useVote(blogId, hasUpVoted, hasDownVoted, upVotes, downVotes);
-
-    const handleDelete = () => {
-        deleteBlog(blogId, user?._id as string);
-    };
-
-    const handleEditNavigator = async () => {
-        const val = await setEditingBlog(blogId);
-        if (val) {
-            navigate(`/blog/edit`);
-        }
-    };
-
-    const handleArchive = async (action: boolean) => {
-        await archiveBlog(blogId, action);
-        if (onArchiveChange) {
-            onArchiveChange();
-        }
-    }
 
     return (
         <div
@@ -86,44 +54,6 @@ const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
                 <ArrowLeft className="h-3 w-3 sm:h-5 sm:w-5" />
             </div>
 
-            {user?._id === authorId && (
-                <div className="flex items-center gap-2 justify-center rounded border px-2 text-xs sm:text-sm">
-                    <Trash2
-                        className="w-4 h-4 sm:w-[17px] sm:h-[17px] cursor-pointer"
-                        strokeWidth={1}
-                        onClick={() =>
-                            dispatch(
-                                showConfirmDialog({
-                                    title: "Are you sure you want to delete?",
-                                    description: "You will not be able to recover it.",
-                                    confirmText: "Delete",
-                                    cancelText: "Cancel",
-                                    onConfirm: () => handleDelete(),
-                                })
-                            )
-                        }
-                    />
-                    <div className="h-[20px] sm:h-[25px] bg-muted-foreground/30 w-[1.5px]" />
-                    <Pencil
-                        className="w-4 h-4 sm:w-[17px] sm:h-[17px] cursor-pointer"
-                        strokeWidth={1}
-                        onClick={handleEditNavigator}
-                    />
-                    <div className="h-[20px] sm:h-[25px] bg-muted-foreground/30 w-[1.5px]" />
-                    {isArchived ?
-                        <ArchiveRestore
-                            className="w-4 h-4 sm:w-[17px] sm:h-[17px] cursor-pointer"
-                            strokeWidth={1}
-                            onClick={() => handleArchive(false)}
-                        /> :
-                        <Archive
-                            className="w-4 h-4 sm:w-[17px] sm:h-[17px] cursor-pointer"
-                            strokeWidth={1}
-                            onClick={() => handleArchive(true)}
-                        />}
-                </div>
-            )}
-
             <div
                 className={`flex items-center justify-center p-1 rounded-md border hover:bg-muted cursor-pointer ${isViewBlog ? "" : "hidden"
                     }`}
@@ -136,7 +66,8 @@ const ViewBlogActionBar: FC<ViewBlogActionBarProps> = ({
                 <Clipboard className="w-3 h-3 sm:w-[17px] sm:h-[17px] cursor-pointer" strokeWidth={1} />
             </div>
 
-            <div className="flex items-center justify-center gap-1 p-1 text-xs sm:text-sm border px-2 rounded-md hover:bg-muted cursor-pointer">
+            <div className="flex items-center justify-center gap-1 p-1 text-xs sm:text-sm border px-2 rounded-md hover:bg-muted cursor-pointer" 
+                onClick={() => onCommentClick?.()}>
                 <span className="hidden xs:inline">{comments}</span>
                 <MessageCircle className="w-3 h-3 sm:w-[17px] sm:h-[17px] cursor-pointer" strokeWidth={1} />
             </div>

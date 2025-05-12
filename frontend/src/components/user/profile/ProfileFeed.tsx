@@ -6,6 +6,7 @@ import { useBlogStore } from "@/store/blogStore";
 import Pagination from "@/components/user/common/Pagination";
 import Loader from "../common/Loader";
 import ViewBlogActionBar from "../blogpost/viewBlog/ViewBlogActionBar";
+import BlogCardDropdown from "../common/BlogCardDropdown";
 
 const TAB_OPTIONS = ["Posts", "Archives", "Saved"] as const;
 
@@ -65,6 +66,13 @@ const ProfileFeed: FC = () => {
         key={blog._id}
         className="p-2 border-2 rounded-lg max-w-[400px] flex flex-col justify-between relative"
       >
+        <BlogCardDropdown
+          blogId={blog._id}
+          authorId={blog.authorId}
+          isArchived={blog.isArchived}
+          onArchiveChange={refreshBlogs}
+        />
+
         <Link to={`/blog/${blog._id}`}>
           <BlogCard blog={blog} />
         </Link>
@@ -76,9 +84,6 @@ const ProfileFeed: FC = () => {
           downVotes={blog?.downVotes}
           hasUpVoted={blog?.hasUpVoted}
           hasDownVoted={blog?.hasDownVoted}
-          authorId={blog?.authorId}
-          isArchived={blog?.isArchived}
-          onArchiveChange={refreshBlogs}
         />
       </div>
     ));
