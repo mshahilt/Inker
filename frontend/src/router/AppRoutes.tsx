@@ -15,6 +15,7 @@ import EditBlog from "@/components/user/blogpost/EditBlog";
 import ViewBlog from "@/components/user/blogpost/ViewBlog";
 import ProtectedRoute from "./ProtectedRoutes";
 import UnProtectedRoute from "./UnProtectedRoutes";
+import ResetPassword from "@/pages/auth/ResetPassword";
 
 export const router = createBrowserRouter([
   { path: "/", element: <LandingPage /> },
@@ -22,18 +23,18 @@ export const router = createBrowserRouter([
     path: "/",
     element: <AppLayout />,
     children: [
-      { path: "feed", element: <ProtectedRoute><Feed/></ProtectedRoute> },
+      { path: "feed", element: <ProtectedRoute><Feed /></ProtectedRoute> },
       { path: "explore", element: <div> Explore </div> },
       { path: "activity", element: <div> Activity </div> },
-      { path: "profile/:userTag", element: <ProtectedRoute><Profile/> </ProtectedRoute> },
-      { path: "account/profile", element: <ProtectedRoute><EditProfile /></ProtectedRoute>},
+      { path: "profile/:userTag", element: <ProtectedRoute><Profile /> </ProtectedRoute> },
+      { path: "account/profile", element: <ProtectedRoute><EditProfile /></ProtectedRoute> },
       { path: "blog/create", element: <ProtectedRoute><AddBlog /></ProtectedRoute> },
       { path: "blog/edit", element: <ProtectedRoute><EditBlog /></ProtectedRoute> },
       { path: "blog/:blogId", element: <ViewBlog /> },
       { path: "community", element: <Community /> },
     ],
   },
-  { path: "*", element: <NotFoundPage />},
+  { path: "*", element: <NotFoundPage /> },
   {
     path: "auth",
     element: (
@@ -45,4 +46,5 @@ export const router = createBrowserRouter([
     ),
   },
   { path: "otp-verification", element: <OtpForm /> },
+  { path: "reset-password", element: <ResetPassword /> },
 ]);
