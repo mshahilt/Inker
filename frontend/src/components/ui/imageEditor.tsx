@@ -43,6 +43,7 @@ export const ImageEditor: React.FC<ImageEditorProps> = ({
                             TABS.ADJUST,
                             TABS.FILTERS,
                             TABS.FINETUNE,
+                            TABS.ANNOTATE
                         ]}
                         defaultTabId={TABS.ADJUST}
                         // Crop options with common aspect ratios
