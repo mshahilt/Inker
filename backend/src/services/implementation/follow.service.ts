@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import { IFollowService } from "../interface/IFollowService";
 import { IFollowRepository } from "@/repositories/interface/IFollowRepository";
-import { IFollow } from "shared/types";
+import { IFollow, IUser } from "shared/types";
 import { IUserRepository } from "@/repositories/interface/IUserRepository";
 import { HttpResponse } from "@/constants";
 
@@ -57,5 +57,15 @@ export class FollowService implements IFollowService {
       this.followRepository.createFollow(followerId, followingId),
       this.userRepository.incrementFollow(followerId, followingId),
     ]);
+  }
+
+  async getFollowData(userId: string, type: "followers" | "followings"): Promise<Partial<IUser>[]> {
+    const userObjectId = new Types.ObjectId(userId);
+    
+    if (type === "followers") {
+      return this.followRepository.findFollowers(userObjectId);
+    } else {
+      return this.followRepository.findFollowings(userObjectId);
+    }
   }
 }
