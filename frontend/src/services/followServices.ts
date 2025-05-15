@@ -10,4 +10,8 @@ export const followService = {
     const response = await axiosInstance.get(`/api/follow/status/${userId}`);
     return response.data;
   },
+  getFollowUsers: async (userId: string, type: "followers" | "followings") => {
+    const response = await axiosInstance.get(`/api/follow/${userId}?type=${type}`);
+    return response.data;
+  }
 };
