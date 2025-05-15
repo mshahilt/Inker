@@ -48,6 +48,9 @@ export const useAuthStore = AuthStore(
 
                         if (error) {
                             set({error: error, isLoading: false});
+                            toast.error('error');
+                            console.log('error occuered',error);
+                            
                             return false;
                         }
                         toast.success('Logged in successfully.')
