@@ -28,6 +28,8 @@ import commentRouter from "./routers/comment.router";
 
 const app = express();
 
+
+
 app.use(
     cors({
         origin: env.CLIENT_ORIGIN,
