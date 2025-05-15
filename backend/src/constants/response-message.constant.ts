@@ -50,5 +50,5 @@ export enum HttpResponse {
     INVALID_PARENT_COMMENT_ID="Invalid parent comment ID format",
     COMMENT_NOT_FOUND="Comment not found",
     FAILED_TO_UPDATE_COMMENT_LIKES="Failed to update comment likes",
-
+    INVALID_TYPE = "Invalid type. Must be 'followers' or 'followings'."
 }; 

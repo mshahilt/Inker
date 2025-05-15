@@ -22,5 +22,10 @@ followRouter.get(
   verifyToken("user"),
   followController.checkFollowStatus.bind(followController)
 );
+followRouter.get(
+  "/:userId",
+  verifyToken("user"),
+  followController.getFollowData.bind(followController)
+);
 
 export default followRouter;

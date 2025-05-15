@@ -11,11 +11,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { followService } from "@/services/followServices";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
+import UserListModal, { UserData } from "./UserListModal";
+
+
 
 const ProfileInfo: FC = () => {
   const { setAuthorId, setLoading, isLoading } = useBlogStore()
   const [isFollowing, setIsFollowing] = useState(false);
   const [isFollowLoading, setIsFollowLoading] = useState(false);
+  const [modalType, setModalType] = useState<'followers' | 'followings' | null>(null);
+  const [modalUsers, setModalUsers] = useState<UserData[]>([]);
   const [userDetails, setUserDetails] = useState<ProfileData>((): ProfileData => {
     return {
       username: '',
@@ -34,7 +39,8 @@ const ProfileInfo: FC = () => {
     };
   });
   const navigate = useNavigate();
-  const { userTag }  = useParams() ;
+  const { userTag } = useParams();
+  console.log('This is the user Tag:',userTag)
   const { user } = useAuthStore()
   
   useEffect(() => {
@@ -86,6 +92,22 @@ const ProfileInfo: FC = () => {
   };
 
   useEffect(() => {
+    const fetchModalUsers = async () => {
+      if (!modalType) return;
+  
+      try {
+        const response = await followService.getFollowUsers(userDetails._id , modalType);
+        setModalUsers(response.users);
+      } catch (err) {
+        console.error("Error fetching users:", err);
+        toast.error("Failed to load users.");
+      }
+    };
+  
+    fetchModalUsers();
+  }, [modalType , userDetails._id]);
+
+  useEffect(() => {
     setLoading(true)
     const fetchUserProfile = async () => {
 
@@ -102,7 +124,31 @@ const ProfileInfo: FC = () => {
     };
 
     fetchUserProfile();
-  }, [ userTag, setAuthorId, setLoading]);
+  }, [userTag, setAuthorId, setLoading]);
+
+  const handleFollowCountChange = (type: 'followers' | 'followings', change: number) => {
+    setUserDetails(prevDetails => ({
+      ...prevDetails,
+      [type]: prevDetails[type] !== null ? prevDetails[type]! + change : change > 0 ? change : 0
+    }));
+  };
+  
+  const handleModalClose = () => {
+    setModalType(null);
+    if (userTag) {
+      ProfileService.profileDetailsService(userTag as string)
+        .then(result => {
+          if (result.profileDetails) {
+            setUserDetails(prevDetails => ({
+              ...prevDetails,
+              followers: result.profileDetails.followers,
+              followings: result.profileDetails.followings
+            }));
+          }
+        })
+        .catch(err => console.error("Error refreshing profile counts:", err));
+    }
+  };
 
   return (
     <div className="min-w-[300px]  lg:w-[400px] p-2 lg:border-x lg:h-full">
@@ -141,15 +187,41 @@ const ProfileInfo: FC = () => {
           alt=""
         /> }
         <div className="flex justify-around w-full">
-          <div className="flex flex-col items-center">
-            <p>followers</p>
+          <div className="flex flex-col items-center group">
+            <p
+              onClick={() => setModalType('followers')}
+              className="relative cursor-pointer text-gray-900 dark:text-white hover:text-gray-600
+                before:content-[''] before:absolute before:bottom-0 before:left-1/2
+                before:-translate-x-1/2 before:w-0 before:h-[2px]
+                before:transition-all before:duration-300 before:ease-in-out
+                group-hover:before:w-full
+                before:bg-black dark:before:bg-white">
+              followers
+            </p>
             <p className="font-semibold">{userDetails?.followers}</p>
           </div>
-          <div className="flex flex-col items-center">
-            <p>followings</p>
+
+          <div className="flex flex-col items-center group">
+            <p
+              onClick={() => setModalType('followings')}
+              className="relative cursor-pointer text-gray-900 dark:text-white hover:text-gray-600
+                before:content-[''] before:absolute before:bottom-0 before:left-1/2
+                before:-translate-x-1/2 before:w-0 before:h-[2px]
+                before:transition-all before:duration-300 before:ease-in-out
+                group-hover:before:w-full
+                before:bg-black dark:before:bg-white">
+              followings
+            </p>
             <p className="font-semibold">{userDetails?.followings}</p>
           </div>
         </div>
+        <UserListModal 
+          isOpen={modalType !== null}
+          onClose={handleModalClose}
+          type={modalType}
+          users={modalUsers}
+          onFollowCountChange={handleFollowCountChange}
+        />
       </div>
 
       <div className="p-2 flex flex-col gap-3">
