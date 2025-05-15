@@ -1,6 +1,6 @@
 "use client";
 
-import {type FC, useState} from "react";
+import {type FC } from "react";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import {z} from "zod";
@@ -31,45 +31,40 @@ interface PropsType {
 }
 
 export const UserAuthForm: FC<PropsType> = ({delayedAuthState}) => {
-    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const formSchema =
         delayedAuthState === "login" ? loginSchema : registerSchema;
 
-    const {login, register} = useAuthStore();
+    const {login, register, isLoading, error} = useAuthStore();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
 
     async function onSubmit(data: z.infer<typeof formSchema>) {
-        setIsLoading(true);
 
-        try {
             if (delayedAuthState === "login") {
                 const status = await login(data.email, data.password);
+
                 if (status) {
                     navigate("/feed");
+                } else {
+                    toast.error(error || "Login failed")
                 }
             } else {
                 if ("name" in data) {
                     const status = await register(data.name, data.email, data.password);
                     if (status) {
                         navigate("/otp-verification", {state: {email: data.email}});
+                    } else {
+                        toast.error(error || "Registration failed")
+
                     }
                 } else {
                     toast.error("Name is required for registration.");
                 }
             }
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                toast.error(error.message);
-            } else {
-                toast.error("An unexpected error occurred.");
-            }
-        } finally {
-            setIsLoading(false);
-        }
+        
     }
 
     return (
@@ -151,7 +146,7 @@ export const UserAuthForm: FC<PropsType> = ({delayedAuthState}) => {
                             <div className="relative flex items-start justify-end">
                                 <Credenza>
                                     <CredenzaTrigger asChild>
-                                        <button className="text-sm font-medium">
+                                        <button type="button" className="text-sm font-medium">
                                             Forgot Password?
                                         </button>
                                     </CredenzaTrigger>

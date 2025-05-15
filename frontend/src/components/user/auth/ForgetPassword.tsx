@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { CredenzaBody, CredenzaClose, CredenzaContent, CredenzaDescription, CredenzaFooter, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
+import { CredenzaBody, CredenzaContent, CredenzaDescription, CredenzaFooter, CredenzaHeader, CredenzaTitle } from '@/components/ui/credenza'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { forgetPasswordSchema } from '@/schemas/authSchema'
@@ -8,13 +8,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
 const ForgetPassword = () => {
     const [isLoading, setIsLoading] = useState(false)
-    const navigate = useNavigate()
+
     const form = useForm<z.infer<typeof forgetPasswordSchema>>({
         resolver: zodResolver(forgetPasswordSchema),
         defaultValues: {
@@ -29,7 +28,8 @@ const ForgetPassword = () => {
             if (response.data?.message) {
                 toast.success(response.data?.message)
                 form.reset()
-                navigate("/auth")
+            } else {
+                toast.error(response?.error || 'Sending OTP failed')
             }
         } catch (error) {
             if (error instanceof Error) {
@@ -71,9 +71,6 @@ const ForgetPassword = () => {
                                     {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                     Submit
                                 </Button>
-                                <CredenzaClose asChild>
-                                    <Button variant='destructive'>Close</Button>
-                                </CredenzaClose>
                             </CredenzaFooter>
                         </div>
                     </form>

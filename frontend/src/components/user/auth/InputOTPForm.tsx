@@ -47,10 +47,10 @@ export function InputOTPForm() {
 
         try {
             const response = await AuthService.otpVerificationService({ ...data, email })
+            
             if (response.data?.message) {
                 setState({isLoading: false, isAuthenticated: false, user: response?.data?.user, accessToken: response?.data?.token})
                 navigate('/feed')
-                toast.success(response.data?.message)
             } 
         } catch (error: unknown) {
             if (error instanceof Error) {
