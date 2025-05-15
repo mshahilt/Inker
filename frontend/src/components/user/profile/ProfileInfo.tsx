@@ -40,7 +40,6 @@ const ProfileInfo: FC = () => {
   });
   const navigate = useNavigate();
   const { userTag } = useParams();
-  console.log('This is the user Tag:',userTag)
   const { user } = useAuthStore()
   
   useEffect(() => {
